@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAC-GRINGAS</title>
+    <title>GRINGA.EXE</title>
     <link rel="stylesheet" href="css/estilo.css">
 </head>
 
 <body>
 <header>
     <div class="logo">
-        <h1>PAC-GRINGAS</h1>
-        <p>¡El sabor que te persigue!</p>
+        <h1>GRINGA.EXE</h1>
+        <p>Food Service System v1.0</p>
     </div>
 </header>
 
@@ -22,13 +22,14 @@
         <li><a href="#menu">Menú</a></li>
         <li><a href="#nosotros">Nosotros</a></li>
         <li><a href="#contacto">Contacto</a></li>
+        <li><a href="#pedido">Mi Pedido</a></li>
     </ul>
 </nav>
 
 <main>
 
     <section id="inicio">
-        <h2>Bienvenido a PAC-GRINGAS</h2>
+        <h2>Bienvenido a GRINGA.EXE</h2>
 
         <p>
             Disfruta de nuestras deliciosas gringas,
@@ -41,66 +42,236 @@
     <section id="menu">
 
     <h2>Nuestro Menú</h2>
+    <p>
+        [DESCRIPCIÓN DEL MENÚ]
+    </p>
+
+    <!-- =========================
+         GRINGAS
+         ========================= -->
+    <section class="categoria" id="gringas">
+        <h3>GRINGAS</h3>
+        <div class="productos">
+            <article class="producto" data-producto="chicken" data-precio="2.00">
+                <h4>Chicken.exe</h4>
+                <p>
+                    Gringa de Pollo
+                </p>
+                <p>
+                    Precio: $2.00
+                </p>
+                <button>
+                    Agregar al pedido
+                </button>
+            </article>
+
+            <article class="producto" data-producto="beef" data-precio="2.00">
+                <h4>Beef.exe</h4>
+                <p>
+                    Gringa de Carne
+                </p>
+                <p>
+                    Precio: $2.00
+                </p>
+                <button>
+                    Agregar al pedido
+                </button>
+            </article>
+
+            <article class="producto" data-producto="mixed" data-precio="2.15">
+                <h4>Mixed Mode</h4>
+                <p>
+                    Gringa de Carne + Pollo
+                </p>
+                <p>
+                    Precio: $2.15
+                </p>
+                <button>
+                    Agregar al pedido
+                </button>
+            </article>
+        </div>
+    </section>
+
+    <!-- =========================
+     FRESCOS
+     ========================= -->
+<section class="categoria" id="frescos">
+    <h3>FRESCOS</h3>
+    <p>
+        Elige el sabor de tu fresco.
+        El precio depende de la cantidad y de si lo acompañas con una gringa.
+    </p>
+
+    <div class="regla-frescos">
+        <p>
+            Fresco individual: $0.35
+        </p>
+        <p>
+            Fresco con gringa: +$0.25
+        </p>
+        <p>
+            Segundo fresco: +$0.50
+        </p>
+    </div>
 
     <div class="productos">
 
+        <!-- FRESCO 1 -->
         <article class="producto">
-            <h3>Nombre del producto</h3>
-            <p>Descripción del producto.</p>
-            <p>Precio: $0.00</p>
-            <button>Ordenar</button>
+            <h4>Blinky Punch</h4>
+            <p>
+                Fresco de Jamaica
+            </p>
+            <p>
+                Precio individual: $0.35
+            </p>
+            <button type="button">
+                Agregar al pedido
+            </button>
         </article>
 
+        <!-- FRESCO 2 -->
         <article class="producto">
-            <h3>Nombre del producto</h3>
-            <p>Descripción del producto.</p>
-            <p>Precio: $0.00</p>
-            <button>Ordenar</button>
+            <h4>Pinky Milk</h4>
+            <p>
+                Fresco de Horchata
+            </p>
+            <p>
+                Precio individual: $0.35
+            </p>
+            <button type="button">
+                Agregar al pedido
+            </button>
         </article>
 
+        <!-- FRESCO 3 -->
         <article class="producto">
-            <h3>Nombre del producto</h3>
-            <p>Descripción del producto.</p>
-            <p>Precio: $0.00</p>
-            <button>Ordenar</button>
+            <h4>Clyde Lemonade</h4>
+            <p>
+                Fresco de Limonada
+            </p>
+            <p>
+                Precio individual: $0.35
+            </p>
+            <button type="button">
+                Agregar al pedido
+            </button>
         </article>
-
     </div>
+</section>
+
+    <!-- =========================
+         SALSAS
+         ========================= -->
+    <section class="categoria" id="salsas">
+    <h3>SALSAS</h3>
+    <p>
+        Elige 1 salsa por el precio normal.
+        Si deseas combinar 2 salsas, se agregarán $0.15 al precio.
+    </p>
+    <div class="productos">
+        <!-- SALSA 1 -->
+        <article class="producto">
+            <h4>Safe Mode</h4>
+            <p>
+                [DESCRIPCIÓN DE LA SALSA 1]
+            </p>
+            <button>
+                Agregar al pedido
+            </button>
+        </article>
+
+        <!-- SALSA 2 -->
+        <article class="producto">
+            <h4>Warning Mode</h4>
+            <p>
+                [DESCRIPCIÓN DE LA SALSA 2]
+            </p>
+            <button>
+                Agregar al pedido
+            </button>
+        </article>
+
+        <!-- SALSA 3 -->
+        <article class="producto">
+            <h4>Reset Mode</h4>
+            <p>
+                [DESCRIPCIÓN DE LA SALSA 3]
+            </p>
+            <button>
+                Agregar al pedido
+            </button>
+        </article>
+    </div>
+</section>
+
+    <!-- =========================
+         EXTRA
+         ========================= -->
+    <section class="categoria" id="extra">
+        <h3>System Upgrade</h3>
+        <div class="productos">
+            <article class="producto">
+                <h4>Extra Cheese</h4>
+                <p>
+                    Extra de queso
+                </p>
+                <p>
+                    Precio: +$0.50
+                </p>
+                <button>
+                    Agregar al pedido
+                </button>
+            </article>
+        </div>
+    </section>
 
 </section>
 
 <section id="nosotros">
-
     <h2>Sobre Nosotros</h2>
-
     <p>
-        Conoce más sobre PAC-GRINGAS, nuestro negocio,
+        Conoce más sobre GRINGA.EXE, nuestro negocio,
         nuestra propuesta y lo que nos hace diferentes.
     </p>
-
 </section>
 
 <section id="contacto">
-
     <h2>Contacto</h2>
-
     <p>¿Quieres realizar un pedido? Contáctanos.</p>
-
     <div class="informacion-contacto">
         <p>Teléfono: 0000-0000</p>
         <p>Dirección: Pendiente</p>
         <p>Horario: Pendiente</p>
     </div>
-
 </section>
 
+<section id="pedido">
+    <h2>Mi Pedido</h2>
+    <div id="lista-pedido">
+        <p>
+            [AÚN NO HAS AGREGADO PRODUCTOS A TU PEDIDO]
+        </p>
+    </div>
+
+    <div class="resumen-pedido">
+        <p>
+            Subtotal: $[0.00]
+        </p>
+        <p>
+            Total: $[0.00]
+        </p>
+        <button type="button">
+            Confirmar pedido
+        </button>
+    </div>
+</section>
+</main>>
+
 <footer>
-
     <p>© 2026 PAC-GRINGAS. Todos los derechos reservados.</p>
-
 </footer>
-
-</main>
 
 </body>
 </html>
