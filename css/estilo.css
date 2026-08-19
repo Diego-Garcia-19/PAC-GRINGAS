@@ -241,3 +241,250 @@ nav a:hover {
 .categoria > p {
     margin-bottom: 25px;
 }
+
+/* =========================
+   IMÁGENES DE PRODUCTOS
+   ========================= */
+
+.producto img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    display: block;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* =========================
+   SECCIÓN NOSOTROS
+   ========================= */
+
+#nosotros {
+    padding: 70px 20px;
+}
+
+.nosotros-contenido {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.nosotros-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.nosotros-titulo h2 {
+    margin: 0;
+    text-align: center;
+}
+
+.pixel-decoracion {
+    font-size: 18px;
+}
+
+.nosotros-card {
+    border: 2px solid currentColor;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.terminal-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 2px solid currentColor;
+    font-weight: bold;
+}
+
+.nosotros-texto {
+    padding: 30px;
+}
+
+.nosotros-texto h3 {
+    margin-top: 0;
+}
+
+.nosotros-texto p {
+    line-height: 1.7;
+}
+
+.system-status {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 18px;
+    border-top: 2px solid currentColor;
+}
+
+.system-status p {
+    margin: 0;
+}
+
+/* =========================
+   SECCIÓN CONTACTO
+   ========================= */
+
+#contacto {
+    padding: 70px 20px;
+}
+
+.contacto-contenido {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.contacto-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 15px;
+}
+
+.contacto-titulo h2 {
+    margin: 0;
+    text-align: center;
+}
+
+.contacto-titulo span {
+    font-size: 20px;
+}
+
+.contacto-subtitulo {
+    text-align: center;
+    max-width: 650px;
+    margin: 0 auto 35px;
+    line-height: 1.6;
+}
+
+.contacto-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.contacto-card {
+    border: 2px solid currentColor;
+    border-radius: 12px;
+    padding: 25px 20px;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.contacto-card:hover {
+    transform: translateY(-5px);
+}
+
+.contacto-icono {
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.contacto-card h3 {
+    margin: 10px 0;
+}
+
+.contacto-card p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.contacto-terminal {
+    margin-top: 30px;
+    padding: 18px 20px;
+    border: 2px dashed currentColor;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.contacto-terminal span {
+    font-weight: bold;
+}
+
+.contacto-terminal strong {
+    display: block;
+    margin-top: 8px;
+}
+
+/* =========================
+   BARRA MI PEDIDO
+   ========================= */
+
+#pedido {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    z-index: 9999;
+}
+
+.pedido-barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 10px 25px;
+
+    background-color: #000;
+    border-top: 3px solid #ffff00;
+    border-bottom: 3px solid #ffff00;
+
+    box-shadow: 0 0 15px #ffff00;
+}
+
+.pedido-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pedido-icono {
+    font-size: 28px;
+}
+
+.pedido-info strong,
+.pedido-total span {
+    display: block;
+}
+
+#cantidad-pedido {
+    font-size: 0.85rem;
+}
+
+.pedido-total {
+    text-align: right;
+}
+
+#ver-pedido {
+    padding: 10px 20px;
+
+    background-color: #ffff00;
+    color: #000;
+
+    border: 2px solid #ffff00;
+    border-radius: 5px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#ver-pedido:hover {
+    background-color: #000;
+    color: #ffff00;
+
+    box-shadow: 0 0 15px #ffff00;
+}
+
+main {
+    padding-bottom: 80px;
+}

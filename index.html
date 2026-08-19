@@ -53,6 +53,7 @@
         <h3>GRINGAS</h3>
         <div class="productos">
             <article class="producto" data-producto="chicken" data-precio="2.00">
+                <img src="img/gringa-pollo.jpg" alt="Gringa de Pollo">
                 <h4>Chicken.exe</h4>
                 <p>
                     Gringa de Pollo
@@ -66,6 +67,7 @@
             </article>
 
             <article class="producto" data-producto="beef" data-precio="2.00">
+                <img src="img/gringa-carne.jpg" alt="Gringa de Carne">
                 <h4>Beef.exe</h4>
                 <p>
                     Gringa de Carne
@@ -79,6 +81,7 @@
             </article>
 
             <article class="producto" data-producto="mixed" data-precio="2.15">
+                <img src="img/gringa-carne-pollo.jpg" alt="Gringa de Carne y Pollo">
                 <h4>Mixed Mode</h4>
                 <p>
                     Gringa de Carne + Pollo
@@ -230,44 +233,96 @@
 </section>
 
 <section id="nosotros">
-    <h2>Sobre Nosotros</h2>
-    <p>
-        Conoce más sobre GRINGA.EXE, nuestro negocio,
-        nuestra propuesta y lo que nos hace diferentes.
-    </p>
+    <div class="nosotros-contenido">
+        <div class="nosotros-titulo">
+            <span class="pixel-decoracion">●</span>
+            <h2>ABOUT_GRINGA.EXE</h2>
+            <span class="pixel-decoracion">●</span>
+        </div>
+        <div class="nosotros-card">
+            <div class="terminal-header">
+                <span>GRINGA.EXE SYSTEM</span>
+                <span>● ONLINE</span>
+            </div>
+            <div class="nosotros-texto">
+                <h3>¿Quiénes somos?</h3>
+                <p>
+                    Somos GRINGA.EXE, un servicio de comida
+                    especializado en deliciosas gringas,
+                    frescos y salsas preparadas con mucho sabor.
+                </p>
+                <p>
+                    Nuestro objetivo es ofrecer comida rica,
+                    accesible y preparada con ingredientes de calidad,
+                    combinando nuestra pasión por la comida con
+                    un estilo único inspirado en los videojuegos
+                    clásicos.
+                </p>
+            </div>
+            <div class="system-status">
+                <p>STATUS: <strong>ONLINE</strong></p>
+                <p>FOOD SYSTEM: <strong>ACTIVE</strong></p>
+                <p>VERSION: <strong>3.0</strong></p>
+            </div>
+        </div>
+    </div>
 </section>
 
 <section id="contacto">
-    <h2>Contacto</h2>
-    <p>¿Quieres realizar un pedido? Contáctanos.</p>
-    <div class="informacion-contacto">
-        <p>Teléfono: 0000-0000</p>
-        <p>Dirección: Pendiente</p>
-        <p>Horario: Pendiente</p>
+    <div class="contacto-contenido">
+        <div class="contacto-titulo">
+            <span>◄</span>
+            <h2>CONTACT_SYSTEM</h2>
+            <span>►</span>
+        </div>
+        <p class="contacto-subtitulo">
+            ¿Necesitas ayuda o quieres realizar un pedido?
+            Conecta con GRINGA.EXE.
+        </p>
+        <div class="contacto-grid">
+            <div class="contacto-card">
+                <div class="contacto-icono">☎</div>
+                <h3>PHONE</h3>
+                <p>+503 6056 6167</p>
+            </div>
+            <div class="contacto-card">
+                <div class="contacto-icono">⌖</div>
+                <h3>LOCATION</h3>
+                <p>Dirección pendiente</p>
+            </div>
+            <div class="contacto-card">
+                <div class="contacto-icono">◷</div>
+                <h3>HORARIO</h3>
+                <p>Horario pendiente</p>
+            </div>
+        </div>
+        <div class="contacto-terminal">
+            <span>SYSTEM MESSAGE:</span>
+            <strong>Estamos listos para recibir tu pedido.</strong>
+        </div>
     </div>
 </section>
 
 <section id="pedido">
-    <h2>Mi Pedido</h2>
-    <div id="lista-pedido">
-        <p>
-            [AÚN NO HAS AGREGADO PRODUCTOS A TU PEDIDO]
-        </p>
-    </div>
-
-    <div class="resumen-pedido">
-        <p>
-            Subtotal: $[0.00]
-        </p>
-        <p>
-            Total: $[0.00]
-        </p>
-        <button type="button">
-            Confirmar pedido
+    <div class="pedido-barra">
+        <div class="pedido-info">
+            <span class="pedido-icono">🛒</span>
+            <div>
+                <strong>MI PEDIDO</strong>
+                <span id="cantidad-pedido">0 productos</span>
+            </div>
+        </div>
+        <div class="pedido-total">
+            <span>TOTAL</span>
+            <strong id="total-pedido">$0.00</strong>
+        </div>
+        <button type="button" id="ver-pedido">
+            VER PEDIDO
         </button>
     </div>
 </section>
-</main>>
+
+</main>
 
 <footer>
     <p>© 2026 PAC-GRINGAS. Todos los derechos reservados.</p>
