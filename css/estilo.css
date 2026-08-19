@@ -488,3 +488,178 @@ nav a:hover {
 main {
     padding-bottom: 80px;
 }
+
+/* =========================
+   VENTANA MI PEDIDO
+   ========================= */
+
+.ventana-pedido {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background-color: rgba(0, 0, 0, 0.85);
+
+    z-index: 10000;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.ventana-pedido.activa {
+    display: flex;
+}
+
+.ventana-contenido {
+    width: 100%;
+    max-width: 550px;
+
+    background-color: #000;
+
+    border: 3px solid #ffff00;
+
+    border-radius: 10px;
+
+    box-shadow: 0 0 30px #ffff00;
+
+    padding: 25px;
+}
+
+.ventana-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 2px solid #ffff00;
+
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.ventana-header h2 {
+    color: #ffff00;
+    margin: 0;
+}
+
+#cerrar-pedido {
+    background-color: #ffff00;
+    color: #000;
+
+    width: 35px;
+    height: 35px;
+
+    border-radius: 5px;
+
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#cerrar-pedido:hover {
+    background-color: #000;
+    color: #ffff00;
+
+    border: 2px solid #ffff00;
+}
+
+#lista-productos {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.item-pedido {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px dashed #ffff00;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-info h3 {
+    color: #ffff00;
+    margin-bottom: 5px;
+}
+
+.item-controles {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.item-controles button {
+    width: 30px;
+    height: 30px;
+
+    background-color: #ffff00;
+    color: #000;
+
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.item-controles span {
+    min-width: 25px;
+    text-align: center;
+}
+
+.item-precio {
+    font-weight: bold;
+    min-width: 60px;
+    text-align: right;
+}
+
+.pedido-vacio {
+    text-align: center;
+    padding: 30px 10px;
+    opacity: 0.8;
+}
+
+.ventana-total {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 20px;
+    padding-top: 15px;
+
+    border-top: 2px solid #ffff00;
+
+    font-size: 1.3rem;
+}
+
+.ventana-total strong {
+    color: #ffff00;
+}
+
+#confirmar-pedido {
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 13px;
+
+    background-color: #ffff00;
+    color: #000;
+
+    border: 2px solid #ffff00;
+    border-radius: 5px;
+
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+#confirmar-pedido:hover {
+    background-color: #000;
+    color: #ffff00;
+
+    box-shadow: 0 0 15px #ffff00;
+}

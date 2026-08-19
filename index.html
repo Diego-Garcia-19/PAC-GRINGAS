@@ -22,7 +22,6 @@
         <li><a href="#menu">Menú</a></li>
         <li><a href="#nosotros">Nosotros</a></li>
         <li><a href="#contacto">Contacto</a></li>
-        <li><a href="#pedido">Mi Pedido</a></li>
     </ul>
 </nav>
 
@@ -320,6 +319,29 @@
             VER PEDIDO
         </button>
     </div>
+    
+    <div id="ventana-pedido" class="ventana-pedido">
+    <div class="ventana-contenido">
+        <div class="ventana-header">
+            <h2>🛒 MI PEDIDO</h2>
+            <button type="button" id="cerrar-pedido">
+                ✕
+            </button>
+        </div>
+        <div id="lista-productos">
+            <p class="pedido-vacio">
+                No hay productos en tu pedido.
+            </p>
+        </div>
+        <div class="ventana-total">
+            <span>TOTAL:</span>
+            <strong id="ventana-total">$0.00</strong>
+        </div>
+        <button type="button" id="confirmar-pedido">
+            CONFIRMAR PEDIDO
+        </button>
+    </div>
+</div>
 </section>
 
 </main>
@@ -327,6 +349,8 @@
 <footer>
     <p>© 2026 PAC-GRINGAS. Todos los derechos reservados.</p>
 </footer>
+
+<script src="js/script.js"></script>
 
 </body>
 </html>
