@@ -1,4 +1,12 @@
-// ========================================
+const SUPABASE_URL = "https://gbrqwiucxwqzflzxtupf.supabase.co";
+const SUPABASE_KEY = "sb_publishable_jW0Tc-8Ij0klXATVMNBFAQ_z3hOqZTz";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
 // GRINGA.EXE
 // SISTEMA DE PEDIDOS
 // ========================================
@@ -1501,7 +1509,7 @@ if (finalizarPedido) {
 
     finalizarPedido.addEventListener(
         "click",
-        function() {
+        async function() {
 
             // ========================================
             // VERIFICAR PEDIDO
@@ -1670,7 +1678,44 @@ if (finalizarPedido) {
 
             }
 
+// ========================================
+// GUARDAR PEDIDO EN SUPABASE
+// ========================================
 
+// ========================================
+// GUARDAR PEDIDO EN SUPABASE
+// ========================================
+
+const { error } = await supabaseClient
+    .from("pedidos")
+    .insert([
+        {
+            numero_pedido: numeroActual,
+            cliente: "Cliente",
+            productos: pedido,
+            total: total,
+            metodo_pago: metodoPago,
+            estado: "Pendiente"
+        }
+    ]);
+
+if (error) {
+
+    console.error(
+        "❌ Error guardando pedido:",
+        error
+    );
+
+    alert(
+        "❌ No se pudo guardar el pedido. Intenta nuevamente."
+    );
+
+    return;
+}
+
+console.log(
+    "✅ Pedido guardado correctamente:",
+);
             // ========================================
             // CERRAR CHECKOUT
             // ========================================

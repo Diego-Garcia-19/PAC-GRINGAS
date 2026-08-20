@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>GRINGA.EXE | Pedidos</title>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            background: #000;
+
+            color: #fff;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* ========================================
+           HEADER
+        ======================================== */
+
+        header {
+
+            background: #000;
+
+            border-bottom:
+                3px solid #ffd900;
+
+            padding: 20px;
+
+            text-align: center;
+
+        }
+
+
+        header h1 {
+
+            color: #ffd900;
+
+            font-size: 28px;
+
+            text-shadow:
+                3px 3px 0 #9c8500;
+
+        }
+
+
+        header p {
+
+            margin-top: 8px;
+
+            color: #aaa;
+
+        }
+
+
+        /* ========================================
+           CONTENEDOR
+        ======================================== */
+
+        #contenedor-pedidos {
+
+            width: 100%;
+
+            max-width: 700px;
+
+            margin: auto;
+
+            padding: 20px;
+
+        }
+
+
+        /* ========================================
+           TARJETA PEDIDO
+        ======================================== */
+
+        .pedido {
+
+            background: #111;
+
+            border:
+                2px solid #ffd900;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            margin-bottom: 18px;
+
+            box-shadow:
+                0 0 10px
+                rgba(255, 217, 0, 0.25);
+
+        }
+
+
+        /* ========================================
+           CABECERA DEL PEDIDO
+        ======================================== */
+
+        .pedido-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .numero {
+
+            color: #ffd900;
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+        }
+
+
+        .estado {
+
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            background: #9b6500;
+
+            color: #fff;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* ========================================
+           CLIENTE
+        ======================================== */
+
+        .cliente {
+
+            margin-bottom: 12px;
+
+            color: #ddd;
+
+        }
+
+
+        /* ========================================
+           PRODUCTOS
+        ======================================== */
+
+        .producto {
+
+            padding: 8px 0;
+
+            border-bottom:
+                1px solid #333;
+
+        }
+
+
+        .producto:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .producto-nombre {
+
+            font-weight: bold;
+
+            color: #fff;
+
+        }
+
+
+        .producto-detalle {
+
+            color: #aaa;
+
+            font-size: 14px;
+
+            margin-top: 4px;
+
+        }
+
+
+        /* ========================================
+           TOTAL
+        ======================================== */
+
+        .total {
+
+            margin-top: 15px;
+
+            padding-top: 12px;
+
+            border-top:
+                2px solid #333;
+
+            color: #ffd900;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            text-align: right;
+
+        }
+
+
+        /* ========================================
+           INFORMACIÓN DE PAGO Y FECHA
+        ======================================== */
+
+        .pago {
+
+            margin-top: 8px;
+
+            color: #aaa;
+
+            text-align: right;
+
+        }
+
+
+        /* ========================================
+           SIN PEDIDOS
+        ======================================== */
+
+        .sin-pedidos {
+
+            text-align: center;
+
+            color: #777;
+
+            padding: 50px 20px;
+
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ========================================
+         HEADER
+    ======================================== -->
+
+    <header>
+
+        <h1>👻 GRINGA.EXE</h1>
+
+        <p>PANEL DE PEDIDOS</p>
+
+    </header>
+
+
+    <!-- ========================================
+         PEDIDOS
+    ======================================== -->
+
+    <main id="contenedor-pedidos">
+
+        <div class="sin-pedidos">
+
+            Cargando pedidos...
+
+        </div>
+
+    </main>
+
+
+    <!-- ========================================
+         SUPABASE
+    ======================================== -->
+
+    <script>
+
+    // ========================================
+    // CONFIGURACIÓN SUPABASE
+    // ========================================
+
+    const SUPABASE_URL =
+        "https://gbrqwiucxwqzflzxtupf.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_jW0Tc-8Ij0klXATVMNBFAQ_z3hOqZTz";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    // ========================================
+    // CARGAR PEDIDOS
+    // ========================================
+
+    async function cargarPedidos() {
+
+        const contenedor =
+            document.getElementById(
+                "contenedor-pedidos"
+            );
+
+
+        try {
+
+            const { data, error } =
+                await supabaseClient
+                    .from("pedidos")
+                    .select("*")
+                    .order(
+                        "id",
+                        {
+                            ascending: false
+                        }
+                    );
+
+
+            // ========================================
+            // ERROR
+            // ========================================
+
+            if (error) {
+
+                console.error(
+                    "❌ Error cargando pedidos:",
+                    error
+                );
+
+                contenedor.innerHTML = `
+
+                    <div class="sin-pedidos">
+
+                        ❌ No se pudieron cargar
+                        los pedidos.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            // ========================================
+            // SIN PEDIDOS
+            // ========================================
+
+            if (
+                !data ||
+                data.length === 0
+            ) {
+
+                contenedor.innerHTML = `
+
+                    <div class="sin-pedidos">
+
+                        🟡 No hay pedidos todavía.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            // ========================================
+            // LIMPIAR
+            // ========================================
+
+            contenedor.innerHTML = "";
+
+
+            // ========================================
+            // MOSTRAR PEDIDOS
+            // ========================================
+
+            data.forEach(
+                function (pedido) {
+
+                    let productosHTML = "";
+
+
+                    // ========================================
+                    // PRODUCTOS
+                    // ========================================
+
+                    if (
+                        Array.isArray(
+                            pedido.productos
+                        )
+                    ) {
+
+                        pedido.productos.forEach(
+                            function (producto) {
+
+                                let detalles = "";
+
+
+                                // Salsas
+
+                                if (
+                                    producto.salsas &&
+                                    producto.salsas.length > 0
+                                ) {
+
+                                    detalles +=
+                                        "🌶️ " +
+                                        producto.salsas.join(
+                                            ", "
+                                        );
+
+                                }
+
+
+                                // Extra queso
+
+                                if (
+                                    producto.extraQueso
+                                ) {
+
+                                    if (
+                                        detalles !== ""
+                                    ) {
+
+                                        detalles +=
+                                            " • ";
+
+                                    }
+
+                                    detalles +=
+                                        "🧀 Extra queso";
+
+                                }
+
+
+                                // Extra salsa
+
+                                if (
+                                    producto.extraSalsa
+                                ) {
+
+                                    if (
+                                        detalles !== ""
+                                    ) {
+
+                                        detalles +=
+                                            " • ";
+
+                                    }
+
+                                    detalles +=
+                                        "➕ Extra salsa";
+
+                                }
+
+
+                                // Producto
+
+                                productosHTML += `
+
+                                    <div class="producto">
+
+                                        <div class="producto-nombre">
+
+                                            ${producto.cantidad}x
+                                            ${producto.nombre}
+
+                                        </div>
+
+                                        <div class="producto-detalle">
+
+                                            ${detalles}
+
+                                        </div>
+
+                                    </div>
+
+                                `;
+
+                            }
+                        );
+
+                    }
+
+
+                    // ========================================
+                    // FECHA
+                    // ========================================
+
+                    const fecha =
+                        pedido.fecha
+
+                            ? new Date(
+                                pedido.fecha
+                            ).toLocaleString(
+                                "es-SV"
+                            )
+
+                            : "Sin fecha";
+
+
+                    // ========================================
+                    // TARJETA PEDIDO
+                    // ========================================
+
+                    contenedor.innerHTML += `
+
+                        <div class="pedido">
+
+                            <div class="pedido-header">
+
+                                <div class="numero">
+
+                                    #${pedido.numero_pedido}
+
+                                </div>
+
+                                <div class="estado">
+
+                                    ${pedido.estado}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="cliente">
+
+                                👤 ${pedido.cliente}
+
+                            </div>
+
+
+                            <div>
+
+                                ${productosHTML}
+
+                            </div>
+
+
+                            <div class="total">
+
+                                Total:
+                                $${Number(
+                                    pedido.total
+                                ).toFixed(2)}
+
+                            </div>
+
+
+                            <div class="pago">
+
+                                💳
+                                ${pedido.metodo_pago}
+
+                            </div>
+
+
+                            <div class="pago">
+
+                                🕐 ${fecha}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ Error inesperado:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // ========================================
+    // PRIMERA CARGA
+    // ========================================
+
+    cargarPedidos();
+
+
+    // ========================================
+    // ACTUALIZAR CADA 5 SEGUNDOS
+    // ========================================
+
+    setInterval(
+        function () {
+
+            cargarPedidos();
+
+        },
+        5000
+    );
+
+
+</script>
+
+
+</body>
+
+</html>
