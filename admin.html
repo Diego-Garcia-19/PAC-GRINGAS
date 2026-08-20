@@ -12,18 +12,34 @@
 
     <title>GRINGA.EXE | Pedidos</title>
 
-    <!-- Supabase -->
+
+    <!-- ========================================
+         SUPABASE
+    ======================================== -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
     <style>
 
+        /* ========================================
+           RESET
+        ======================================== */
+
         * {
+
             box-sizing: border-box;
+
             margin: 0;
+
             padding: 0;
+
         }
 
+
+        /* ========================================
+           BODY
+        ======================================== */
 
         body {
 
@@ -56,6 +72,12 @@
 
             text-align: center;
 
+            position: sticky;
+
+            top: 0;
+
+            z-index: 10;
+
         }
 
 
@@ -76,6 +98,23 @@
             margin-top: 8px;
 
             color: #aaa;
+
+            font-size: 14px;
+
+        }
+
+
+        /* ========================================
+           INDICADOR DE CONEXIÓN
+        ======================================== */
+
+        #conexion {
+
+            margin-top: 10px;
+
+            font-size: 13px;
+
+            color: #55ff55;
 
         }
 
@@ -122,7 +161,7 @@
 
 
         /* ========================================
-           CABECERA DEL PEDIDO
+           HEADER DEL PEDIDO
         ======================================== */
 
         .pedido-header {
@@ -132,6 +171,8 @@
             justify-content: space-between;
 
             align-items: center;
+
+            gap: 10px;
 
             margin-bottom: 15px;
 
@@ -149,6 +190,10 @@
         }
 
 
+        /* ========================================
+           ESTADO
+        ======================================== */
+
         .estado {
 
             padding: 6px 10px;
@@ -163,6 +208,8 @@
 
             font-weight: bold;
 
+            text-transform: uppercase;
+
         }
 
 
@@ -172,9 +219,11 @@
 
         .cliente {
 
-            margin-bottom: 12px;
+            margin-bottom: 15px;
 
             color: #ddd;
+
+            font-size: 15px;
 
         }
 
@@ -185,7 +234,7 @@
 
         .producto {
 
-            padding: 8px 0;
+            padding: 10px 0;
 
             border-bottom:
                 1px solid #333;
@@ -206,6 +255,8 @@
 
             color: #fff;
 
+            font-size: 16px;
+
         }
 
 
@@ -215,7 +266,9 @@
 
             font-size: 14px;
 
-            margin-top: 4px;
+            margin-top: 5px;
+
+            line-height: 1.5;
 
         }
 
@@ -245,7 +298,7 @@
 
 
         /* ========================================
-           INFORMACIÓN DE PAGO Y FECHA
+           PAGO
         ======================================== */
 
         .pago {
@@ -255,6 +308,8 @@
             color: #aaa;
 
             text-align: right;
+
+            font-size: 14px;
 
         }
 
@@ -269,10 +324,65 @@
 
             color: #777;
 
-            padding: 50px 20px;
+            padding: 60px 20px;
+
+            font-size: 16px;
 
         }
 
+
+        /* ========================================
+           ERROR
+        ======================================== */
+
+        .error {
+
+            color: #ff5555;
+
+        }
+
+
+        /* ========================================
+           RESPONSIVE
+        ======================================== */
+
+        @media (max-width: 500px) {
+
+            #contenedor-pedidos {
+
+                padding: 12px;
+
+            }
+
+
+            .pedido {
+
+                padding: 15px;
+
+            }
+
+
+            .pedido-header {
+
+                align-items: flex-start;
+
+            }
+
+
+            .numero {
+
+                font-size: 20px;
+
+            }
+
+
+            .estado {
+
+                font-size: 11px;
+
+            }
+
+        }
 
     </style>
 
@@ -292,11 +402,17 @@
 
         <p>PANEL DE PEDIDOS</p>
 
+        <div id="conexion">
+
+            🟢 Conectando...
+
+        </div>
+
     </header>
 
 
     <!-- ========================================
-         PEDIDOS
+         CONTENEDOR DE PEDIDOS
     ======================================== -->
 
     <main id="contenedor-pedidos">
@@ -311,34 +427,34 @@
 
 
     <!-- ========================================
-         SUPABASE
+         JAVASCRIPT
     ======================================== -->
 
     <script>
 
-    // ========================================
-    // CONFIGURACIÓN SUPABASE
-    // ========================================
 
-    const SUPABASE_URL =
-        "https://gbrqwiucxwqzflzxtupf.supabase.co";
+        // ========================================
+        // CONFIGURACIÓN SUPABASE
+        // ========================================
 
-    const SUPABASE_KEY =
-        "sb_publishable_jW0Tc-8Ij0klXATVMNBFAQ_z3hOqZTz";
+        const SUPABASE_URL =
+            "https://gbrqwiucxwqzflzxtupf.supabase.co";
 
 
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
+        const SUPABASE_KEY =
+            "sb_publishable_jW0Tc-8Ij0klXATVMNBFAQ_z3hOqZTz";
 
 
-    // ========================================
-    // CARGAR PEDIDOS
-    // ========================================
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
 
-    async function cargarPedidos() {
+
+        // ========================================
+        // ELEMENTOS
+        // ========================================
 
         const contenedor =
             document.getElementById(
@@ -346,312 +462,462 @@
             );
 
 
-        try {
+        const conexion =
+            document.getElementById(
+                "conexion"
+            );
 
-            const { data, error } =
-                await supabaseClient
-                    .from("pedidos")
-                    .select("*")
-                    .order(
-                        "id",
-                        {
-                            ascending: false
-                        }
-                    );
 
+        // ========================================
+        // CARGAR PEDIDOS
+        // ========================================
 
-            // ========================================
-            // ERROR
-            // ========================================
+        async function cargarPedidos() {
 
-            if (error) {
 
-                console.error(
-                    "❌ Error cargando pedidos:",
-                    error
-                );
+            try {
 
-                contenedor.innerHTML = `
 
-                    <div class="sin-pedidos">
+                // ========================================
+                // CONSULTAR SUPABASE
+                // ========================================
 
-                        ❌ No se pudieron cargar
-                        los pedidos.
+                const resultado =
+                    await supabaseClient
 
-                    </div>
+                        .from("pedidos")
 
-                `;
+                        .select("*")
 
-                return;
-
-            }
-
-
-            // ========================================
-            // SIN PEDIDOS
-            // ========================================
-
-            if (
-                !data ||
-                data.length === 0
-            ) {
-
-                contenedor.innerHTML = `
-
-                    <div class="sin-pedidos">
-
-                        🟡 No hay pedidos todavía.
-
-                    </div>
-
-                `;
-
-                return;
-
-            }
-
-
-            // ========================================
-            // LIMPIAR
-            // ========================================
-
-            contenedor.innerHTML = "";
-
-
-            // ========================================
-            // MOSTRAR PEDIDOS
-            // ========================================
-
-            data.forEach(
-                function (pedido) {
-
-                    let productosHTML = "";
-
-
-                    // ========================================
-                    // PRODUCTOS
-                    // ========================================
-
-                    if (
-                        Array.isArray(
-                            pedido.productos
-                        )
-                    ) {
-
-                        pedido.productos.forEach(
-                            function (producto) {
-
-                                let detalles = "";
-
-
-                                // Salsas
-
-                                if (
-                                    producto.salsas &&
-                                    producto.salsas.length > 0
-                                ) {
-
-                                    detalles +=
-                                        "🌶️ " +
-                                        producto.salsas.join(
-                                            ", "
-                                        );
-
-                                }
-
-
-                                // Extra queso
-
-                                if (
-                                    producto.extraQueso
-                                ) {
-
-                                    if (
-                                        detalles !== ""
-                                    ) {
-
-                                        detalles +=
-                                            " • ";
-
-                                    }
-
-                                    detalles +=
-                                        "🧀 Extra queso";
-
-                                }
-
-
-                                // Extra salsa
-
-                                if (
-                                    producto.extraSalsa
-                                ) {
-
-                                    if (
-                                        detalles !== ""
-                                    ) {
-
-                                        detalles +=
-                                            " • ";
-
-                                    }
-
-                                    detalles +=
-                                        "➕ Extra salsa";
-
-                                }
-
-
-                                // Producto
-
-                                productosHTML += `
-
-                                    <div class="producto">
-
-                                        <div class="producto-nombre">
-
-                                            ${producto.cantidad}x
-                                            ${producto.nombre}
-
-                                        </div>
-
-                                        <div class="producto-detalle">
-
-                                            ${detalles}
-
-                                        </div>
-
-                                    </div>
-
-                                `;
-
+                        .order(
+                            "id",
+                            {
+                                ascending: false
                             }
                         );
 
-                    }
+
+                const data =
+                    resultado.data;
 
 
-                    // ========================================
-                    // FECHA
-                    // ========================================
-
-                    const fecha =
-                        pedido.fecha
-
-                            ? new Date(
-                                pedido.fecha
-                            ).toLocaleString(
-                                "es-SV"
-                            )
-
-                            : "Sin fecha";
+                const error =
+                    resultado.error;
 
 
-                    // ========================================
-                    // TARJETA PEDIDO
-                    // ========================================
+                // ========================================
+                // ERROR
+                // ========================================
 
-                    contenedor.innerHTML += `
-
-                        <div class="pedido">
-
-                            <div class="pedido-header">
-
-                                <div class="numero">
-
-                                    #${pedido.numero_pedido}
-
-                                </div>
-
-                                <div class="estado">
-
-                                    ${pedido.estado}
-
-                                </div>
-
-                            </div>
+                if (error) {
 
 
-                            <div class="cliente">
-
-                                👤 ${pedido.cliente}
-
-                            </div>
-
-
-                            <div>
-
-                                ${productosHTML}
-
-                            </div>
+                    console.error(
+                        "Error cargando pedidos:",
+                        error
+                    );
 
 
-                            <div class="total">
-
-                                Total:
-                                $${Number(
-                                    pedido.total
-                                ).toFixed(2)}
-
-                            </div>
+                    conexion.textContent =
+                        "🔴 Error de conexión";
 
 
-                            <div class="pago">
-
-                                💳
-                                ${pedido.metodo_pago}
-
-                            </div>
+                    conexion.style.color =
+                        "#ff5555";
 
 
-                            <div class="pago">
+                    contenedor.innerHTML = `
 
-                                🕐 ${fecha}
+                        <div class="sin-pedidos error">
 
-                            </div>
+                            ❌ No se pudieron cargar
+                            los pedidos.
 
                         </div>
 
                     `;
 
+
+                    return;
+
                 }
-            );
 
 
-        } catch (error) {
+                // ========================================
+                // CONEXIÓN CORRECTA
+                // ========================================
 
-            console.error(
-                "❌ Error inesperado:",
-                error
-            );
+                conexion.textContent =
+                    "🟢 Conectado";
+
+
+                conexion.style.color =
+                    "#55ff55";
+
+
+                // ========================================
+                // SIN PEDIDOS
+                // ========================================
+
+                if (
+                    !data ||
+                    data.length === 0
+                ) {
+
+
+                    contenedor.innerHTML = `
+
+                        <div class="sin-pedidos">
+
+                            🟡 No hay pedidos todavía.
+
+                        </div>
+
+                    `;
+
+
+                    return;
+
+                }
+
+
+                // ========================================
+                // CREAR HTML
+                // ========================================
+
+                let pedidosHTML = "";
+
+
+                data.forEach(
+                    function (pedido) {
+
+
+                        let productosHTML = "";
+
+
+                        // ========================================
+                        // PRODUCTOS
+                        // ========================================
+
+                        if (
+                            Array.isArray(
+                                pedido.productos
+                            )
+                        ) {
+
+
+                            pedido.productos.forEach(
+                                function (producto) {
+
+
+                                    let detalles = "";
+
+
+                                    // ========================================
+                                    // SALSAS
+                                    // ========================================
+
+                                    if (
+                                        Array.isArray(
+                                            producto.salsas
+                                        ) &&
+                                        producto.salsas.length > 0
+                                    ) {
+
+
+                                        detalles +=
+                                            "🌶️ " +
+                                            producto.salsas.join(
+                                                ", "
+                                            );
+
+                                    }
+
+
+                                    // ========================================
+                                    // EXTRA QUESO
+                                    // ========================================
+
+                                    if (
+                                        producto.extraQueso
+                                    ) {
+
+
+                                        if (
+                                            detalles !== ""
+                                        ) {
+
+                                            detalles +=
+                                                " • ";
+
+                                        }
+
+
+                                        detalles +=
+                                            "🧀 Extra queso";
+
+                                    }
+
+
+                                    // ========================================
+                                    // EXTRA SALSA
+                                    // ========================================
+
+                                    if (
+                                        producto.extraSalsa
+                                    ) {
+
+
+                                        if (
+                                            detalles !== ""
+                                        ) {
+
+                                            detalles +=
+                                                " • ";
+
+                                        }
+
+
+                                        detalles +=
+                                            "➕ Extra salsa";
+
+                                    }
+
+
+                                    // ========================================
+                                    // SI NO HAY DETALLES
+                                    // ========================================
+
+                                    if (
+                                        detalles === ""
+                                    ) {
+
+                                        detalles =
+                                            "Sin modificaciones";
+
+                                    }
+
+
+                                    // ========================================
+                                    // HTML PRODUCTO
+                                    // ========================================
+
+                                    productosHTML += `
+
+                                        <div class="producto">
+
+                                            <div class="producto-nombre">
+
+                                                ${producto.cantidad || 1}x
+                                                ${producto.nombre || "Producto"}
+
+                                            </div>
+
+
+                                            <div class="producto-detalle">
+
+                                                ${detalles}
+
+                                            </div>
+
+                                        </div>
+
+                                    `;
+
+                                }
+                            );
+
+                        }
+
+
+                        // ========================================
+                        // FECHA
+                        // ========================================
+
+                        let fecha =
+                            "Sin fecha";
+
+
+                        if (
+                            pedido.fecha
+                        ) {
+
+
+                            fecha =
+                                new Date(
+                                    pedido.fecha
+                                ).toLocaleString(
+                                    "es-SV"
+                                );
+
+                        }
+
+
+                        // ========================================
+                        // MÉTODO DE PAGO
+                        // ========================================
+
+                        const metodoPago =
+                            pedido.metodo_pago ||
+                            "No especificado";
+
+
+                        // ========================================
+                        // CLIENTE
+                        // ========================================
+
+                        const cliente =
+                            pedido.cliente ||
+                            "Cliente";
+
+
+                        // ========================================
+                        // ESTADO
+                        // ========================================
+
+                        const estado =
+                            pedido.estado ||
+                            "Pendiente";
+
+
+                        // ========================================
+                        // TOTAL
+                        // ========================================
+
+                        const total =
+                            Number(
+                                pedido.total || 0
+                            ).toFixed(2);
+
+
+                        // ========================================
+                        // PEDIDO COMPLETO
+                        // ========================================
+
+                        pedidosHTML += `
+
+                            <div class="pedido">
+
+
+                                <div class="pedido-header">
+
+
+                                    <div class="numero">
+
+                                        #${pedido.numero_pedido}
+
+                                    </div>
+
+
+                                    <div class="estado">
+
+                                        ${estado}
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="cliente">
+
+                                    👤 ${cliente}
+
+                                </div>
+
+
+                                <div>
+
+                                    ${productosHTML}
+
+                                </div>
+
+
+                                <div class="total">
+
+                                    Total:
+                                    $${total}
+
+                                </div>
+
+
+                                <div class="pago">
+
+                                    💳 ${metodoPago}
+
+                                </div>
+
+
+                                <div class="pago">
+
+                                    🕐 ${fecha}
+
+                                </div>
+
+
+                            </div>
+
+                        `;
+
+                    }
+                );
+
+
+                // ========================================
+                // MOSTRAR PEDIDOS
+                // ========================================
+
+                contenedor.innerHTML =
+                    pedidosHTML;
+
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(
+                    "Error inesperado:",
+                    error
+                );
+
+
+                conexion.textContent =
+                    "🔴 Error";
+
+
+                conexion.style.color =
+                    "#ff5555";
+
+            }
 
         }
 
-    }
+
+        // ========================================
+        // PRIMERA CARGA
+        // ========================================
+
+        cargarPedidos();
 
 
-    // ========================================
-    // PRIMERA CARGA
-    // ========================================
+        // ========================================
+        // ACTUALIZACIÓN AUTOMÁTICA
+        // CADA 5 SEGUNDOS
+        // ========================================
 
-    cargarPedidos();
+        setInterval(
+            function () {
 
+                cargarPedidos();
 
-    // ========================================
-    // ACTUALIZAR CADA 5 SEGUNDOS
-    // ========================================
-
-    setInterval(
-        function () {
-
-            cargarPedidos();
-
-        },
-        5000
-    );
+            },
+            5000
+        );
 
 
-</script>
+    </script>
 
 
 </body>
