@@ -3686,3 +3686,33 @@ body::before {
     bottom: 12%;
     right: 13%;
 }
+
+.campo-cliente {
+    margin: 15px 0;
+}
+
+.campo-cliente label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ffd900;
+    font-weight: bold;
+}
+
+.campo-cliente input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ffd900;
+    border-radius: 8px;
+    background: #111;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+.campo-cliente input::placeholder {
+    color: #777;
+}
+
+.campo-cliente input:focus {
+    box-shadow: 0 0 10px rgba(255, 217, 0, 0.4);
+}

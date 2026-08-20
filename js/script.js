@@ -1,18 +1,25 @@
-const SUPABASE_URL = "https://gbrqwiucxwqzflzxtupf.supabase.co";
-const SUPABASE_KEY = "sb_publishable_jW0Tc-8Ij0klXATVMNBFAQ_z3hOqZTz";
+const SUPABASE_URL =
+    "https://gbrqwiucxwqzflzxtupf.supabase.co";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+const SUPABASE_KEY =
+    "sb_publishable_jW0Tc-8Ij0klXATVMNBFAQ_z3hOqZTz";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
+// ========================================
 // GRINGA.EXE
 // SISTEMA DE PEDIDOS
 // ========================================
 
 let pedido = [];
 let gringaSeleccionada = null;
+let nombreCliente = "";
+
 
 // ========================================
 // TRANSICIÓN PAC-MAN
@@ -24,31 +31,22 @@ function mostrarTransicion(accion) {
         document.getElementById("pacman-transicion");
 
     if (!transicion) {
+
         accion();
+
         return;
     }
 
-    // Mostrar animación
     transicion.classList.add("activa");
 
-    // Esperar a que termine
-    setTimeout(function() {
+    setTimeout(function () {
 
-        // Ocultar animación
         transicion.classList.remove("activa");
 
-        // Ejecutar la acción
         accion();
 
     }, 1900);
 }
-
-// ========================================
-// NÚMERO DE PEDIDO
-// ========================================
-
-let numeroPedidoActual =
-    parseInt(localStorage.getItem("numeroPedido")) || 1;
 
 
 // ========================================
@@ -162,7 +160,6 @@ const finalizarPedido =
 
 const ventanaConfirmacion =
     document.getElementById("ventana-confirmacion");
-    
 
 const numeroPedidoElemento =
     document.getElementById("numero-pedido");
@@ -192,14 +189,6 @@ const cerrarConfirmacion =
 // ========================================
 // CALCULAR PRECIO DE FRESCOS
 // ========================================
-//
-// SIN GRINGA:
-// Todos cuestan $0.35
-//
-// CON GRINGA:
-// Primeros 2 = $0.25 c/u
-// Tercero en adelante = $0.35 c/u
-// ========================================
 
 function calcularPrecioFrescos(
     cantidadFrescos,
@@ -211,7 +200,9 @@ function calcularPrecioFrescos(
     }
 
     if (cantidadGringas === 0) {
+
         return cantidadFrescos * 0.35;
+
     }
 
     const primerosDos =
@@ -221,24 +212,26 @@ function calcularPrecioFrescos(
         Math.max(cantidadFrescos - 2, 0);
 
     return (
-        (primerosDos * 0.25) +
-        (restantes * 0.35)
+        primerosDos * 0.25 +
+        restantes * 0.35
     );
 }
 
 
 // ========================================
-// OBTENER CANTIDAD DE GRINGAS
+// CANTIDAD DE GRINGAS
 // ========================================
 
 function obtenerCantidadGringas() {
 
     let cantidad = 0;
 
-    pedido.forEach(function(producto) {
+    pedido.forEach(function (producto) {
 
         if (producto.tipo === "gringa") {
+
             cantidad += producto.cantidad;
+
         }
 
     });
@@ -248,17 +241,19 @@ function obtenerCantidadGringas() {
 
 
 // ========================================
-// OBTENER CANTIDAD DE FRESCOS
+// CANTIDAD DE FRESCOS
 // ========================================
 
 function obtenerCantidadFrescos() {
 
     let cantidad = 0;
 
-    pedido.forEach(function(producto) {
+    pedido.forEach(function (producto) {
 
         if (producto.tipo === "fresco") {
+
             cantidad += producto.cantidad;
+
         }
 
     });
@@ -268,14 +263,14 @@ function obtenerCantidadFrescos() {
 
 
 // ========================================
-// OBTENER TOTAL DE GRINGAS
+// TOTAL DE GRINGAS
 // ========================================
 
 function obtenerTotalGringas() {
 
     let total = 0;
 
-    pedido.forEach(function(producto) {
+    pedido.forEach(function (producto) {
 
         if (producto.tipo === "gringa") {
 
@@ -287,6 +282,7 @@ function obtenerTotalGringas() {
             total +=
                 precioUnitario *
                 producto.cantidad;
+
         }
 
     });
@@ -296,7 +292,7 @@ function obtenerTotalGringas() {
 
 
 // ========================================
-// OBTENER TOTAL DEL PEDIDO
+// TOTAL DEL PEDIDO
 // ========================================
 
 function obtenerTotalPedido() {
@@ -328,7 +324,7 @@ function actualizarPedido() {
 
     let cantidadTotal = 0;
 
-    pedido.forEach(function(producto) {
+    pedido.forEach(function (producto) {
 
         cantidadTotal += producto.cantidad;
 
@@ -337,10 +333,6 @@ function actualizarPedido() {
     const total =
         obtenerTotalPedido();
 
-
-    // ========================================
-    // BARRA INFERIOR
-    // ========================================
 
     if (cantidadPedido) {
 
@@ -351,6 +343,7 @@ function actualizarPedido() {
                     ? " producto"
                     : " productos"
             );
+
     }
 
 
@@ -375,27 +368,24 @@ function actualizarPedido() {
     }
 
 
-    // ========================================
-    // PEDIDO VACÍO
-    // ========================================
-
     if (pedido.length === 0) {
 
         listaProductos.innerHTML = `
+
             <p class="pedido-vacio">
+
                 No hay productos en tu pedido.
+
             </p>
+
         `;
 
         return;
     }
 
 
-    // ========================================
-    // MOSTRAR PRODUCTOS
-    // ========================================
-
     listaProductos.innerHTML = "";
+
 
     const cantidadGringas =
         obtenerCantidadGringas();
@@ -410,7 +400,7 @@ function actualizarPedido() {
         );
 
 
-    pedido.forEach(function(producto, indice) {
+    pedido.forEach(function (producto, indice) {
 
         let subtotal = 0;
 
@@ -429,6 +419,7 @@ function actualizarPedido() {
             subtotal =
                 precioUnitario *
                 producto.cantidad;
+
         }
 
 
@@ -446,7 +437,9 @@ function actualizarPedido() {
                         cantidadFrescos
                     ) *
                     producto.cantidad;
+
             }
+
         }
 
 
@@ -459,6 +452,7 @@ function actualizarPedido() {
             subtotal =
                 producto.precio *
                 producto.cantidad;
+
         }
 
 
@@ -475,19 +469,24 @@ function actualizarPedido() {
         ) {
 
             textoSalsas = `
+
                 <p>
                     🌶️ Salsa:
                     ${producto.salsas.join(", ")}
                 </p>
+
             `;
 
         } else if (producto.tipo === "gringa") {
 
             textoSalsas = `
+
                 <p>
                     Sin salsa
                 </p>
+
             `;
+
         }
 
 
@@ -503,10 +502,13 @@ function actualizarPedido() {
         ) {
 
             textoQueso = `
+
                 <p>
                     🧀 Extra Cheese
                 </p>
+
             `;
+
         }
 
 
@@ -517,7 +519,9 @@ function actualizarPedido() {
         const item =
             document.createElement("div");
 
-        item.classList.add("item-pedido");
+        item.classList.add(
+            "item-pedido"
+        );
 
 
         item.innerHTML = `
@@ -529,6 +533,7 @@ function actualizarPedido() {
                 </h3>
 
                 <p>
+
                     ${
                         producto.tipo === "fresco"
                             ? "Fresco"
@@ -536,6 +541,7 @@ function actualizarPedido() {
                               producto.precio.toFixed(2) +
                               " c/u"
                     }
+
                 </p>
 
                 ${textoSalsas}
@@ -582,6 +588,7 @@ function actualizarPedido() {
         listaProductos.appendChild(item);
 
     });
+
 }
 
 
@@ -631,11 +638,11 @@ const botonesGringa =
     document.querySelectorAll(".btn-gringa");
 
 
-botonesGringa.forEach(function(boton) {
+botonesGringa.forEach(function (boton) {
 
     boton.addEventListener(
         "click",
-        function() {
+        function () {
 
             const producto =
                 boton.closest(".producto");
@@ -656,19 +663,19 @@ botonesGringa.forEach(function(boton) {
 
 
             gringaSeleccionada = {
+
                 nombre: nombre,
+
                 precio: precio
+
             };
 
-
-            // ========================================
-            // REINICIAR VENTANA
-            // ========================================
 
             if (salsaGringaNombre) {
 
                 salsaGringaNombre.textContent =
                     nombre;
+
             }
 
 
@@ -686,6 +693,7 @@ botonesGringa.forEach(function(boton) {
 
                 contenedorSalsa2.style.display =
                     "none";
+
             }
 
 
@@ -693,6 +701,7 @@ botonesGringa.forEach(function(boton) {
 
                 botonSegundaSalsa.style.display =
                     "block";
+
             }
 
 
@@ -700,6 +709,7 @@ botonesGringa.forEach(function(boton) {
 
                 precioSalsas.textContent =
                     "$0.00";
+
             }
 
 
@@ -707,6 +717,7 @@ botonesGringa.forEach(function(boton) {
 
                 mensajeSalsa.textContent =
                     "";
+
             }
 
 
@@ -714,6 +725,7 @@ botonesGringa.forEach(function(boton) {
 
                 extraQuesoCheckbox.checked =
                     false;
+
             }
 
 
@@ -721,20 +733,20 @@ botonesGringa.forEach(function(boton) {
 
                 precioQueso.textContent =
                     "$0.00";
+
             }
 
 
-            // ========================================
-            // ABRIR
-            // ========================================
-
             if (ventanaSalsas) {
 
-                mostrarTransicion(function() {
+                mostrarTransicion(function () {
 
-    ventanaSalsas.classList.add("activa");
+                    ventanaSalsas.classList.add(
+                        "activa"
+                    );
 
-});
+                });
+
             }
 
         }
@@ -751,7 +763,7 @@ if (extraQuesoCheckbox) {
 
     extraQuesoCheckbox.addEventListener(
         "change",
-        function() {
+        function () {
 
             if (extraQuesoCheckbox.checked) {
 
@@ -779,7 +791,7 @@ if (botonSegundaSalsa) {
 
     botonSegundaSalsa.addEventListener(
         "click",
-        function() {
+        function () {
 
             if (salsa1.value === "") {
 
@@ -819,7 +831,7 @@ if (salsa2) {
 
     salsa2.addEventListener(
         "change",
-        function() {
+        function () {
 
             if (
                 salsa2.value !== "" &&
@@ -852,7 +864,7 @@ if (confirmarGringa) {
 
     confirmarGringa.addEventListener(
         "click",
-        function() {
+        function () {
 
             if (!gringaSeleccionada) {
                 return;
@@ -867,6 +879,7 @@ if (confirmarGringa) {
                 salsas.push(
                     salsa1.value
                 );
+
             }
 
 
@@ -880,12 +893,14 @@ if (confirmarGringa) {
                         "⚠️ No puedes repetir la misma salsa.";
 
                     return;
+
                 }
 
 
                 salsas.push(
                     salsa2.value
                 );
+
             }
 
 
@@ -909,10 +924,6 @@ if (confirmarGringa) {
 
             }
 
-
-            // ========================================
-            // AGREGAR GRINGA
-            // ========================================
 
             pedido.push({
 
@@ -943,10 +954,6 @@ if (confirmarGringa) {
             actualizarPedido();
 
 
-            // ========================================
-            // CERRAR
-            // ========================================
-
             ventanaSalsas.classList.remove(
                 "activa"
             );
@@ -968,7 +975,7 @@ if (cerrarSalsas) {
 
     cerrarSalsas.addEventListener(
         "click",
-        function() {
+        function () {
 
             ventanaSalsas.classList.remove(
                 "activa"
@@ -992,11 +999,11 @@ const botonesFresco =
     );
 
 
-botonesFresco.forEach(function(boton) {
+botonesFresco.forEach(function (boton) {
 
     boton.addEventListener(
         "click",
-        function() {
+        function () {
 
             const producto =
                 boton.closest(".producto");
@@ -1017,7 +1024,7 @@ botonesFresco.forEach(function(boton) {
 
 
             const frescoExistente =
-                pedido.find(function(item) {
+                pedido.find(function (item) {
 
                     return (
                         item.nombre === nombre &&
@@ -1061,16 +1068,16 @@ botonesFresco.forEach(function(boton) {
 
 
 // ========================================
-// ABRIR MI PEDIDO CON TRANSICIÓN
+// ABRIR MI PEDIDO
 // ========================================
 
 if (botonVerPedido) {
 
     botonVerPedido.addEventListener(
         "click",
-        function() {
+        function () {
 
-            mostrarTransicion(function() {
+            mostrarTransicion(function () {
 
                 ventanaPedido.classList.add(
                     "activa"
@@ -1092,7 +1099,7 @@ if (botonCerrarPedido) {
 
     botonCerrarPedido.addEventListener(
         "click",
-        function() {
+        function () {
 
             ventanaPedido.classList.remove(
                 "activa"
@@ -1141,11 +1148,7 @@ function abrirCheckout() {
         );
 
 
-    // ========================================
-    // MOSTRAR PRODUCTOS
-    // ========================================
-
-    pedido.forEach(function(producto) {
+    pedido.forEach(function (producto) {
 
         let subtotal = 0;
 
@@ -1176,17 +1179,22 @@ function abrirCheckout() {
             ) {
 
                 detalles += `
+
                     <p>
-                        🌶️ ${producto.salsas.join(", ")}
+                        🌶️
+                        ${producto.salsas.join(", ")}
                     </p>
+
                 `;
 
             } else {
 
                 detalles += `
+
                     <p>
                         Sin salsa
                     </p>
+
                 `;
 
             }
@@ -1195,9 +1203,11 @@ function abrirCheckout() {
             if (producto.extraQueso > 0) {
 
                 detalles += `
+
                     <p>
                         🧀 Extra Cheese
                     </p>
+
                 `;
 
             }
@@ -1282,10 +1292,6 @@ function abrirCheckout() {
     });
 
 
-    // ========================================
-    // TOTAL
-    // ========================================
-
     const total =
         obtenerTotalPedido();
 
@@ -1293,10 +1299,6 @@ function abrirCheckout() {
     checkoutTotal.textContent =
         "$" + total.toFixed(2);
 
-
-    // ========================================
-    // REINICIAR PAGO
-    // ========================================
 
     pagoEfectivo.style.display =
         "none";
@@ -1314,10 +1316,6 @@ function abrirCheckout() {
         true;
 
 
-    // ========================================
-    // ABRIR CHECKOUT
-    // ========================================
-
     ventanaCheckout.classList.add(
         "activa"
     );
@@ -1327,24 +1325,67 @@ function abrirCheckout() {
 
 // ========================================
 // CONFIRMAR PEDIDO → CHECKOUT
-// CON TRANSICIÓN PAC-MAN
 // ========================================
 
 if (confirmarPedido) {
 
     confirmarPedido.addEventListener(
         "click",
-        function() {
+        function () {
 
-            // Cerrar Mi Pedido
+            if (pedido.length === 0) {
+
+                alert(
+                    "⚠️ Tu pedido está vacío."
+                );
+
+                return;
+            }
+
+
+            // ========================================
+            // PEDIR NOMBRE DEL CLIENTE
+            // ========================================
+
+            const nombre =
+                prompt(
+                    "👤 Ingresa tu nombre:"
+                );
+
+
+            if (nombre === null) {
+
+                return;
+
+            }
+
+
+            const nombreLimpio =
+                nombre.trim();
+
+
+            if (nombreLimpio === "") {
+
+                alert(
+                    "⚠️ Debes ingresar tu nombre."
+                );
+
+                return;
+
+            }
+
+
+            nombreCliente =
+                nombreLimpio;
+
+
             ventanaPedido.classList.remove(
                 "activa"
             );
 
-            // Mostrar transición
-            mostrarTransicion(function() {
 
-                // Abrir Checkout
+            mostrarTransicion(function () {
+
                 abrirCheckout();
 
             });
@@ -1363,7 +1404,7 @@ if (cerrarCheckout) {
 
     cerrarCheckout.addEventListener(
         "click",
-        function() {
+        function () {
 
             ventanaCheckout.classList.remove(
                 "activa"
@@ -1379,19 +1420,15 @@ if (cerrarCheckout) {
 // MÉTODOS DE PAGO
 // ========================================
 
-botonesMetodoPago.forEach(function(boton) {
+botonesMetodoPago.forEach(function (boton) {
 
     boton.addEventListener(
         "click",
-        function() {
+        function () {
 
             const metodo =
                 boton.dataset.metodo;
 
-
-            // ========================================
-            // EFECTIVO
-            // ========================================
 
             if (metodo === "efectivo") {
 
@@ -1408,10 +1445,6 @@ botonesMetodoPago.forEach(function(boton) {
 
             }
 
-
-            // ========================================
-            // TRANSFERENCIA
-            // ========================================
 
             else if (
                 metodo === "transferencia"
@@ -1442,7 +1475,7 @@ if (dineroRecibido) {
 
     dineroRecibido.addEventListener(
         "input",
-        function() {
+        function () {
 
             const total =
                 obtenerTotalPedido();
@@ -1463,6 +1496,7 @@ if (dineroRecibido) {
                     true;
 
                 return;
+
             }
 
 
@@ -1500,20 +1534,11 @@ if (dineroRecibido) {
 // FINALIZAR PEDIDO
 // ========================================
 
-// ========================================
-// FINALIZAR PEDIDO
-// CON TRANSICIÓN PAC-MAN
-// ========================================
-
 if (finalizarPedido) {
 
     finalizarPedido.addEventListener(
         "click",
-        async function() {
-
-            // ========================================
-            // VERIFICAR PEDIDO
-            // ========================================
+        async function () {
 
             if (pedido.length === 0) {
 
@@ -1526,9 +1551,16 @@ if (finalizarPedido) {
             }
 
 
-            // ========================================
-            // OBTENER TOTAL
-            // ========================================
+            if (!nombreCliente) {
+
+                alert(
+                    "⚠️ Falta el nombre del cliente."
+                );
+
+                return;
+
+            }
+
 
             const total =
                 obtenerTotalPedido();
@@ -1541,8 +1573,11 @@ if (finalizarPedido) {
             let metodoPago =
                 "transferencia";
 
-            let efectivoRecibido = 0;
-            let cambio = 0;
+            let efectivoRecibido =
+                0;
+
+            let cambio =
+                0;
 
 
             if (
@@ -1560,6 +1595,20 @@ if (finalizarPedido) {
                     );
 
 
+                if (
+                    isNaN(efectivoRecibido) ||
+                    efectivoRecibido < total
+                ) {
+
+                    alert(
+                        "⚠️ El dinero recibido no es suficiente."
+                    );
+
+                    return;
+
+                }
+
+
                 cambio =
                     efectivoRecibido -
                     total;
@@ -1568,25 +1617,8 @@ if (finalizarPedido) {
 
 
             // ========================================
-            // NÚMERO DE PEDIDO
+            // PREPARAR CONFIRMACIÓN
             // ========================================
-
-            const numeroActual =
-                String(numeroPedidoActual)
-                    .padStart(3, "0");
-
-
-            // ========================================
-            // PREPARAR VENTANA DE CONFIRMACIÓN
-            // ========================================
-
-            if (numeroPedidoElemento) {
-
-                numeroPedidoElemento.textContent =
-                    "#" + numeroActual;
-
-            }
-
 
             if (confirmacionTotal) {
 
@@ -1598,7 +1630,7 @@ if (finalizarPedido) {
 
 
             // ========================================
-            // PAGO EN EFECTIVO
+            // EFECTIVO
             // ========================================
 
             if (metodoPago === "efectivo") {
@@ -1648,7 +1680,7 @@ if (finalizarPedido) {
 
 
             // ========================================
-            // PAGO POR TRANSFERENCIA
+            // TRANSFERENCIA
             // ========================================
 
             else {
@@ -1678,44 +1710,111 @@ if (finalizarPedido) {
 
             }
 
-// ========================================
-// GUARDAR PEDIDO EN SUPABASE
-// ========================================
 
-// ========================================
-// GUARDAR PEDIDO EN SUPABASE
-// ========================================
+            // ========================================
+            // GUARDAR EN SUPABASE
+            // ========================================
 
-const { error } = await supabaseClient
-    .from("pedidos")
-    .insert([
-        {
-            numero_pedido: numeroActual,
-            cliente: "Cliente",
-            productos: pedido,
-            total: total,
-            metodo_pago: metodoPago,
-            estado: "Pendiente"
-        }
-    ]);
+            const { data, error } =
+                await supabaseClient
 
-if (error) {
+                    .from("pedidos")
 
-    console.error(
-        "❌ Error guardando pedido:",
-        error
-    );
+                    .insert([
 
-    alert(
-        "❌ No se pudo guardar el pedido. Intenta nuevamente."
-    );
+                        {
 
-    return;
-}
+                            cliente:
+                                nombreCliente,
 
-console.log(
-    "✅ Pedido guardado correctamente:",
-);
+                            productos:
+                                pedido,
+
+                            total:
+                                total,
+
+                            metodo_pago:
+                                metodoPago,
+
+                            cambio:
+                                cambio,
+
+                            estado:
+                                "Pendiente"
+
+                        }
+
+                    ])
+
+                    .select()
+
+                    .single();
+
+
+            // ========================================
+            // ERROR
+            // ========================================
+
+            if (error) {
+
+                console.error(
+                    "❌ Error guardando pedido:",
+                    error
+                );
+
+                alert(
+                    "❌ No se pudo guardar el pedido. Intenta nuevamente."
+                );
+
+                return;
+
+            }
+
+
+            // ========================================
+            // NÚMERO DEL PEDIDO
+            // GENERADO POR SUPABASE
+            // ========================================
+
+            const numeroGenerado =
+                data.numero_pedido;
+
+
+            const numeroFormateado =
+                String(numeroGenerado)
+                    .padStart(3, "0");
+
+
+            // ========================================
+            // MOSTRAR NÚMERO AL CLIENTE
+            // ========================================
+
+            if (numeroPedidoElemento) {
+
+                numeroPedidoElemento.textContent =
+                    "#" + numeroFormateado;
+
+            }
+
+
+            console.log(
+                "✅ Pedido guardado:",
+                numeroFormateado
+            );
+
+
+            console.log(
+                "👤 Cliente:",
+                nombreCliente
+            );
+
+
+            console.log(
+                "💰 Cambio:",
+                cambio.toFixed(2)
+            );
+
+
             // ========================================
             // CERRAR CHECKOUT
             // ========================================
@@ -1726,14 +1825,10 @@ console.log(
 
 
             // ========================================
-            // TRANSICIÓN PAC-MAN
+            // MOSTRAR CONFIRMACIÓN
             // ========================================
 
-            mostrarTransicion(function() {
-
-                // ========================================
-                // MOSTRAR CONFIRMACIÓN
-                // ========================================
+            mostrarTransicion(function () {
 
                 if (ventanaConfirmacion) {
 
@@ -1747,31 +1842,20 @@ console.log(
 
 
             // ========================================
-            // GUARDAR SIGUIENTE NÚMERO
-            // ========================================
-
-            numeroPedidoActual++;
-
-
-            localStorage.setItem(
-                "numeroPedido",
-                numeroPedidoActual
-            );
-
-
-            // ========================================
             // VACIAR PEDIDO
             // ========================================
 
             pedido = [];
 
-
             actualizarPedido();
 
 
             // ========================================
-            // REINICIAR PAGO
+            // REINICIAR DATOS
             // ========================================
+
+            nombreCliente = "";
+
 
             if (dineroRecibido) {
 
@@ -1816,14 +1900,13 @@ console.log(
 
 // ========================================
 // CERRAR CONFIRMACIÓN
-// NUEVO PEDIDO
 // ========================================
 
 if (cerrarConfirmacion) {
 
     cerrarConfirmacion.addEventListener(
         "click",
-        function() {
+        function () {
 
             ventanaConfirmacion.classList.remove(
                 "activa"
@@ -1836,6 +1919,51 @@ if (cerrarConfirmacion) {
 
 
 // ========================================
+// ESTADO INICIAL
+// ========================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const ventanas = [
+
+            document.getElementById(
+                "ventana-pedido"
+            ),
+
+            document.getElementById(
+                "ventana-salsas"
+            ),
+
+            document.getElementById(
+                "ventana-checkout"
+            ),
+
+            document.getElementById(
+                "ventana-confirmacion"
+            )
+
+        ];
+
+
+        ventanas.forEach(function (ventana) {
+
+            if (ventana) {
+
+                ventana.classList.remove(
+                    "activa"
+                );
+
+            }
+
+        });
+
+    }
+);
+
+
+// ========================================
 // INICIAR SISTEMA
 // ========================================
 
@@ -1843,33 +1971,5 @@ actualizarPedido();
 
 
 console.log(
-    "GRINGA.EXE iniciado correctamente."
+    "👻 GRINGA.EXE iniciado correctamente."
 );
-
-console.log(
-    "Siguiente número de pedido:",
-    String(numeroPedidoActual).padStart(3, "0")
-);
-
-// ========================================
-// ESTADO INICIAL DE LAS VENTANAS
-// ========================================
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const ventanas = [
-        document.getElementById("ventana-pedido"),
-        document.getElementById("ventana-salsas"),
-        document.getElementById("ventana-checkout"),
-        document.getElementById("ventana-confirmacion")
-    ];
-
-    ventanas.forEach(function (ventana) {
-
-        if (ventana) {
-            ventana.classList.remove("activa");
-        }
-
-    });
-
-});

@@ -843,9 +843,34 @@
 
                                 <div class="pago">
 
-                                    💳 ${metodoPago}
+    💳 Método:
+    ${pedido.metodo_pago}
 
-                                </div>
+</div>
+
+${
+    pedido.metodo_pago === "efectivo"
+        ? `
+            <div class="pago">
+
+                💵 Recibió:
+                $${Number(
+                    pedido.efectivo_recibido || 0
+                ).toFixed(2)}
+
+            </div>
+
+            <div class="pago">
+
+                💰 Cambio:
+                $${Number(
+                    pedido.cambio || 0
+                ).toFixed(2)}
+
+            </div>
+        `
+        : ""
+}
 
 
                                 <div class="pago">
