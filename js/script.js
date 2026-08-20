@@ -1999,3 +1999,339 @@ actualizarPedido();
 console.log(
     "👻 GRINGA.EXE iniciado correctamente."
 );
+
+// ========================================
+// PANEL DE PEDIDOS
+// VER Y CAMBIAR ESTADO
+// ========================================
+
+async function cargarPedidos() {
+
+    const contenedorPedidos =
+        document.getElementById("lista-pedidos");
+
+    // Si esta página no tiene el panel
+    // de pedidos, no hacemos nada.
+    if (!contenedorPedidos) {
+        return;
+    }
+
+    contenedorPedidos.innerHTML = `
+        <p>
+            Cargando pedidos...
+        </p>
+    `;
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("pedidos")
+            .select("*")
+            .order(
+                "numero_pedido",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "❌ Error cargando pedidos:",
+            error
+        );
+
+        contenedorPedidos.innerHTML = `
+            <p>
+                ❌ No se pudieron cargar los pedidos.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        contenedorPedidos.innerHTML = `
+            <p>
+                📭 No hay pedidos todavía.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    contenedorPedidos.innerHTML = "";
+
+
+    data.forEach(function (pedidoActual) {
+
+        const numero =
+            String(
+                pedidoActual.numero_pedido
+            ).padStart(3, "0");
+
+
+        const estado =
+            pedidoActual.estado ||
+            "Pendiente";
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.classList.add(
+            "pedido-admin"
+        );
+
+
+        // ========================================
+        // PRODUCTOS
+        // ========================================
+
+        let productosHTML = "";
+
+
+        if (
+            pedidoActual.productos &&
+            Array.isArray(
+                pedidoActual.productos
+            )
+        ) {
+
+            pedidoActual.productos.forEach(
+                function (producto) {
+
+                    productosHTML += `
+
+                        <div class="producto-admin">
+
+                            <strong>
+                                ${producto.cantidad}x
+                                ${producto.nombre}
+                            </strong>
+
+                            ${
+                                producto.salsas &&
+                                producto.salsas.length > 0
+                                ? `
+                                    <small>
+                                        🌶️
+                                        ${producto.salsas.join(", ")}
+                                    </small>
+                                  `
+                                : ""
+                            }
+
+                            ${
+                                producto.extraQueso > 0
+                                ? `
+                                    <small>
+                                        🧀 Extra Cheese
+                                    </small>
+                                  `
+                                : ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
+        }
+
+
+        // ========================================
+        // ESTADO
+        // ========================================
+
+        const claseEstado =
+            estado === "Entregado"
+                ? "estado-entregado"
+                : "estado-pendiente";
+
+
+        div.innerHTML = `
+
+            <div class="pedido-admin-header">
+
+                <h2>
+                    Pedido #${numero}
+                </h2>
+
+                <button
+                    type="button"
+                    class="estado-pedido ${claseEstado}"
+                    onclick="cambiarEstadoPedido(
+                        ${pedidoActual.id},
+                        '${estado}'
+                    )"
+                >
+
+                    ${
+                        estado === "Entregado"
+                            ? "✅ Entregado"
+                            : "📌 Pendiente"
+                    }
+
+                </button>
+
+            </div>
+
+
+            <div class="pedido-admin-info">
+
+                <p>
+                    👤
+                    <strong>
+                        Cliente:
+                    </strong>
+
+                    ${pedidoActual.cliente}
+                </p>
+
+
+                <p>
+                    💳
+                    <strong>
+                        Pago:
+                    </strong>
+
+                    ${pedidoActual.metodo_pago}
+                </p>
+
+
+                ${
+                    pedidoActual.cambio > 0
+                    ? `
+                        <p>
+                            💵
+                            <strong>
+                                Cambio:
+                            </strong>
+
+                            $${Number(
+                                pedidoActual.cambio
+                            ).toFixed(2)}
+                        </p>
+                      `
+                    : ""
+                }
+
+            </div>
+
+
+            <div class="pedido-admin-productos">
+
+                ${productosHTML}
+
+            </div>
+
+
+            <div class="pedido-admin-total">
+
+                <strong>
+                    TOTAL:
+                </strong>
+
+                $${Number(
+                    pedidoActual.total
+                ).toFixed(2)}
+
+            </div>
+
+        `;
+
+
+        contenedorPedidos.appendChild(
+            div
+        );
+
+    });
+
+}
+
+
+// ========================================
+// CAMBIAR ESTADO
+// PENDIENTE ↔ ENTREGADO
+// ========================================
+
+async function cambiarEstadoPedido(
+    id,
+    estadoActual
+) {
+
+    const nuevoEstado =
+        estadoActual === "Pendiente"
+            ? "Entregado"
+            : "Pendiente";
+
+
+    const { error } =
+        await supabaseClient
+            .from("pedidos")
+            .update({
+
+                estado:
+                    nuevoEstado
+
+            })
+            .eq(
+                "id",
+                id
+            );
+
+
+    if (error) {
+
+        console.error(
+            "❌ Error cambiando estado:",
+            error
+        );
+
+        alert(
+            "❌ No se pudo cambiar el estado del pedido."
+        );
+
+        return;
+    }
+
+
+    console.log(
+        "✅ Pedido actualizado:",
+        id
+    );
+
+
+    console.log(
+        "📌 Nuevo estado:",
+        nuevoEstado
+    );
+
+
+    // Volver a cargar los pedidos
+    // para mostrar el nuevo estado
+    cargarPedidos();
+
+}
+
+
+// ========================================
+// CARGAR PEDIDOS AL ABRIR LA PÁGINA
+// ========================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        cargarPedidos();
+
+    }
+);
