@@ -1,1286 +1,3497 @@
-/* ========================================
-   GRINGA.EXE
-   Estilos generales
-   ======================================== */
 
-/* ===== CONFIGURACIÓN GENERAL ===== */
+/* =========================================================
+   GRINGA.EXE
+   PAC-MAN ARCADE SYSTEM
+   ========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+:root {
+
+    --amarillo: #ffd900;
+    --amarillo-claro: #ffe95c;
+    --negro: #050505;
+    --negro-2: #0b0b0b;
+    --negro-3: #111111;
+    --azul: #1737ff;
+    --azul-claro: #2e63ff;
+    --blanco: #ffffff;
+    --gris: #9b9b9b;
+    --gris-oscuro: #222222;
+    --rojo: #ff3154;
+    --rosa: #ff7eb6;
+    --cian: #35d9ff;
+    --verde: #38ff8b;
+
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
 * {
+
     margin: 0;
     padding: 0;
+
     box-sizing: border-box;
+
 }
+
 
 html {
+
     scroll-behavior: smooth;
+
 }
+
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #fff;
-    line-height: 1.6;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #151515 0%,
+            #050505 55%,
+            #000000 100%
+        );
+
+    color: var(--blanco);
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    min-height: 100vh;
+
+    padding-bottom: 105px;
+
 }
 
-/* ===== ENLACES ===== */
-a {
-    color: inherit;
-    text-decoration: none;
+
+/* =========================================================
+   SCANLINES
+   ========================================================= */
+
+.scanlines {
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 9999;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            transparent 3px,
+            rgba(255,255,255,0.025) 4px
+        );
+
 }
 
-/* ===== LISTAS ===== */
-ul {
-    list-style: none;
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+
+    min-height: 120px;
+
+    padding: 25px 7%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    border-bottom:
+        3px solid var(--amarillo);
+
+    background:
+        rgba(0,0,0,0.92);
+
 }
 
-/* ===== BOTONES ===== */
-button {
-    cursor: pointer;
-    border: none;
+
+.logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
 }
 
-/* ===== SECCIONES ===== */
-section {
-    padding: 60px 20px;
+
+.logo h1 {
+
+    color: var(--amarillo);
+
+    font-size: clamp(
+        1.8rem,
+        5vw,
+        3rem
+    );
+
+    letter-spacing: 4px;
+
+    text-shadow:
+        4px 4px 0 #4d4200;
+
+}
+
+
+.logo p {
+
+    color: var(--gris);
+
+    font-size: 0.7rem;
+
+    margin-top: 5px;
+
+    letter-spacing: 2px;
+
 }
 
 /* ========================================
-   HEADER
+   LOGO PRINCIPAL
    ======================================== */
-header {
-    padding: 30px 20px;
-    text-align: center;
-    border-bottom: 2px solid #fff;
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
-.logo h1 {
-    font-size: 3rem;
-    letter-spacing: 5px;
+.logo img {
+    width: 230px;
+    max-width: 80%;
+    height: auto;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(0 0 6px rgba(255, 216, 0, 0.5));
+
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.04);
+
+    filter:
+        drop-shadow(0 0 10px rgba(255, 216, 0, 0.8));
 }
 
 .logo p {
-    font-size: 1rem;
-    margin-top: 5px;
-    opacity: 0.8;
+    margin: 0;
+
+    color: #aaa;
+
+    font-size: 0.85rem;
+
+    letter-spacing: 2px;
 }
 
-/* ========================================
-   NAVEGACIÓN
-   ======================================== */
-nav {
-    padding: 15px 20px;
-    border-bottom: 2px solid #fff;
+/* =========================================================
+   PACMAN LOGO
+   ========================================================= */
+
+.pacman-logo {
+
+    width: 42px;
+
+    height: 42px;
+
+    background: var(--amarillo);
+
+    border-radius: 50%;
+
+    position: relative;
+
 }
 
-nav ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
+
+.pacman-logo::after {
+
+    content: "";
+
+    position: absolute;
+
+    right: -1px;
+
+    top: 9px;
+
+    border-top: 12px solid transparent;
+
+    border-bottom: 12px solid transparent;
+
+    border-right: 22px solid var(--negro);
+
 }
 
-nav a {
-    display: block;
-    padding: 8px 14px;
-    font-weight: bold;
-    transition: 0.3s;
+
+.status {
+
+    color: var(--verde);
+
+    font-size: 0.75rem;
+
+    letter-spacing: 1px;
+
 }
 
-nav a:hover {
-    background-color: #fff;
-    color: #000;
-}
 
-/* ========================================
-   INICIO / HERO
-   ======================================== */
-#inicio {
-    min-height: 60vh;
+.status-dot {
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    text-align: center;
-}
-
-#inicio h2 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-#inicio p {
-    max-width: 600px;
-    margin-bottom: 30px;
-    font-size: 1.1rem;
-}
-
-#inicio a {
     display: inline-block;
 
-    padding: 12px 25px;
+    width: 8px;
 
-    border: 2px solid #fff;
+    height: 8px;
+
+    background: var(--verde);
+
+    border-radius: 50%;
+
+    margin-right: 7px;
+
+    box-shadow:
+        0 0 10px var(--verde);
+
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+
+    background: var(--negro-2);
+
+    border-bottom:
+        1px solid var(--gris-oscuro);
+
+}
+
+
+.navbar ul {
+
+    list-style: none;
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+}
+
+
+.navbar a {
+
+    display: block;
+
+    padding: 18px 25px;
+
+    color: var(--blanco);
+
+    text-decoration: none;
+
+    font-size: 0.8rem;
+
+    letter-spacing: 2px;
+
+    transition: 0.2s;
+
+}
+
+
+.navbar a:hover {
+
+    color: var(--amarillo);
+
+    background:
+        rgba(255,217,0,0.08);
+
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+
+    min-height: 560px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-bottom:
+        2px solid var(--azul);
+
+}
+
+
+.hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 25px;
+
+    border:
+        2px solid var(--azul);
+
+    box-shadow:
+        inset 0 0 30px rgba(23,55,255,0.2);
+
+}
+
+
+.hero-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 800px;
+
+    padding: 50px 25px;
+
+}
+
+
+.system-label {
+
+    color: var(--verde);
+
+    font-size: 0.75rem;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.hero h2 {
+
+    font-size: clamp(
+        2rem,
+        7vw,
+        4.8rem
+    );
+
+    line-height: 1.1;
+
+    letter-spacing: 4px;
+
+}
+
+
+.hero h2 span {
+
+    display: block;
+
+    color: var(--amarillo);
+
+    text-shadow:
+        5px 5px 0 #4d4200;
+
+}
+
+
+.hero-text {
+
+    max-width: 500px;
+
+    margin: 25px auto;
+
+    color: var(--gris);
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================================================
+   HERO PACMAN + GHOSTS
+   ========================================================= */
+
+.hero-pixel {
+
+    height: 80px;
+
+    position: relative;
+
+    margin-bottom: 25px;
+
+}
+
+
+.hero-pacman {
+
+    position: absolute;
+
+    width: 42px;
+
+    height: 42px;
+
+    background: var(--amarillo);
+
+    border-radius: 50%;
+
+    left: calc(50% - 180px);
+
+    top: 15px;
+
+}
+
+
+.hero-pacman::after {
+
+    content: "";
+
+    position: absolute;
+
+    right: -2px;
+
+    top: 9px;
+
+    border-top: 12px solid transparent;
+
+    border-bottom: 12px solid transparent;
+
+    border-right: 22px solid var(--negro);
+
+}
+
+
+.hero-ghost {
+
+    position: absolute;
+
+    width: 38px;
+
+    height: 40px;
+
+    border-radius:
+        20px 20px 4px 4px;
+
+    top: 16px;
+
+}
+
+
+.hero-ghost::after {
+
+    content: "";
+
+    position: absolute;
+
+    bottom: -1px;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            transparent 25%,
+            currentColor 26%,
+            currentColor 65%,
+            transparent 66%
+        );
+
+}
+
+
+.ghost-red {
+
+    left: calc(50% - 90px);
+
+    background: var(--rojo);
+
+    color: var(--rojo);
+
+}
+
+
+.ghost-pink {
+
+    left: calc(50% - 35px);
+
+    background: var(--rosa);
+
+    color: var(--rosa);
+
+}
+
+
+.ghost-blue {
+
+    left: calc(50% + 20px);
+
+    background: var(--cian);
+
+    color: var(--cian);
+
+}
+
+
+.ghost-eye {
+
+    position: absolute;
+
+    width: 8px;
+
+    height: 11px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    top: 10px;
+
+    z-index: 2;
+
+}
+
+
+.ghost-eye::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 4px;
+
+    height: 5px;
+
+    background: #111;
+
+    border-radius: 50%;
+
+    top: 4px;
+
+    left: 2px;
+
+}
+
+
+.ghost-eye.left {
+
+    left: 9px;
+
+}
+
+
+.ghost-eye.right {
+
+    right: 9px;
+
+}
+
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+.pixel-button,
+.btn-principal,
+.btn-secundario,
+.producto button,
+.pedido-barra button {
+
+    border: none;
+
+    font-family:
+        "Courier New",
+        monospace;
 
     font-weight: bold;
 
-    transition: 0.3s;
+    cursor: pointer;
+
+    transition:
+        transform 0.15s,
+        box-shadow 0.15s,
+        background 0.15s;
+
 }
 
-#inicio a:hover {
-    background-color: #fff;
+
+.pixel-button {
+
+    display: inline-block;
+
+    text-decoration: none;
+
     color: #000;
+
+    background: var(--amarillo);
+
+    padding: 16px 28px;
+
+    box-shadow:
+        5px 5px 0 #806d00;
+
+    font-size: 0.85rem;
+
 }
+
+
+.pixel-button:hover,
+.btn-principal:hover,
+.producto button:hover,
+.pedido-barra button:hover {
+
+    transform: translate(-2px,-2px);
+
+    box-shadow:
+        7px 7px 0 #806d00;
+
+}
+
+
+.pixel-button:active,
+.btn-principal:active,
+.producto button:active,
+.pedido-barra button:active {
+
+    transform: translate(2px,2px);
+
+    box-shadow:
+        2px 2px 0 #806d00;
+
+}
+
+
+/* =========================================================
+   SECCIONES
+   ========================================================= */
+
+.section {
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding: 90px 25px;
+
+}
+
+
+.section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 60px;
+
+}
+
+
+.section-title > div {
+
+    text-align: center;
+
+}
+
+
+.section-title p {
+
+    color: var(--amarillo);
+
+    font-size: 0.65rem;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.section-title h2 {
+
+    font-size: clamp(
+        1.5rem,
+        4vw,
+        2.5rem
+    );
+
+    letter-spacing: 3px;
+
+}
+
+
+.line {
+
+    height: 2px;
+
+    flex: 1;
+
+    background: var(--azul);
+
+}
+
+
+/* =========================================================
+   CATEGORÍAS
+   ========================================================= */
+
+.categoria {
+
+    margin-bottom: 80px;
+
+}
+
+
+.categoria-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 30px;
+
+    border-left:
+        5px solid var(--amarillo);
+
+    padding-left: 15px;
+
+}
+
+
+.categoria-numero {
+
+    color: var(--amarillo);
+
+    font-size: 1.5rem;
+
+    font-weight: bold;
+
+}
+
+
+.categoria-header h3 {
+
+    font-size: 1.5rem;
+
+    letter-spacing: 3px;
+
+}
+
+
+.categoria-header p {
+
+    color: var(--gris);
+
+    font-size: 0.65rem;
+
+    margin-top: 5px;
+
+}
+
+
+/* =========================================================
+   PRODUCTOS
+   ========================================================= */
+
+.productos {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(270px, 1fr)
+        );
+
+    gap: 28px;
+
+}
+
 
 /* ========================================
-   MENÚ
+   TARJETAS DE PRODUCTOS
    ======================================== */
-#menu {
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-#menu > h2 {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-}
-
-#menu > p {
-    max-width: 700px;
-    margin: 0 auto 50px;
-    opacity: 0.8;
-}
-
-/* ===== CATEGORÍAS ===== */
-.categoria {
-    margin-bottom: 70px;
-}
-
-.categoria h3 {
-    font-size: 2rem;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-}
-
-/* ===== TARJETAS DE PRODUCTOS ===== */
 
 .producto {
+    position: relative;
+
+    background: #111;
+
+    border: 3px solid #ffd800;
+
+    border-radius: 12px;
+
     padding: 25px;
-    border: 3px solid #ffff00;
-    border-radius: 10px;
-    text-align: center;
-    min-height: 220px;
+
+    min-height: 230px;
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
 
-    gap: 12px;
+    justify-content: space-between;
 
-    background-color: #000;
-    
-    transition: 0.3s;
+    box-shadow:
+        0 0 8px rgba(255, 216, 0, 0.35);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+/* ========================================
+   EFECTO HOVER
+   ======================================== */
+
+.producto:hover {
+
+    transform:
+        translateY(-6px);
+
+    border-color:
+        #ffe95b;
+
+    box-shadow:
+        0 0 12px rgba(255, 216, 0, 0.65),
+        0 0 25px rgba(255, 216, 0, 0.25);
+
+}
+
+
+/* ========================================
+   NOMBRE DEL PRODUCTO
+   ======================================== */
+
+.producto h4 {
+
+    margin: 0 0 12px;
+
+    color: #ffd800;
+
+    font-size: 1.35rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* ========================================
+   DESCRIPCIÓN
+   ======================================== */
+
+.producto p {
+
+    color: #ddd;
+
+    margin: 6px 0;
+
+    line-height: 1.5;
+
+}
+
+
+/* ========================================
+   PRECIO
+   ======================================== */
+
+.producto p:nth-of-type(2) {
+
+    color: #fff;
+
+    font-weight: bold;
+
+    margin-top: 15px;
+
+}
+
+
+/* ========================================
+   BOTÓN
+   ======================================== */
+
+.producto button {
+
+    width: 100%;
+
+    margin-top: 18px;
+
+    padding: 12px 15px;
+
+    background: #ffd800;
+
+    color: #000;
+
+    border: 2px solid #ffd800;
+
+    border-radius: 6px;
+
+    font-weight: bold;
+
+    font-size: 0.95rem;
+
+    cursor: pointer;
+
+    text-transform: uppercase;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+
+}
+
+
+.producto button:hover {
+
+    background: #000;
+
+    color: #ffd800;
+
+    box-shadow:
+        0 0 10px rgba(255, 216, 0, 0.7);
+
+}
+
+
+.producto button:active {
+
+    transform:
+        scale(0.96);
+
+}
+
+/* ========================================
+   CATEGORÍAS DEL MENÚ
+   ======================================== */
+
+.categoria {
+
+    margin-bottom: 70px;
+
+}
+
+
+.categoria h3 {
+
+    display: inline-block;
+
+    color: #ffd800;
+
+    font-size: 2rem;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 25px;
+
+    padding-bottom: 8px;
+
+    border-bottom:
+        3px solid #ffd800;
+
+    text-shadow:
+        0 0 8px rgba(255, 216, 0, 0.5);
+
+}
+
+
+/* ========================================
+   GRID DE PRODUCTOS
+   ======================================== */
+
+.productos {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
+
+    gap: 30px;
+
 }
 
 .producto:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 0 20px #ffff00;
-}
 
-.producto h4 {
-    font-size: 1.4rem;
-    color: #ffff00;
-    margin: 0 0 5px 0;
-}
+    transform: translateY(-6px);
 
-.producto p {
-    margin: 0;
-    line-height: 1.5;
-}
-
-.producto button {
-    margin-top: 10px;
-    padding: 10px 18px;
-
-    background-color: #ffff00;
-    color: #000;
-
-    font-weight: bold;
-    border: 2px solid #ffff00;
-    border-radius: 5px;
-
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.producto button:hover {
-    background-color: #000;
-    color: #ffff00;
-}
-
-/* ===== REGLAS DE LOS PRODUCTOS ===== */
-
-.regla-frescos {
-    margin-bottom: 50px;
-}
-
-.regla-frescos p {
-    margin: 5px 0;
-}
-
-.categoria {
-    margin-bottom: 100px;
-}
-
-.categoria > h3 {
-    margin-bottom: 20px;
-}
-
-.categoria > p {
-    margin-bottom: 25px;
-}
-
-/* =========================
-   IMÁGENES DE PRODUCTOS
-   ========================= */
-
-.producto img {
-    width: 100%;
-    height: 180px;
-    object-fit: contain;
-    display: block;
-    border-radius: 10px;
-    margin-bottom: 15px;
-}
-
-/* =========================
-   SECCIÓN NOSOTROS
-   ========================= */
-
-#nosotros {
-    padding: 70px 20px;
-}
-
-.nosotros-contenido {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.nosotros-titulo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-.nosotros-titulo h2 {
-    margin: 0;
-    text-align: center;
-}
-
-.pixel-decoracion {
-    font-size: 18px;
-}
-
-.nosotros-card {
-    border: 2px solid currentColor;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.terminal-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 18px;
-    border-bottom: 2px solid currentColor;
-    font-weight: bold;
-}
-
-.nosotros-texto {
-    padding: 30px;
-}
-
-.nosotros-texto h3 {
-    margin-top: 0;
-}
-
-.nosotros-texto p {
-    line-height: 1.7;
-}
-
-.system-status {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-    padding: 18px;
-    border-top: 2px solid currentColor;
-}
-
-.system-status p {
-    margin: 0;
-}
-
-/* =========================
-   SECCIÓN CONTACTO
-   ========================= */
-
-#contacto {
-    padding: 70px 20px;
-}
-
-.contacto-contenido {
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.contacto-titulo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
-    margin-bottom: 15px;
-}
-
-.contacto-titulo h2 {
-    margin: 0;
-    text-align: center;
-}
-
-.contacto-titulo span {
-    font-size: 20px;
-}
-
-.contacto-subtitulo {
-    text-align: center;
-    max-width: 650px;
-    margin: 0 auto 35px;
-    line-height: 1.6;
-}
-
-.contacto-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
-.contacto-card {
-    border: 2px solid currentColor;
-    border-radius: 12px;
-    padding: 25px 20px;
-    text-align: center;
-    transition: transform 0.2s ease;
-}
-
-.contacto-card:hover {
-    transform: translateY(-5px);
-}
-
-.contacto-icono {
-    font-size: 35px;
-    margin-bottom: 10px;
-}
-
-.contacto-card h3 {
-    margin: 10px 0;
-}
-
-.contacto-card p {
-    margin: 0;
-    line-height: 1.5;
-}
-
-.contacto-terminal {
-    margin-top: 30px;
-    padding: 18px 20px;
-    border: 2px dashed currentColor;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.contacto-terminal span {
-    font-weight: bold;
-}
-
-.contacto-terminal strong {
-    display: block;
-    margin-top: 8px;
-}
-
-/* =========================
-   BARRA MI PEDIDO
-   ========================= */
-
-#pedido {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    z-index: 1000;
-}
-
-.pedido-barra {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-
-    padding: 10px 25px;
-
-    background-color: #000;
-    border-top: 3px solid #ffff00;
-    border-bottom: 3px solid #ffff00;
-
-    box-shadow: 0 0 15px #ffff00;
-}
-
-.pedido-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.pedido-icono {
-    font-size: 28px;
-}
-
-.pedido-info strong,
-.pedido-total span {
-    display: block;
-}
-
-#cantidad-pedido {
-    font-size: 0.85rem;
-}
-
-.pedido-total {
-    text-align: right;
-}
-
-#ver-pedido {
-    padding: 10px 20px;
-
-    background-color: #ffff00;
-    color: #000;
-
-    border: 2px solid #ffff00;
-    border-radius: 5px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#ver-pedido:hover {
-    background-color: #000;
-    color: #ffff00;
-
-    box-shadow: 0 0 15px #ffff00;
-}
-
-main {
-    padding-bottom: 80px;
-}
-
-/* =========================
-   VENTANA MI PEDIDO
-   ========================= */
-
-.ventana-pedido {
-    display: none;
-
-    position: fixed;
-    inset: 0;
-
-    background-color: rgba(0, 0, 0, 0.85);
-
-    z-index: 10000;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-}
-
-.ventana-pedido.activa {
-    display: flex;
-}
-
-.ventana-contenido {
-    width: 100%;
-    max-width: 550px;
-
-    background-color: #000;
-
-    border: 3px solid #ffff00;
-
-    border-radius: 10px;
-
-    box-shadow: 0 0 30px #ffff00;
-
-    padding: 25px;
-}
-
-.ventana-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    border-bottom: 2px solid #ffff00;
-
-    padding-bottom: 15px;
-    margin-bottom: 20px;
-}
-
-.ventana-header h2 {
-    color: #ffff00;
-    margin: 0;
-}
-
-#cerrar-pedido {
-    background-color: #ffff00;
-    color: #000;
-
-    width: 35px;
-    height: 35px;
-
-    border-radius: 5px;
-
-    font-size: 18px;
-    font-weight: bold;
-}
-
-#cerrar-pedido:hover {
-    background-color: #000;
-    color: #ffff00;
-
-    border: 2px solid #ffff00;
-}
-
-#lista-productos {
-    max-height: 350px;
-    overflow-y: auto;
-}
-
-.item-pedido {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 15px;
-
-    padding: 15px 0;
-
-    border-bottom: 1px dashed #ffff00;
-}
-
-.item-info {
-    flex: 1;
-}
-
-.item-info h3 {
-    color: #ffff00;
-    margin-bottom: 5px;
-}
-
-.item-controles {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.item-controles button {
-    width: 30px;
-    height: 30px;
-
-    background-color: #ffff00;
-    color: #000;
-
-    font-weight: bold;
-    border-radius: 4px;
-}
-
-.item-controles span {
-    min-width: 25px;
-    text-align: center;
-}
-
-.item-precio {
-    font-weight: bold;
-    min-width: 60px;
-    text-align: right;
-}
-
-.pedido-vacio {
-    text-align: center;
-    padding: 30px 10px;
-    opacity: 0.8;
-}
-
-.ventana-total {
-    display: flex;
-    justify-content: space-between;
-
-    margin-top: 20px;
-    padding-top: 15px;
-
-    border-top: 2px solid #ffff00;
-
-    font-size: 1.3rem;
-}
-
-.ventana-total strong {
-    color: #ffff00;
-}
-
-#confirmar-pedido {
-    width: 100%;
-
-    margin-top: 20px;
-
-    padding: 13px;
-
-    background-color: #ffff00;
-    color: #000;
-
-    border: 2px solid #ffff00;
-    border-radius: 5px;
-
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-#confirmar-pedido:hover {
-    background-color: #000;
-    color: #ffff00;
-
-    box-shadow: 0 0 15px #ffff00;
-}
-
-/* ========================================
-   VENTANA DE SALSAS
-   ======================================== */
-
-.ventana-salsas {
-    position: fixed;
-    inset: 0;
-
-    display: none;
-
-    justify-content: center;
-    align-items: center;
-
-    background: rgba(0, 0, 0, 0.85);
-
-    z-index: 2000;
-
-    padding: 20px;
-}
-
-.ventana-salsas.activa {
-    display: flex;
-}
-
-.salsas-contenido {
-    width: 100%;
-    max-width: 500px;
-
-    background: #000;
-
-    border: 3px solid #ffff00;
-
-    border-radius: 12px;
-
-    padding: 25px;
+    border-color:
+        var(--amarillo);
 
     box-shadow:
-        0 0 10px #ffff00,
-        0 0 30px #ffff00;
+        0 0 25px rgba(255,217,0,0.12);
+
 }
 
-.salsas-header {
+
+.producto-imagen {
+
+    height: 160px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle,
+            #202020,
+            #090909
+        );
+
+    border-bottom:
+        2px solid var(--gris-oscuro);
+
+}
+
+
+.gringa-chicken {
+
+    background:
+        linear-gradient(
+            135deg,
+            #2b1b0c,
+            #0a0a0a
+        );
+
+}
+
+
+.gringa-beef {
+
+    background:
+        linear-gradient(
+            135deg,
+            #28110f,
+            #090909
+        );
+
+}
+
+
+.gringa-mixed {
+
+    background:
+        linear-gradient(
+            135deg,
+            #30220b,
+            #121212
+        );
+
+}
+
+
+/* =========================================================
+   MINI PACMAN
+   ========================================================= */
+
+.mini-pacman {
+
+    width: 80px;
+
+    height: 80px;
+
+    background:
+        var(--amarillo);
+
+    border-radius: 50%;
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    box-shadow:
+        0 0 30px
+        rgba(255,217,0,0.35);
+
+}
+
+
+.mini-pacman::after {
+
+    content: "";
+
+    position: absolute;
+
+    right: -2px;
+
+    top: 18px;
+
+    border-top:
+        22px solid transparent;
+
+    border-bottom:
+        22px solid transparent;
+
+    border-right:
+        40px solid #111;
+
+}
+
+
+/* =========================================================
+   PRODUCTO CONTENIDO
+   ========================================================= */
+
+.producto-contenido {
+
+    padding: 22px;
+
+}
+
+
+.producto-tag {
+
+    color: var(--azul-claro);
+
+    font-size: 0.6rem;
+
+    letter-spacing: 2px;
+
+}
+
+
+.producto h4 {
+
+    color: var(--amarillo);
+
+    font-size: 1.3rem;
+
+    margin:
+        8px 0;
+
+}
+
+
+.producto p {
+
+    color: var(--gris);
+
+    font-size: 0.8rem;
+
+    line-height: 1.5;
+
+}
+
+
+.producto-footer {
+
+    margin-top: 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+}
+
+
+.producto-footer strong {
+
+    color: var(--blanco);
+
+    font-size: 1.2rem;
+
+}
+
+
+.producto button {
+
+    background:
+        var(--amarillo);
+
+    color: #000;
+
+    padding: 11px 15px;
+
+    font-size: 0.65rem;
+
+    box-shadow:
+        3px 3px 0 #806d00;
+
+}
+
+
+/* =========================================================
+   FRESCOS
+   ========================================================= */
+
+.regla-frescos {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.regla-frescos div {
+
+    border:
+        1px solid var(--gris-oscuro);
+
+    padding: 18px;
+
+    text-align: center;
+
+    background: var(--negro-2);
+
+}
+
+
+.regla-frescos strong {
+
+    display: block;
+
+    color: var(--amarillo);
+
+    font-size: 1.3rem;
+
+}
+
+
+.regla-frescos span {
+
+    display: block;
+
+    color: var(--gris);
+
+    font-size: 0.6rem;
+
+    margin-top: 5px;
+
+}
+
+
+.fresco-icon {
+
+    height: 150px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 4rem;
+
+    font-weight: bold;
+
+    color: #000;
+
+}
+
+
+.fresco-rojo {
+
+    background:
+        linear-gradient(
+            135deg,
+            #68152a,
+            #23050d
+        );
+
+    color: var(--rojo);
+
+}
+
+
+.fresco-rosa {
+
+    background:
+        linear-gradient(
+            135deg,
+            #60283f,
+            #200b14
+        );
+
+    color: var(--rosa);
+
+}
+
+
+.fresco-azul {
+
+    background:
+        linear-gradient(
+            135deg,
+            #123a60,
+            #06131f
+        );
+
+    color: var(--cian);
+
+}
+
+
+/* =========================================================
+   NOSOTROS
+   ========================================================= */
+
+.terminal-card {
+
+    border:
+        2px solid var(--azul);
+
+    background: #070707;
+
+    box-shadow:
+        8px 8px 0 #08145c;
+
+}
+
+
+.terminal-header {
+
     display: flex;
 
     justify-content: space-between;
-    align-items: center;
 
-    border-bottom: 2px solid #ffff00;
+    padding: 14px 18px;
 
-    padding-bottom: 15px;
+    background:
+        var(--azul);
 
-    margin-bottom: 20px;
+    color: white;
+
+    font-size: 0.7rem;
+
 }
 
-.salsas-header h2 {
-    color: #ffff00;
 
-    font-size: 1.5rem;
+.terminal-body {
+
+    padding: 35px;
+
 }
 
-.salsas-header button {
-    background: none;
 
-    color: #ffff00;
+.terminal-command {
 
-    font-size: 30px;
-
-    font-weight: bold;
-}
-
-.salsas-producto {
-    text-align: center;
+    color: var(--verde) !important;
 
     margin-bottom: 25px;
+
 }
 
-.salsas-producto h3 {
-    color: #ffff00;
 
-    font-size: 1.5rem;
+.terminal-body h3 {
 
-    margin-bottom: 8px;
+    color: var(--amarillo);
+
+    margin-bottom: 20px;
+
 }
 
-.salsa-regla {
-    margin-top: 10px;
+
+.terminal-body p {
+
+    color: var(--gris);
+
+    line-height: 1.8;
+
+    margin-bottom: 18px;
+
+}
+
+
+.system-status {
+
+    display: flex;
+
+    justify-content: space-around;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    border-top:
+        1px solid #222;
+
+    color: var(--gris);
+
+    font-size: 0.65rem;
+
+}
+
+
+.system-status strong {
+
+    color: var(--verde);
+
+}
+
+
+/* =========================================================
+   CONTACTO
+   ========================================================= */
+
+.contacto {
+
+    text-align: center;
+
+}
+
+
+.contacto-subtitulo {
+
+    color: var(--gris);
+
+    max-width: 600px;
+
+    margin:
+        -30px auto 40px;
+
+    line-height: 1.7;
+
+}
+
+
+.contacto-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap: 20px;
+
+}
+
+
+.contacto-card {
+
+    padding: 30px 20px;
+
+    background: var(--negro-2);
+
+    border:
+        1px solid var(--gris-oscuro);
+
+    transition: 0.2s;
+
+}
+
+
+.contacto-card:hover {
+
+    border-color:
+        var(--amarillo);
+
+}
+
+
+.contacto-icono {
+
+    display: block;
+
+    color: var(--amarillo);
+
+    font-weight: bold;
+
+    font-size: 0.8rem;
+
+    margin-bottom: 18px;
+
+}
+
+
+.contacto-card h3 {
 
     font-size: 0.9rem;
 
-    opacity: 0.8;
+    letter-spacing: 2px;
+
+    margin-bottom: 12px;
+
 }
 
-.selector-salsa {
-    margin-bottom: 18px;
+
+.contacto-card p {
+
+    color: var(--gris);
+
+    font-size: 0.75rem;
+
 }
 
-.selector-salsa label {
-    display: block;
 
-    margin-bottom: 7px;
+.contacto-terminal {
 
-    font-weight: bold;
-
-    color: #ffff00;
-}
-
-.selector-salsa select {
-    width: 100%;
-
-    padding: 12px;
-
-    background: #111;
-
-    color: #fff;
-
-    border: 2px solid #ffff00;
-
-    border-radius: 6px;
-
-    font-size: 1rem;
-}
-
-.btn-segunda-salsa {
-    width: 100%;
-
-    padding: 12px;
-
-    background: #111;
-
-    color: #ffff00;
-
-    border: 2px dashed #ffff00;
-
-    border-radius: 6px;
-
-    font-weight: bold;
-
-    margin-bottom: 15px;
-}
-
-.btn-segunda-salsa:hover {
-    background: #ffff00;
-
-    color: #000;
-}
-
-.mensaje-salsa {
-    min-height: 25px;
-
-    color: #ffff00;
-
-    text-align: center;
-
-    font-weight: bold;
-}
-
-.resumen-salsas {
-    border-top: 1px solid #ffff00;
-
-    margin-top: 15px;
-
-    padding-top: 15px;
-
-    text-align: right;
-}
-
-.resumen-salsas strong {
-    color: #ffff00;
-}
-
-.btn-confirmar-gringa {
-    width: 100%;
-
-    padding: 14px;
-
-    margin-top: 20px;
-
-    background: #ffff00;
-
-    color: #000;
-
-    border: 2px solid #ffff00;
-
-    border-radius: 6px;
-
-    font-weight: bold;
-
-    font-size: 1rem;
-
-    cursor: pointer;
-}
-
-.btn-confirmar-gringa:hover {
-    background: #000;
-
-    color: #ffff00;
-}
-
-/* ========================================
-   VENTANA DE SALSAS
-   ======================================== */
-
-.ventana-salsas {
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 30px;
-    background: rgba(0, 0, 0, 0.85);
-}
-
-.ventana-salsas.activa {
-    display: flex;
-}
-
-.salsas-contenido {
-    width: 100%;
-    max-width: 500px;
-
-    max-height: 85vh;
-    overflow-y: auto;
-
-    padding: 25px;
-
-    background: #000;
-
-    border: 3px solid #ffff00;
-    border-radius: 12px;
-
-    box-shadow: 0 0 30px #ffff00;
-}
-
-.salsas-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding-bottom: 15px;
-    margin-bottom: 20px;
-
-    border-bottom: 2px solid #ffff00;
-}
-
-.salsas-header h2 {
-    color: #ffff00;
-    margin: 0;
-}
-
-.salsas-header button {
-    background: transparent;
-    color: #ffff00;
-
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.salsas-producto {
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.salsas-producto h3 {
-    color: #ffff00;
-    font-size: 1.6rem;
-    margin-bottom: 10px;
-}
-
-.selector-salsa {
-    margin-bottom: 18px;
-}
-
-.selector-salsa label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #ffff00;
-}
-
-.selector-salsa select {
-    width: 100%;
-    padding: 12px;
-
-    background: #111;
-    color: #fff;
-
-    border: 2px solid #ffff00;
-    border-radius: 6px;
-
-    font-size: 1rem;
-}
-
-.btn-segunda-salsa {
-    width: 100%;
-    padding: 12px;
-
-    background: #ffff00;
-    color: #000;
-
-    font-weight: bold;
-
-    border: 2px solid #ffff00;
-    border-radius: 6px;
-
-    margin-bottom: 15px;
-}
-
-.btn-segunda-salsa:hover {
-    background: #000;
-    color: #ffff00;
-}
-
-.mensaje-salsa {
-    min-height: 25px;
-    color: #ffff00;
-    text-align: center;
-}
-
-.resumen-salsas {
-    margin: 20px 0;
-    padding: 15px;
-
-    border-top: 2px solid #ffff00;
-    border-bottom: 2px solid #ffff00;
-
-    text-align: center;
-}
-
-.resumen-salsas strong {
-    color: #ffff00;
-}
-
-.btn-confirmar-gringa {
-    width: 100%;
-    padding: 14px;
-
-    background: #ffff00;
-    color: #000;
-
-    border: 2px solid #ffff00;
-    border-radius: 6px;
-
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-.btn-confirmar-gringa:hover {
-    background: #000;
-    color: #ffff00;
-}
-
-/* ========================================
-   CHECKOUT - OCULTO POR DEFECTO
-   ======================================== */
-
-.ventana-checkout {
-    display: none;
-}
-
-/* ========================================
-   VENTANA CHECKOUT
-   ======================================== */
-
-.ventana-checkout {
-    position: fixed;
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.85);
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    z-index: 10000;
+    margin-top: 35px;
 
     padding: 20px;
-}
 
+    border:
+        1px dashed var(--azul);
 
-/* Cuando está activa */
-
-.ventana-checkout.activa {
     display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    font-size: 0.75rem;
+
 }
 
 
-/* ========================================
-   CONTENIDO CHECKOUT
-   ======================================== */
+.contacto-terminal span {
 
-.checkout-contenido {
+    color: var(--azul-claro);
+
+}
+
+
+.contacto-terminal strong {
+
+    color: var(--verde);
+
+}
+
+
+/* =========================================================
+   BARRA FIJA DE PEDIDO
+   ========================================================= */
+
+.pedido-barra {
+
+    position: fixed;
+
+    z-index: 9000;
+
+    bottom: 0;
+
+    left: 0;
+
     width: 100%;
-    max-width: 550px;
 
-    max-height: 90vh;
-    overflow-y: auto;
+    min-height: 82px;
 
-    background: #111;
+    padding:
+        12px 5%;
 
-    border: 3px solid #ffd900;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    background:
+        rgba(5,5,5,0.97);
+
+    border-top:
+        3px solid var(--amarillo);
 
     box-shadow:
-        0 0 10px #ffd900,
-        0 0 30px rgba(255, 217, 0, 0.4);
+        0 -8px 30px
+        rgba(0,0,0,0.6);
+
+    backdrop-filter:
+        blur(10px);
+
+}
+
+
+.pedido-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+}
+
+
+.pedido-icono {
+
+    width: 45px;
+
+    height: 45px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border:
+        2px solid var(--amarillo);
+
+}
+
+
+.carrito-pixel {
+
+    width: 22px;
+
+    height: 13px;
+
+    border:
+        3px solid var(--amarillo);
+
+    border-top: none;
+
+    transform:
+        skew(-10deg);
+
+    position: relative;
+
+}
+
+
+.carrito-pixel::before,
+.carrito-pixel::after {
+
+    content: "";
+
+    position: absolute;
+
+    bottom: -9px;
+
+    width: 5px;
+
+    height: 5px;
+
+    background:
+        var(--amarillo);
+
+    border-radius: 50%;
+
+}
+
+
+.carrito-pixel::before {
+
+    left: 1px;
+
+}
+
+
+.carrito-pixel::after {
+
+    right: 1px;
+
+}
+
+
+.pedido-info strong {
+
+    display: block;
+
+    color: var(--amarillo);
+
+    font-size: 0.8rem;
+
+    letter-spacing: 1px;
+
+}
+
+
+.pedido-info span {
+
+    display: block;
+
+    color: var(--gris);
+
+    font-size: 0.65rem;
+
+    margin-top: 3px;
+
+}
+
+
+.pedido-total {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.pedido-total span {
+
+    color: var(--gris);
+
+    font-size: 0.65rem;
+
+}
+
+
+.pedido-total strong {
+
+    color: var(--blanco);
+
+    font-size: 1.2rem;
+
+}
+
+
+.pedido-barra > button {
+
+    background:
+        var(--amarillo);
+
+    color: #000;
+
+    padding:
+        14px 20px;
+
+    font-size: 0.7rem;
+
+    box-shadow:
+        4px 4px 0 #806d00;
+
+}
+
+
+/* =========================================================
+   VENTANAS MODALES
+   ========================================================= */
+
+.ventana-pedido,
+.ventana-salsas,
+.ventana-checkout,
+.ventana-confirmacion {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9500;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
 
     padding: 25px;
 
-    color: white;
+    background:
+        rgba(0,0,0,0.88);
+
+    backdrop-filter:
+        blur(5px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
+
 }
 
 
-/* ========================================
-   HEADER
-   ======================================== */
+.ventana-pedido.activa,
+.ventana-salsas.activa,
+.ventana-checkout.activa,
+.ventana-confirmacion.activa {
 
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+}
+
+
+/* =========================================================
+   CONTENEDORES MODALES
+   ========================================================= */
+
+.ventana-contenido,
+.salsas-contenido,
+.checkout-contenido,
+.confirmacion-contenido {
+
+    width: 100%;
+
+    max-width: 600px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background:
+        #090909;
+
+    border:
+        3px solid var(--amarillo);
+
+    box-shadow:
+        10px 10px 0 #403700,
+        0 0 50px
+        rgba(255,217,0,0.12);
+
+    padding: 25px;
+
+}
+
+
+/* =========================================================
+   HEADERS MODALES
+   ========================================================= */
+
+.ventana-header,
+.salsas-header,
 .checkout-header {
+
     display: flex;
 
     justify-content: space-between;
+
     align-items: center;
 
-    border-bottom: 2px solid #ffd900;
+    padding-bottom: 18px;
 
-    padding-bottom: 15px;
+    margin-bottom: 25px;
 
-    margin-bottom: 20px;
+    border-bottom:
+        1px solid var(--gris-oscuro);
+
 }
 
+
+.ventana-header h2,
+.salsas-header h2,
 .checkout-header h2 {
-    margin: 0;
 
-    color: #ffd900;
+    color: var(--amarillo);
+
+    font-size: 1rem;
+
+    letter-spacing: 2px;
+
 }
 
+
+.ventana-header button,
+.salsas-header button,
 .checkout-header button {
-    background: transparent;
+
+    background: none;
 
     border: none;
 
-    color: #ffd900;
+    color: var(--blanco);
 
-    font-size: 28px;
+    font-size: 1.8rem;
 
     cursor: pointer;
+
 }
 
 
-/* ========================================
-   RESUMEN
-   ======================================== */
+.ventana-header button:hover,
+.salsas-header button:hover,
+.checkout-header button:hover {
 
-.checkout-resumen h3 {
-    color: #ffd900;
+    color: var(--amarillo);
 
-    margin-bottom: 15px;
 }
 
 
-/* ========================================
-   PRODUCTOS CHECKOUT
-   ======================================== */
+/* =========================================================
+   LISTA DEL PEDIDO
+   ========================================================= */
 
-.checkout-item {
+#lista-productos {
+
     display: flex;
 
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 12px;
+
+}
+
+
+.item-pedido {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr auto auto;
 
     gap: 15px;
 
-    padding: 12px 0;
+    align-items: center;
 
-    border-bottom: 1px solid #444;
-}
+    padding: 15px;
 
-.checkout-item strong {
-    color: white;
-}
+    border:
+        1px solid #292929;
 
-.checkout-item p {
-    margin: 5px 0 0;
+    background: #0e0e0e;
 
-    font-size: 14px;
-
-    color: #ccc;
 }
 
 
-/* ========================================
-   TOTAL
-   ======================================== */
+.item-info h3 {
 
+    color: var(--amarillo);
+
+    font-size: 0.85rem;
+
+}
+
+
+.item-info p {
+
+    color: var(--gris);
+
+    font-size: 0.65rem;
+
+    margin-top: 5px;
+
+}
+
+
+.item-controles {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.item-controles button {
+
+    width: 28px;
+
+    height: 28px;
+
+    background:
+        var(--amarillo);
+
+    border: none;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+.item-controles span {
+
+    min-width: 20px;
+
+    text-align: center;
+
+}
+
+
+.item-precio {
+
+    color: var(--amarillo);
+
+    font-weight: bold;
+
+}
+
+
+.pedido-vacio {
+
+    color: var(--gris);
+
+    text-align: center;
+
+    padding: 35px;
+
+}
+
+
+/* =========================================================
+   TOTAL VENTANA
+   ========================================================= */
+
+.ventana-total,
 .checkout-total {
+
     display: flex;
 
     justify-content: space-between;
 
-    margin-top: 20px;
+    align-items: center;
 
-    padding: 15px 0;
+    margin-top: 25px;
 
-    border-top: 2px solid #ffd900;
+    padding-top: 20px;
 
-    font-size: 20px;
+    border-top:
+        2px solid var(--amarillo);
+
 }
 
+
+.ventana-total span,
+.checkout-total span {
+
+    color: var(--gris);
+
+}
+
+
+.ventana-total strong,
 .checkout-total strong {
-    color: #ffd900;
+
+    color: var(--amarillo);
+
+    font-size: 1.5rem;
+
 }
 
 
-/* ========================================
-   MÉTODO DE PAGO
-   ======================================== */
+/* =========================================================
+   BOTÓN PRINCIPAL
+   ========================================================= */
 
-.metodo-pago {
-    margin-top: 20px;
+.btn-principal {
+
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 16px;
+
+    background:
+        var(--amarillo);
+
+    color: #000;
+
+    box-shadow:
+        5px 5px 0 #806d00;
+
 }
 
-.metodo-pago h3 {
-    color: #ffd900;
+
+.btn-principal:disabled {
+
+    background:
+        #444;
+
+    color:
+        #777;
+
+    box-shadow:
+        none;
+
+    cursor:
+        not-allowed;
+
+    transform: none;
+
 }
 
-.metodo-pago-btn {
+
+/* =========================================================
+   CONFIGURAR GRINGA
+   ========================================================= */
+
+.salsas-producto {
+
+    padding: 18px;
+
+    background: #101010;
+
+    border-left:
+        4px solid var(--amarillo);
+
+    margin-bottom: 25px;
+
+}
+
+
+.salsas-producto h3 {
+
+    color: var(--amarillo);
+
+    margin-bottom: 8px;
+
+}
+
+
+.salsas-producto p {
+
+    color: var(--gris);
+
+    font-size: 0.75rem;
+
+    line-height: 1.6;
+
+}
+
+
+.salsa-regla {
+
+    margin-top: 10px;
+
+}
+
+
+.selector-salsa {
+
+    margin-bottom: 18px;
+
+}
+
+
+.selector-salsa label {
+
+    display: block;
+
+    color: var(--amarillo);
+
+    font-size: 0.7rem;
+
+    margin-bottom: 8px;
+
+}
+
+
+.selector-salsa select {
+
+    width: 100%;
+
+    padding: 13px;
+
+    background: #111;
+
+    color: white;
+
+    border:
+        1px solid #333;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+}
+
+
+.btn-secundario {
+
     width: 100%;
 
     padding: 12px;
 
+    background:
+        transparent;
+
+    color: var(--amarillo);
+
+    border:
+        1px dashed var(--amarillo);
+
+}
+
+
+.mensaje-salsa {
+
+    color: var(--rojo);
+
+    min-height: 25px;
+
+    font-size: 0.7rem;
+
+    margin-top: 10px;
+
+}
+
+
+/* =========================================================
+   EXTRA CHEESE
+   ========================================================= */
+
+.extra-queso {
+
+    margin-top: 15px;
+
+    padding: 18px;
+
+    border:
+        1px solid #292929;
+
+    background: #101010;
+
+}
+
+
+.checkbox-extra {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: var(--amarillo);
+
+    cursor: pointer;
+
+}
+
+
+.checkbox-extra input {
+
+    width: 18px;
+
+    height: 18px;
+
+    accent-color:
+        var(--amarillo);
+
+}
+
+
+.extra-queso p {
+
+    color: var(--gris);
+
+    font-size: 0.7rem;
+
     margin-top: 8px;
 
-    background: #222;
+}
 
-    border: 2px solid #ffd900;
+
+.extra-queso strong {
+
+    color: var(--amarillo);
+
+}
+
+
+.resumen-salsas {
+
+    margin-top: 18px;
+
+    padding: 15px;
+
+    border:
+        1px solid #292929;
+
+}
+
+
+.resumen-salsas p {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    color: var(--gris);
+
+    font-size: 0.7rem;
+
+    margin: 6px 0;
+
+}
+
+
+.resumen-salsas strong {
+
+    color: var(--amarillo);
+
+}
+
+
+/* =========================================================
+   CHECKOUT
+   ========================================================= */
+
+.checkout-resumen h3,
+.metodo-pago h3 {
+
+    color: var(--amarillo);
+
+    font-size: 0.8rem;
+
+    margin-bottom: 15px;
+
+}
+
+
+.checkout-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 15px 0;
+
+    border-bottom:
+        1px solid #222;
+
+}
+
+
+.checkout-item strong {
+
+    color: white;
+
+    font-size: 0.8rem;
+
+}
+
+
+.checkout-item p {
+
+    color: var(--gris);
+
+    font-size: 0.65rem;
+
+    margin-top: 5px;
+
+}
+
+
+.checkout-item > span {
+
+    color: var(--amarillo);
+
+    font-weight: bold;
+
+}
+
+
+.metodo-pago {
+
+    margin-top: 30px;
+
+}
+
+
+.metodo-pago-btn {
+
+    width: 100%;
+
+    padding: 13px;
+
+    margin-bottom: 10px;
+
+    background: #111;
+
+    border:
+        1px solid #333;
 
     color: white;
 
     cursor: pointer;
+
+    font-family:
+        "Courier New",
+        monospace;
+
 }
+
 
 .metodo-pago-btn:hover {
-    background: #ffd900;
 
-    color: black;
+    border-color:
+        var(--amarillo);
+
+    color:
+        var(--amarillo);
+
 }
 
-
-/* ========================================
-   PAGO
-   ======================================== */
 
 .pago-opcion {
-    margin-top: 15px;
 
-    padding: 15px;
+    padding: 18px;
 
-    border: 1px solid #555;
+    background: #101010;
+
+    border:
+        1px solid #292929;
+
+    margin-top: 10px;
+
 }
+
+
+.pago-opcion label {
+
+    display: block;
+
+    color: var(--gris);
+
+    font-size: 0.7rem;
+
+    margin-bottom: 8px;
+
+}
+
 
 .pago-opcion input {
+
     width: 100%;
 
-    padding: 10px;
+    padding: 13px;
 
-    margin-top: 8px;
+    background: #050505;
 
-    box-sizing: border-box;
+    border:
+        1px solid #333;
+
+    color: white;
+
+    font-family:
+        "Courier New",
+        monospace;
+
 }
 
 
-/* ========================================
-   CAMBIO
-   ======================================== */
-
 .cambio {
+
     display: flex;
 
     justify-content: space-between;
 
     margin-top: 15px;
 
-    font-size: 18px;
 }
 
+
+.cambio span {
+
+    color: var(--gris);
+
+}
+
+
 .cambio strong {
-    color: #ffd900;
+
+    color: var(--amarillo);
+
+}
+
+
+/* =========================================================
+   CONFIRMACIÓN
+   ========================================================= */
+
+.confirmacion-contenido {
+
+    text-align: center;
+
+    max-width: 500px;
+
+}
+
+
+.confirmacion-pacman {
+
+    height: 80px;
+
+    position: relative;
+
+    margin-bottom: 20px;
+
+}
+
+
+.confirmacion-pac {
+
+    position: absolute;
+
+    width: 50px;
+
+    height: 50px;
+
+    background: var(--amarillo);
+
+    border-radius: 50%;
+
+    left: calc(50% - 75px);
+
+    top: 15px;
+
+}
+
+
+.confirmacion-pac::after {
+
+    content: "";
+
+    position: absolute;
+
+    right: -2px;
+
+    top: 12px;
+
+    border-top:
+        13px solid transparent;
+
+    border-bottom:
+        13px solid transparent;
+
+    border-right:
+        25px solid #090909;
+
+}
+
+
+.confirmacion-ghost {
+
+    position: absolute;
+
+    width: 45px;
+
+    height: 45px;
+
+    background: var(--rojo);
+
+    border-radius:
+        22px 22px 5px 5px;
+
+    left: calc(50% + 15px);
+
+    top: 18px;
+
+}
+
+
+.confirmacion-status {
+
+    color: var(--verde);
+
+    font-size: 0.6rem;
+
+    letter-spacing: 2px;
+
+}
+
+
+.confirmacion-contenido h2 {
+
+    color: var(--amarillo);
+
+    margin:
+        12px 0;
+
+    letter-spacing: 2px;
+
+}
+
+
+.numero-pedido {
+
+    color: var(--gris);
+
+    font-size: 0.8rem;
+
+}
+
+
+.numero-pedido strong {
+
+    color: white;
+
+    font-size: 1.3rem;
+
+}
+
+
+.confirmacion-mensaje {
+
+    margin: 25px 0;
+
+    padding: 15px;
+
+    background: #101010;
+
+    border:
+        1px solid var(--verde);
+
+}
+
+
+.confirmacion-mensaje p {
+
+    color: var(--verde);
+
+    font-size: 0.7rem;
+
+}
+
+
+.confirmacion-detalles {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap: 10px;
+
+}
+
+
+.confirmacion-detalles > div {
+
+    padding: 15px;
+
+    background: #101010;
+
+    border:
+        1px solid #292929;
+
+}
+
+
+.confirmacion-detalles span {
+
+    display: block;
+
+    color: var(--gris);
+
+    font-size: 0.6rem;
+
+    margin-bottom: 7px;
+
+}
+
+
+.confirmacion-detalles strong {
+
+    color: var(--amarillo);
+
+    font-size: 0.85rem;
+
+}
+
+
+.mensaje-final {
+
+    color: var(--gris);
+
+    margin-top: 25px;
+
+    font-size: 0.75rem;
+
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+
+    padding:
+        50px 20px 130px;
+
+    text-align: center;
+
+    border-top:
+        1px solid #222;
+
+    color: var(--gris);
+
+    font-size: 0.65rem;
+
+    line-height: 2;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .header {
+
+        padding: 20px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+
+    .navbar a {
+
+        padding:
+            14px 10px;
+
+        font-size: 0.65rem;
+
+    }
+
+
+    .hero {
+
+        min-height: 500px;
+
+    }
+
+
+    .hero::before {
+
+        inset: 12px;
+
+    }
+
+
+    .section {
+
+        padding:
+            65px 18px;
+
+    }
+
+
+    .section-title {
+
+        gap: 10px;
+
+    }
+
+
+    .section-title h2 {
+
+        font-size: 1.3rem;
+
+    }
+
+
+    .line {
+
+        min-width: 20px;
+
+    }
+
+
+    .regla-frescos {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .contacto-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .pedido-barra {
+
+        padding:
+            10px 15px;
+
+        gap: 10px;
+
+    }
+
+
+    .pedido-total {
+
+        display: none;
+
+    }
+
+
+    .pedido-barra > button {
+
+        padding:
+            13px 14px;
+
+    }
+
+
+    .item-pedido {
+
+        grid-template-columns:
+            1fr auto;
+
+    }
+
+
+    .item-precio {
+
+        grid-column:
+            2;
+
+        grid-row:
+            1;
+
+    }
+
+
+    .item-controles {
+
+        grid-column:
+            1 / -1;
+
+    }
+
+
+    .confirmacion-detalles {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media (max-width: 430px) {
+
+    body {
+
+        padding-bottom: 90px;
+
+    }
+
+
+    .logo h1 {
+
+        font-size: 1.7rem;
+
+    }
+
+
+    .status {
+
+        font-size: 0.6rem;
+
+    }
+
+
+    .hero-pacman {
+
+        left:
+            calc(50% - 140px);
+
+    }
+
+
+    .hero-ghost.ghost-red {
+
+        left:
+            calc(50% - 70px);
+
+    }
+
+
+    .hero-ghost.ghost-pink {
+
+        left:
+            calc(50% - 20px);
+
+    }
+
+
+    .hero-ghost.ghost-blue {
+
+        left:
+            calc(50% + 30px);
+
+    }
+
+
+    .pedido-icono {
+
+        width: 38px;
+
+        height: 38px;
+
+    }
+
+
+    .pedido-info strong {
+
+        font-size: 0.65rem;
+
+    }
+
+
+    .pedido-info span {
+
+        font-size: 0.55rem;
+
+    }
+
+
+    .pedido-barra > button {
+
+        font-size: 0.6rem;
+
+        padding:
+            12px 10px;
+
+    }
+
+
+    .ventana-pedido,
+    .ventana-salsas,
+    .ventana-checkout,
+    .ventana-confirmacion {
+
+        padding: 12px;
+
+    }
+
+
+    .ventana-contenido,
+    .salsas-contenido,
+    .checkout-contenido,
+    .confirmacion-contenido {
+
+        padding: 18px;
+
+        box-shadow:
+            5px 5px 0 #403700;
+
+    }
+
+}
+
+/* ========================================
+   TRANSICIÓN PAC-MAN
+   ======================================== */
+
+.pacman-transicion {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        rgba(0, 0, 0, 0.38);
+
+    backdrop-filter:
+        blur(6px);
+
+    -webkit-backdrop-filter:
+        blur(6px);
+
+    overflow: hidden;
+
+    pointer-events: all;
+
+}
+
+
+.pacman-transicion.activa {
+
+    display: flex;
+
+    animation:
+        aparecer-transicion
+        0.3s
+        ease-out
+        forwards;
+
+}
+
+
+@keyframes aparecer-transicion {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
 }
 
 
 /* ========================================
-   FINALIZAR
+   ESCENA
    ======================================== */
 
-#finalizar-pedido {
+.pacman-escena {
+
+    position: relative;
+
     width: 100%;
 
-    margin-top: 20px;
+    height: 130px;
 
-    padding: 14px;
+    display: flex;
 
-    background: #ffd900;
+    align-items: center;
 
-    border: none;
+    overflow: hidden;
 
-    color: black;
-
-    font-weight: bold;
-
-    cursor: pointer;
 }
 
-#finalizar-pedido:disabled {
-    opacity: 0.4;
 
-    cursor: not-allowed;
+/* ========================================
+   PAC-MAN
+   ======================================== */
+
+.pacman-css {
+
+    position: absolute;
+
+    width: 58px;
+
+    height: 58px;
+
+    background:
+        var(--amarillo);
+
+    border-radius: 50%;
+
+    left: -80px;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(255,217,0,0.45)
+        );
+
+    animation:
+
+        pacman-correr
+        2.2s
+        linear
+        forwards,
+
+        pacman-boca
+        0.20s
+        infinite
+        alternate;
+
+}
+
+
+/* ========================================
+   BOCA DE PAC-MAN
+   ======================================== */
+
+.pacman-css::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 0;
+
+    height: 0;
+
+    border-top:
+        13px solid transparent;
+
+    border-bottom:
+        13px solid transparent;
+
+    border-left:
+        27px solid #000;
+
+    right: -2px;
+
+    top: 16px;
+
+}
+
+
+/* ========================================
+   FANTASMAS
+   ======================================== */
+
+.fantasma-css {
+
+    position: absolute;
+
+    width: 50px;
+
+    height: 55px;
+
+    border-radius:
+        25px 25px 5px 5px;
+
+    left: -140px;
+
+    filter:
+        drop-shadow(
+            0 0 7px
+            rgba(255,255,255,0.15)
+        );
+
+    animation:
+
+        fantasmas-correr
+        2.2s
+        linear
+        forwards,
+
+        fantasma-flotar
+        0.7s
+        ease-in-out
+        infinite
+        alternate;
+
+}
+
+
+/* ========================================
+   MOVIMIENTO VERTICAL
+   ======================================== */
+
+@keyframes fantasma-flotar {
+
+    from {
+
+        transform:
+            translateY(-6px);
+
+    }
+
+    to {
+
+        transform:
+            translateY(6px);
+
+    }
+
+}
+
+
+/* ========================================
+   PARTE INFERIOR DEL FANTASMA
+   ======================================== */
+
+.fantasma-css::after {
+
+    content: "";
+
+    position: absolute;
+
+    bottom: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 15px;
+
+    background:
+        inherit;
+
+    clip-path:
+        polygon(
+            0 0,
+            20% 70%,
+            40% 0,
+            60% 70%,
+            80% 0,
+            100% 70%,
+            100% 100%,
+            0 100%
+        );
+
+}
+
+
+/* ========================================
+   COLORES
+   ======================================== */
+
+.fantasma-rojo {
+
+    background:
+        #ff3030;
+
+    animation-delay:
+        0.18s,
+        0s;
+
+}
+
+
+.fantasma-rosa {
+
+    background:
+        #ff8fcf;
+
+    animation-delay:
+        0.32s,
+        0s;
+
+}
+
+
+.fantasma-cyan {
+
+    background:
+        #00e5ff;
+
+    animation-delay:
+        0.46s,
+        0s;
+
+}
+
+
+.fantasma-naranja {
+
+    background:
+        #ff9d00;
+
+    animation-delay:
+        0.60s,
+        0s;
+
+}
+
+
+/* ========================================
+   OJOS
+   ======================================== */
+
+.fantasma-ojo {
+
+    position: absolute;
+
+    width: 12px;
+
+    height: 17px;
+
+    background:
+        white;
+
+    border-radius: 50%;
+
+    top: 15px;
+
+    z-index: 2;
+
+}
+
+
+.ojo-1 {
+
+    left: 10px;
+
+}
+
+
+.ojo-2 {
+
+    right: 10px;
+
+}
+
+
+/* ========================================
+   PUPILAS
+   ======================================== */
+
+.fantasma-ojo::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 6px;
+
+    height: 8px;
+
+    background:
+        #111;
+
+    border-radius: 50%;
+
+    left: 3px;
+
+    top: 5px;
+
+}
+
+
+/* ========================================
+   MOVIMIENTO HORIZONTAL
+   ======================================== */
+
+@keyframes pacman-correr {
+
+    0% {
+
+        left:
+            -90px;
+
+    }
+
+    100% {
+
+        left:
+            110%;
+
+    }
+
+}
+
+
+@keyframes fantasmas-correr {
+
+    0% {
+
+        left:
+            -150px;
+
+    }
+
+    100% {
+
+        left:
+            110%;
+
+    }
+
+}
+
+
+/* ========================================
+   BOCA DE PAC-MAN
+   ======================================== */
+
+@keyframes pacman-boca {
+
+    from {
+
+        transform:
+            scaleX(1);
+
+    }
+
+    to {
+
+        transform:
+            scaleX(0.88);
+
+    }
+
+}
+
+
+/* ========================================
+   CELULAR
+   ======================================== */
+
+@media (max-width: 600px) {
+
+    .pacman-css {
+
+        width: 45px;
+
+        height: 45px;
+
+    }
+
+
+    .fantasma-css {
+
+        width: 40px;
+
+        height: 45px;
+
+    }
+
 }

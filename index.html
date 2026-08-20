@@ -1,597 +1,1263 @@
-!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>GRINGA.EXE</title>
+
     <link rel="stylesheet" href="css/estilo.css">
+    <link rel="icon" type="image/png" href="img/logo1.png">
 </head>
 
 <body>
-<header>
+
+    <!-- =====================================================
+         FONDO / DECORACIÓN
+         ===================================================== -->
+
+    <div class="scanlines"></div>
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+   <header>
     <div class="logo">
-        <h1>GRINGA.EXE</h1>
+        <img
+            src="img/logo1.png"
+            alt="Logo GRINGA.EXE"
+        >
         <p>Food Service System v1.0</p>
     </div>
 </header>
 
-<nav>
-    <ul>
-        <li><a href="#inicio">Inicio</a></li>
-        <li><a href="#menu">Menú</a></li>
-        <li><a href="#nosotros">Nosotros</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-    </ul>
-</nav>
 
-<main>
+    <!-- =====================================================
+         NAVEGACIÓN
+         ===================================================== -->
 
-    <section id="inicio">
-        <h2>Bienvenido a GRINGA.EXE</h2>
+    <nav class="navbar">
 
-        <p>
-            Disfruta de nuestras deliciosas gringas,
-            preparadas con ingredientes de calidad y mucho sabor.
-        </p>
+        <ul>
 
-        <a href="#menu">Ver nuestro menú</a>
-    </section>
+            <li>
+                <a href="#inicio">INICIO</a>
+            </li>
 
-    <section id="menu">
+            <li>
+                <a href="#menu">MENÚ</a>
+            </li>
 
-    <h2>Nuestro Menú</h2>
-    <p>
-        [DESCRIPCIÓN DEL MENÚ]
-    </p>
+            <li>
+                <a href="#nosotros">NOSOTROS</a>
+            </li>
 
-    <!-- =========================
-         GRINGAS
-         ========================= -->
-    <section class="categoria" id="gringas">
-        <h3>GRINGAS</h3>
-        <div class="productos">
-           <article class="producto"
-    data-producto="chicken"
-    data-precio="2.00"
-    data-tipo="gringa">
-    <h4>Chicken.exe</h4>
-    <p>
-        Gringa de Pollo
-    </p>
-    <p>
-        Precio: $2.00
-    </p>
-    <button type="button" class="btn-gringa">
-        Agregar al pedido
-    </button>
-</article>
+            <li>
+                <a href="#contacto">CONTACTO</a>
+            </li>
 
-            <article class="producto"
-    data-producto="beef"
-    data-precio="2.00"
-    data-tipo="gringa">
-    <h4>Beef.exe</h4>
-    <p>
-        Gringa de Carne
-    </p>
-    <p>
-        Precio: $2.00
-    </p>
-    <button type="button" class="btn-gringa">
-        Agregar al pedido
-    </button>
-</article>
+        </ul>
 
-            <article class="producto"
-    data-producto="mixed"
-    data-precio="2.15"
-    data-tipo="gringa">
-    <h4>Mixed Mode</h4>
-    <p>
-        Gringa de Carne + Pollo
-    </p>
-    <p>
-        Precio: $2.15
-    </p>
-    <button type="button" class="btn-gringa">
-        Agregar al pedido
-    </button>
-</article>
+    </nav>
 
-    <!-- =========================
-     FRESCOS
-     ========================= -->
-<section class="categoria" id="frescos">
-    <h3>FRESCOS</h3>
-    <p>
-        Elige el sabor de tu fresco.
-        El precio depende de la cantidad y de si lo acompañas con una gringa.
-    </p>
 
-    <div class="regla-frescos">
-        <p>
-            Fresco individual: $0.35
-        </p>
-        <p>
-            Fresco con gringa: +$0.25
-        </p>
-        <p>
-            Segundo fresco: +$0.50
-        </p>
-    </div>
+    <!-- =====================================================
+         CONTENIDO PRINCIPAL
+         ===================================================== -->
 
-    <div class="productos">
+    <main>
 
-        <!-- FRESCO 1 -->
-        <article class="producto"
-    data-tipo="fresco"
-    data-precio="0.35">
+        <!-- =================================================
+             INICIO
+             ================================================= -->
 
-    <h4>Blinky Punch</h4>
-    <p>
-        Fresco de Jamaica
-    </p>
-    <p>
-        Precio individual: $0.35
-    </p>
-    <button type="button">
-        Agregar al pedido
-    </button>
+        <section id="inicio" class="hero">
 
-</article>
+            <div class="hero-content">
 
-        <!-- FRESCO 2 -->
-        <article class="producto"
-    data-tipo="fresco"
-    data-precio="0.35">
+                <div class="hero-pixel">
+                    <div class="hero-pacman"></div>
 
-    <h4>Pinky Milk</h4>
-    <p>
-        Fresco de Horchata
-    </p>
-    <p>
-        Precio individual: $0.35
-    </p>
-    <button type="button">
-        Agregar al pedido
-    </button>
-</article>
+                    <div class="hero-ghost ghost-red">
+                        <span class="ghost-eye left"></span>
+                        <span class="ghost-eye right"></span>
+                    </div>
 
-        <!-- FRESCO 3 -->
-        <article class="producto"
-    data-tipo="fresco"
-    data-precio="0.35">
+                    <div class="hero-ghost ghost-pink">
+                        <span class="ghost-eye left"></span>
+                        <span class="ghost-eye right"></span>
+                    </div>
 
-    <h4>Clyde Lemonade</h4>
-    <p>
-        Fresco de Limonada
-    </p>
-    <p>
-        Precio individual: $0.35
-    </p>
-    <button type="button">
-        Agregar al pedido
-    </button>
-</article>
+                    <div class="hero-ghost ghost-blue">
+                        <span class="ghost-eye left"></span>
+                        <span class="ghost-eye right"></span>
+                    </div>
 
-    </div>
-</section>
+                </div>
 
-        </div>
-    </section>
-
-</section>
-
-<section id="nosotros">
-    <div class="nosotros-contenido">
-        <div class="nosotros-titulo">
-            <span class="pixel-decoracion">●</span>
-            <h2>ABOUT_GRINGA.EXE</h2>
-            <span class="pixel-decoracion">●</span>
-        </div>
-        <div class="nosotros-card">
-            <div class="terminal-header">
-                <span>GRINGA.EXE SYSTEM</span>
-                <span>● ONLINE</span>
-            </div>
-            <div class="nosotros-texto">
-                <h3>¿Quiénes somos?</h3>
-                <p>
-                    Somos GRINGA.EXE, un servicio de comida
-                    especializado en deliciosas gringas,
-                    frescos y salsas preparadas con mucho sabor.
+                <p class="system-label">
+                    [ SYSTEM READY ]
                 </p>
-                <p>
-                    Nuestro objetivo es ofrecer comida rica,
-                    accesible y preparada con ingredientes de calidad,
-                    combinando nuestra pasión por la comida con
-                    un estilo único inspirado en los videojuegos
-                    clásicos.
+
+                <h2>
+                    BIENVENIDO A
+                    <span>GRINGA.EXE</span>
+                </h2>
+
+                <p class="hero-text">
+                    Inserta monedas, elige tu gringa
+                    y prepárate para comer.
                 </p>
-            </div>
-            <div class="system-status">
-                <p>STATUS: <strong>ONLINE</strong></p>
-                <p>FOOD SYSTEM: <strong>ACTIVE</strong></p>
-                <p>VERSION: <strong>3.0</strong></p>
-            </div>
-        </div>
-    </div>
-</section>
 
-<section id="contacto">
-    <div class="contacto-contenido">
-        <div class="contacto-titulo">
-            <span>◄</span>
-            <h2>CONTACT_SYSTEM</h2>
-            <span>►</span>
-        </div>
-        <p class="contacto-subtitulo">
-            ¿Necesitas ayuda o quieres realizar un pedido?
-            Conecta con GRINGA.EXE.
-        </p>
-        <div class="contacto-grid">
-            <div class="contacto-card">
-                <div class="contacto-icono">☎</div>
-                <h3>PHONE</h3>
-                <p>+503 6056 6167</p>
-            </div>
-            <div class="contacto-card">
-                <div class="contacto-icono">⌖</div>
-                <h3>LOCATION</h3>
-                <p>Dirección pendiente</p>
-            </div>
-            <div class="contacto-card">
-                <div class="contacto-icono">◷</div>
-                <h3>HORARIO</h3>
-                <p>Horario pendiente</p>
-            </div>
-        </div>
-        <div class="contacto-terminal">
-            <span>SYSTEM MESSAGE:</span>
-            <strong>Estamos listos para recibir tu pedido.</strong>
-        </div>
-    </div>
-</section>
+                <a href="#menu" class="pixel-button">
+                    INSERT COIN
+                </a>
 
-<section id="pedido">
-    <div class="pedido-barra">
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MENÚ
+             ================================================= -->
+
+        <section id="menu" class="section">
+
+            <div class="section-title">
+
+                <span class="line"></span>
+
+                <div>
+                    <p>/// SELECT YOUR FOOD ///</p>
+                    <h2>NUESTRO MENÚ</h2>
+                </div>
+
+                <span class="line"></span>
+
+            </div>
+
+
+            <!-- =================================================
+                 GRINGAS
+                 ================================================= -->
+
+            <section class="categoria">
+
+                <div class="categoria-header">
+
+                    <span class="categoria-numero">
+                        01
+                    </span>
+
+                    <div>
+                        <h3>GRINGAS</h3>
+                        <p>CHOOSE YOUR CHARACTER</p>
+                    </div>
+
+                </div>
+
+
+                <div class="productos">
+
+                    <!-- CHICKEN -->
+
+                    <article
+                        class="producto"
+                        data-producto="chicken"
+                        data-precio="2.00"
+                        data-tipo="gringa"
+                    >
+
+                        <div class="producto-imagen gringa-chicken">
+
+                            <div class="mini-pacman"></div>
+
+                        </div>
+
+                        <div class="producto-contenido">
+
+                            <span class="producto-tag">
+                                PLAYER 01
+                            </span>
+
+                            <h4>Chicken.exe</h4>
+
+                            <p>
+                                Gringa de pollo
+                            </p>
+
+                            <div class="producto-footer">
+
+                                <strong>
+                                    $2.00
+                                </strong>
+
+                                <button
+                                    type="button"
+                                    class="btn-gringa"
+                                >
+                                    AGREGAR
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- BEEF -->
+
+                    <article
+                        class="producto"
+                        data-producto="beef"
+                        data-precio="2.00"
+                        data-tipo="gringa"
+                    >
+
+                        <div class="producto-imagen gringa-beef">
+
+                            <div class="mini-pacman"></div>
+
+                        </div>
+
+                        <div class="producto-contenido">
+
+                            <span class="producto-tag">
+                                PLAYER 02
+                            </span>
+
+                            <h4>Beef.exe</h4>
+
+                            <p>
+                                Gringa de carne
+                            </p>
+
+                            <div class="producto-footer">
+
+                                <strong>
+                                    $2.00
+                                </strong>
+
+                                <button
+                                    type="button"
+                                    class="btn-gringa"
+                                >
+                                    AGREGAR
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- MIXED -->
+
+                    <article
+                        class="producto"
+                        data-producto="mixed"
+                        data-precio="2.15"
+                        data-tipo="gringa"
+                    >
+
+                        <div class="producto-imagen gringa-mixed">
+
+                            <div class="mini-pacman"></div>
+
+                        </div>
+
+                        <div class="producto-contenido">
+
+                            <span class="producto-tag">
+                                PLAYER 03
+                            </span>
+
+                            <h4>Mixed Mode</h4>
+
+                            <p>
+                                Carne + pollo
+                            </p>
+
+                            <div class="producto-footer">
+
+                                <strong>
+                                    $2.15
+                                </strong>
+
+                                <button
+                                    type="button"
+                                    class="btn-gringa"
+                                >
+                                    AGREGAR
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 FRESCOS
+                 ================================================= -->
+
+            <section class="categoria">
+
+                <div class="categoria-header">
+
+                    <span class="categoria-numero">
+                        02
+                    </span>
+
+                    <div>
+                        <h3>FRESCOS</h3>
+                        <p>REFRESH YOUR GAME</p>
+                    </div>
+
+                </div>
+
+
+                <div class="regla-frescos">
+
+                    <div>
+                        <strong>$0.35</strong>
+                        <span>INDIVIDUAL</span>
+                    </div>
+
+                    <div>
+                        <strong>$0.25</strong>
+                        <span>CON GRINGA</span>
+                    </div>
+
+                    <div>
+                        <strong>$0.35</strong>
+                        <span>DESDE EL 3.º</span>
+                    </div>
+
+                </div>
+
+
+                <div class="productos">
+
+                    <!-- JAMAICA -->
+
+                    <article
+                        class="producto fresco-card"
+                        data-tipo="fresco"
+                        data-precio="0.35"
+                    >
+
+                        <div class="fresco-icon fresco-rojo">
+                            B
+                        </div>
+
+                        <div class="producto-contenido">
+
+                            <span class="producto-tag">
+                                BLINKY
+                            </span>
+
+                            <h4>Blinky Punch</h4>
+
+                            <p>
+                                Fresco de Jamaica
+                            </p>
+
+                            <div class="producto-footer">
+
+                                <strong>
+                                    $0.35
+                                </strong>
+
+                                <button type="button">
+                                    AGREGAR
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- HORCHATA -->
+
+                    <article
+                        class="producto fresco-card"
+                        data-tipo="fresco"
+                        data-precio="0.35"
+                    >
+
+                        <div class="fresco-icon fresco-rosa">
+                            P
+                        </div>
+
+                        <div class="producto-contenido">
+
+                            <span class="producto-tag">
+                                PINKY
+                            </span>
+
+                            <h4>Pinky Milk</h4>
+
+                            <p>
+                                Fresco de horchata
+                            </p>
+
+                            <div class="producto-footer">
+
+                                <strong>
+                                    $0.35
+                                </strong>
+
+                                <button type="button">
+                                    AGREGAR
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- LIMONADA -->
+
+                    <article
+                        class="producto fresco-card"
+                        data-tipo="fresco"
+                        data-precio="0.35"
+                    >
+
+                        <div class="fresco-icon fresco-azul">
+                            C
+                        </div>
+
+                        <div class="producto-contenido">
+
+                            <span class="producto-tag">
+                                CLYDE
+                            </span>
+
+                            <h4>Clyde Lemonade</h4>
+
+                            <p>
+                                Fresco de limonada
+                            </p>
+
+                            <div class="producto-footer">
+
+                                <strong>
+                                    $0.35
+                                </strong>
+
+                                <button type="button">
+                                    AGREGAR
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+        </section>
+
+
+        <!-- =================================================
+             NOSOTROS
+             ================================================= -->
+
+        <section id="nosotros" class="section nosotros">
+
+            <div class="section-title">
+
+                <span class="line"></span>
+
+                <div>
+                    <p>/// SYSTEM INFORMATION ///</p>
+                    <h2>ABOUT_GRINGA.EXE</h2>
+                </div>
+
+                <span class="line"></span>
+
+            </div>
+
+
+            <div class="terminal-card">
+
+                <div class="terminal-header">
+
+                    <span>
+                        GRINGA.EXE_SYSTEM
+                    </span>
+
+                    <span>
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <div class="terminal-body">
+
+                    <p class="terminal-command">
+                        &gt; execute about_gringa.exe
+                    </p>
+
+                    <h3>
+                        ¿QUIÉNES SOMOS?
+                    </h3>
+
+                    <p>
+                        Somos GRINGA.EXE, un servicio de comida
+                        especializado en deliciosas gringas,
+                        frescos y salsas preparados con mucho sabor.
+                    </p>
+
+                    <p>
+                        Nuestro objetivo es ofrecer comida rica,
+                        accesible y preparada con ingredientes de
+                        calidad, combinando nuestra pasión por la
+                        comida con una experiencia inspirada en
+                        los videojuegos clásicos.
+                    </p>
+
+                </div>
+
+
+                <div class="system-status">
+
+                    <span>
+                        STATUS:
+                        <strong>ONLINE</strong>
+                    </span>
+
+                    <span>
+                        FOOD:
+                        <strong>ACTIVE</strong>
+                    </span>
+
+                    <span>
+                        VERSION:
+                        <strong>3.0</strong>
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CONTACTO
+             ================================================= -->
+
+        <section id="contacto" class="section contacto">
+
+            <div class="section-title">
+
+                <span class="line"></span>
+
+                <div>
+                    <p>/// COMMUNICATION SYSTEM ///</p>
+                    <h2>CONTACT_SYSTEM</h2>
+                </div>
+
+                <span class="line"></span>
+
+            </div>
+
+
+            <p class="contacto-subtitulo">
+                ¿Necesitas ayuda o quieres realizar un pedido?
+                Conecta con GRINGA.EXE.
+            </p>
+
+
+            <div class="contacto-grid">
+
+                <div class="contacto-card">
+
+                    <span class="contacto-icono">
+                        TEL
+                    </span>
+
+                    <h3>PHONE</h3>
+
+                    <p>
+                        +503 6056 6167
+                    </p>
+
+                </div>
+
+
+                <div class="contacto-card">
+
+                    <span class="contacto-icono">
+                        LOC
+                    </span>
+
+                    <h3>LOCATION</h3>
+
+                    <p>
+                        Dirección pendiente
+                    </p>
+
+                </div>
+
+
+                <div class="contacto-card">
+
+                    <span class="contacto-icono">
+                        TIME
+                    </span>
+
+                    <h3>HORARIO</h3>
+
+                    <p>
+                        Horario pendiente
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="contacto-terminal">
+
+                <span>
+                    SYSTEM MESSAGE:
+                </span>
+
+                <strong>
+                    Estamos listos para recibir tu pedido.
+                </strong>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         BARRA DE PEDIDO FIJA
+         ===================================================== -->
+
+    <section id="pedido" class="pedido-barra">
+
         <div class="pedido-info">
-            <span class="pedido-icono">🛒</span>
+
+            <div class="pedido-icono">
+                <span class="carrito-pixel"></span>
+            </div>
+
             <div>
-                <strong>MI PEDIDO</strong>
-                <span id="cantidad-pedido">0 productos</span>
+
+                <strong>
+                    MI PEDIDO
+                </strong>
+
+                <span id="cantidad-pedido">
+                    0 productos
+                </span>
+
             </div>
+
         </div>
+
+
         <div class="pedido-total">
-            <span>TOTAL</span>
-            <strong id="total-pedido">$0.00</strong>
-        </div>
-        <button type="button" id="ver-pedido">
-            VER PEDIDO
-        </button>
-    </div>
-    
-    <div id="ventana-pedido" class="ventana-pedido">
-    <div class="ventana-contenido">
-        <div class="ventana-header">
-            <h2>🛒 MI PEDIDO</h2>
-            <button type="button" id="cerrar-pedido">
-                ✕
-            </button>
-        </div>
-        <div id="lista-productos">
-            <p class="pedido-vacio">
-                No hay productos en tu pedido.
-            </p>
-        </div>
-        <div class="ventana-total">
-            <span>TOTAL:</span>
-            <strong id="ventana-total">$0.00</strong>
-        </div>
-        <button type="button" id="confirmar-pedido">
-            CONFIRMAR PEDIDO
-        </button>
-    </div>
-</div>
-</section>
 
-</main>
+            <span>
+                TOTAL
+            </span>
 
-<footer>
-    <p>© 2026 PAC-GRINGAS. Todos los derechos reservados.</p>
-</footer>
-
-<!-- ========================================
-     VENTANA CONFIGURAR GRINGA
-     ======================================== -->
-
-<div id="ventana-salsas" class="ventana-salsas">
-
-    <div class="salsas-contenido">
-
-        <div class="salsas-header">
-
-            <h2>CONFIGURAR GRINGA</h2>
-
-            <button
-                type="button"
-                id="cerrar-salsas">
-                ×
-            </button>
-        </div>
-
-        <div class="salsas-producto">
-            <h3 id="salsa-gringa-nombre">
-                Chicken.exe
-            </h3>
-
-            <p>
-                Elige las salsas para tu gringa
-            </p>
-
-            <p class="salsa-regla">
-                Puedes elegir hasta 2 salsas.
-                La primera está incluida.
-                La segunda cuesta +$0.15.
-            </p>
-        </div>
-
-
-        <!-- SALSA 1 -->
-        <div class="selector-salsa">
-            <label for="salsa-1">
-                Salsa 1
-            </label>
-
-            <select id="salsa-1">
-                <option value="">
-                    Sin salsa
-                </option>
-
-                <option value="Safe Mode">
-                    Safe Mode
-                </option>
-
-                <option value="Warning Mode">
-                    Warning Mode
-                </option>
-
-                <option value="Reset Mode">
-                    Reset Mode
-                </option>
-            </select>
-        </div>
-
-        <!-- SALSA 2 -->
-        <div
-            class="selector-salsa"
-            id="contenedor-salsa-2"
-            style="display: none;">
-
-            <label for="salsa-2">
-                Salsa 2
-            </label>
-
-            <select id="salsa-2">
-                <option value="">
-                    Selecciona una salsa
-                </option>
-
-                <option value="Safe Mode">
-                    Safe Mode
-                </option>
-
-                <option value="Warning Mode">
-                    Warning Mode
-                </option>
-
-                <option value="Reset Mode">
-                    Reset Mode
-                </option>
-            </select>
-        </div>
-
-        <button
-            type="button"
-            id="agregar-segunda-salsa"
-            class="btn-segunda-salsa">
-            + Agregar segunda salsa
-        </button>
-
-        <p
-            id="mensaje-salsa"
-            class="mensaje-salsa">
-        </p>
-
-        <!-- ========================================
-     EXTRA CHEESE
-     ======================================== -->
-
-<div class="extra-queso">
-
-    <label class="checkbox-extra">
-
-        <input
-            type="checkbox"
-            id="extra-queso-checkbox">
-
-        <span>
-            🧀 Extra Cheese
-        </span>
-
-    </label>
-
-    <p>
-        Agregar queso extra:
-        <strong>+$0.50</strong>
-    </p>
-
-</div>
-
-
-<!-- ========================================
-     RESUMEN DE EXTRAS
-     ======================================== -->
-
-<div class="resumen-salsas">
-
-    <p>
-        Extra por segunda salsa:
-
-        <strong id="precio-salsas">
-            $0.00
-        </strong>
-    </p>
-
-    <p>
-        Extra Cheese:
-
-        <strong id="precio-queso">
-            $0.00
-        </strong>
-    </p>
-
-</div>
-
-        <button
-            type="button"
-            id="confirmar-gringa"
-            class="btn-confirmar-gringa">
-            Agregar gringa al pedido
-        </button>
-    </div>
-</div>
-
-<!-- ========================================
-     VENTANA CHECKOUT
-     ======================================== -->
-
-<div id="ventana-checkout" class="ventana-checkout">
-
-    <div class="checkout-contenido">
-
-        <div class="checkout-header">
-
-            <h2>👻 CHECKOUT.EXE</h2>
-
-            <button
-                type="button"
-                id="cerrar-checkout">
-                ✕
-            </button>
-
-        </div>
-
-
-        <div class="checkout-resumen">
-
-            <h3>RESUMEN DEL PEDIDO</h3>
-
-            <div id="checkout-productos">
-
-                <!-- Aquí aparecerán los productos -->
-
-            </div>
-
-        </div>
-
-
-        <div class="checkout-total">
-
-            <span>TOTAL</span>
-
-            <strong id="checkout-total">
+            <strong id="total-pedido">
                 $0.00
             </strong>
 
         </div>
 
 
-        <div class="metodo-pago">
+        <button
+            type="button"
+            id="ver-pedido"
+        >
+            VER PEDIDO
+        </button>
 
-            <h3>MÉTODO DE PAGO</h3>
-
-            <button
-                type="button"
-                class="metodo-pago-btn"
-                data-metodo="efectivo">
-
-                💵 EFECTIVO
-
-            </button>
+    </section>
 
 
-            <button
-                type="button"
-                class="metodo-pago-btn"
-                data-metodo="transferencia">
+    <!-- =====================================================
+         VENTANA MI PEDIDO
+         ===================================================== -->
 
-                📱 TRANSFERENCIA
+    <div
+        id="ventana-pedido"
+        class="ventana-pedido"
+    >
 
-            </button>
+        <div class="ventana-contenido">
 
-        </div>
+            <div class="ventana-header">
 
+                <h2>
+                    MI PEDIDO
+                </h2>
 
-        <div
-            id="pago-efectivo"
-            class="pago-opcion"
-            style="display:none;">
+                <button
+                    type="button"
+                    id="cerrar-pedido"
+                >
+                    ×
+                </button>
 
-            <label for="dinero-recibido">
-
-                ¿Con cuánto paga el cliente?
-
-            </label>
-
-            <input
-                type="number"
-                id="dinero-recibido"
-                min="0"
-                step="0.01"
-                placeholder="Ej. 5.00">
+            </div>
 
 
-            <div class="cambio">
+            <div id="lista-productos">
 
-                <span>CAMBIO:</span>
+                <p class="pedido-vacio">
+                    No hay productos en tu pedido.
+                </p>
 
-                <strong id="cambio-pago">
+            </div>
+
+
+            <div class="ventana-total">
+
+                <span>
+                    TOTAL:
+                </span>
+
+                <strong id="ventana-total">
                     $0.00
                 </strong>
 
             </div>
 
+
+            <button
+                type="button"
+                id="confirmar-pedido"
+                class="btn-principal"
+            >
+                CONFIRMAR PEDIDO
+            </button>
+
         </div>
 
+    </div>
 
-        <div
-            id="pago-transferencia"
-            class="pago-opcion"
-            style="display:none;">
 
-            <p>
-                📱 El cliente realizará
-                el pago por transferencia.
+    <!-- =====================================================
+         VENTANA CONFIGURAR GRINGA
+         ===================================================== -->
+
+    <div
+        id="ventana-salsas"
+        class="ventana-salsas"
+    >
+
+        <div class="salsas-contenido">
+
+            <div class="salsas-header">
+
+                <h2>
+                    CONFIGURAR GRINGA
+                </h2>
+
+                <button
+                    type="button"
+                    id="cerrar-salsas"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="salsas-producto">
+
+                <h3 id="salsa-gringa-nombre">
+                    Chicken.exe
+                </h3>
+
+                <p>
+                    Personaliza tu gringa.
+                </p>
+
+                <p class="salsa-regla">
+                    La primera salsa está incluida.
+                    La segunda cuesta +$0.15.
+                </p>
+
+            </div>
+
+
+            <div class="selector-salsa">
+
+                <label for="salsa-1">
+                    SALSA 01
+                </label>
+
+                <select id="salsa-1">
+
+                    <option value="">
+                        Sin salsa
+                    </option>
+
+                    <option value="Safe Mode">
+                        Safe Mode
+                    </option>
+
+                    <option value="Warning Mode">
+                        Warning Mode
+                    </option>
+
+                    <option value="Reset Mode">
+                        Reset Mode
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                class="selector-salsa"
+                id="contenedor-salsa-2"
+                style="display:none;"
+            >
+
+                <label for="salsa-2">
+                    SALSA 02
+                </label>
+
+                <select id="salsa-2">
+
+                    <option value="">
+                        Selecciona una salsa
+                    </option>
+
+                    <option value="Safe Mode">
+                        Safe Mode
+                    </option>
+
+                    <option value="Warning Mode">
+                        Warning Mode
+                    </option>
+
+                    <option value="Reset Mode">
+                        Reset Mode
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="agregar-segunda-salsa"
+                class="btn-secundario"
+            >
+                + AGREGAR SEGUNDA SALSA
+            </button>
+
+
+            <p
+                id="mensaje-salsa"
+                class="mensaje-salsa"
+            ></p>
+
+
+            <!-- EXTRA CHEESE -->
+
+            <div class="extra-queso">
+
+                <label class="checkbox-extra">
+
+                    <input
+                        type="checkbox"
+                        id="extra-queso-checkbox"
+                    >
+
+                    <span>
+                        EXTRA CHEESE
+                    </span>
+
+                </label>
+
+                <p>
+                    Agregar queso extra:
+                    <strong>+$0.50</strong>
+                </p>
+
+            </div>
+
+
+            <!-- RESUMEN -->
+
+            <div class="resumen-salsas">
+
+                <p>
+                    Segunda salsa:
+                    <strong id="precio-salsas">
+                        $0.00
+                    </strong>
+                </p>
+
+                <p>
+                    Extra Cheese:
+                    <strong id="precio-queso">
+                        $0.00
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="confirmar-gringa"
+                class="btn-principal"
+            >
+                AGREGAR GRINGA
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VENTANA CHECKOUT
+         ===================================================== -->
+
+    <div
+        id="ventana-checkout"
+        class="ventana-checkout"
+    >
+
+        <div class="checkout-contenido">
+
+            <div class="checkout-header">
+
+                <h2>
+                    CHECKOUT.EXE
+                </h2>
+
+                <button
+                    type="button"
+                    id="cerrar-checkout"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="checkout-resumen">
+
+                <h3>
+                    RESUMEN DEL PEDIDO
+                </h3>
+
+                <div id="checkout-productos"></div>
+
+            </div>
+
+
+            <div class="checkout-total">
+
+                <span>
+                    TOTAL
+                </span>
+
+                <strong id="checkout-total">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <div class="metodo-pago">
+
+                <h3>
+                    MÉTODO DE PAGO
+                </h3>
+
+                <button
+                    type="button"
+                    class="metodo-pago-btn"
+                    data-metodo="efectivo"
+                >
+                    EFECTIVO
+                </button>
+
+                <button
+                    type="button"
+                    class="metodo-pago-btn"
+                    data-metodo="transferencia"
+                >
+                    TRANSFERENCIA
+                </button>
+
+            </div>
+
+
+            <div
+                id="pago-efectivo"
+                class="pago-opcion"
+                style="display:none;"
+            >
+
+                <label for="dinero-recibido">
+                    DINERO RECIBIDO
+                </label>
+
+                <input
+                    type="number"
+                    id="dinero-recibido"
+                    min="0"
+                    step="0.01"
+                    placeholder="Ej. 5.00"
+                >
+
+                <div class="cambio">
+
+                    <span>
+                        CAMBIO
+                    </span>
+
+                    <strong id="cambio-pago">
+                        $0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="pago-transferencia"
+                class="pago-opcion"
+                style="display:none;"
+            >
+
+                <p>
+                    El cliente realizará el pago
+                    por transferencia.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="finalizar-pedido"
+                class="btn-principal"
+                disabled
+            >
+                FINALIZAR PEDIDO
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONFIRMACIÓN
+         ===================================================== -->
+
+    <div
+        id="ventana-confirmacion"
+        class="ventana-confirmacion"
+    >
+
+        <div class="confirmacion-contenido">
+
+            <div class="confirmacion-pacman">
+
+                <div class="confirmacion-pac"></div>
+
+                <div class="confirmacion-ghost"></div>
+
+            </div>
+
+
+            <p class="confirmacion-status">
+                [ TRANSACTION COMPLETE ]
             </p>
 
+
+            <h2>
+                PEDIDO CONFIRMADO
+            </h2>
+
+
+            <p class="numero-pedido">
+                PEDIDO
+                <strong id="numero-pedido">
+                    #001
+                </strong>
+            </p>
+
+
+            <div class="confirmacion-mensaje">
+
+                <p>
+                    Tu pedido ha sido registrado correctamente.
+                </p>
+
+            </div>
+
+
+            <div class="confirmacion-detalles">
+
+                <div>
+
+                    <span>
+                        TOTAL
+                    </span>
+
+                    <strong id="confirmacion-total">
+                        $0.00
+                    </strong>
+
+                </div>
+
+
+                <div id="detalle-efectivo">
+
+                    <span>
+                        EFECTIVO
+                    </span>
+
+                    <strong id="confirmacion-efectivo">
+                        $0.00
+                    </strong>
+
+                </div>
+
+
+                <div id="detalle-cambio">
+
+                    <span>
+                        CAMBIO
+                    </span>
+
+                    <strong id="confirmacion-cambio">
+                        $0.00
+                    </strong>
+
+                </div>
+
+
+                <div id="detalle-transferencia">
+
+                    <span>
+                        MÉTODO
+                    </span>
+
+                    <strong>
+                        TRANSFERENCIA
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <p class="mensaje-final">
+                ¡Gracias por tu compra!
+            </p>
+
+
+            <button
+                type="button"
+                id="cerrar-confirmacion"
+                class="btn-principal"
+            >
+                NUEVO PEDIDO
+            </button>
+
         </div>
 
+    </div>
 
-        <button
-            type="button"
-            id="finalizar-pedido"
-            disabled>
 
-            CONFIRMAR PEDIDO
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
 
-        </button>
+    <footer>
+
+        <p>
+            © 2026 GRINGA.EXE
+        </p>
+
+        <p>
+            INSERT COIN • EAT • REPEAT
+        </p>
+
+    </footer>
+
+    <!-- ========================================
+     ANIMACIÓN PAC-MAN
+     ======================================== -->
+
+<div id="pacman-transicion" class="pacman-transicion">
+
+    <div class="pacman-escena">
+
+        <div class="pacman-css"></div>
+
+        <div class="fantasma-css fantasma-rojo">
+            <div class="fantasma-ojo ojo-1"></div>
+            <div class="fantasma-ojo ojo-2"></div>
+        </div>
+
+        <div class="fantasma-css fantasma-rosa">
+            <div class="fantasma-ojo ojo-1"></div>
+            <div class="fantasma-ojo ojo-2"></div>
+        </div>
+
+        <div class="fantasma-css fantasma-cyan">
+            <div class="fantasma-ojo ojo-1"></div>
+            <div class="fantasma-ojo ojo-2"></div>
+        </div>
+
+        <div class="fantasma-css fantasma-naranja">
+            <div class="fantasma-ojo ojo-1"></div>
+            <div class="fantasma-ojo ojo-2"></div>
+        </div>
 
     </div>
 
 </div>
 
-<script src="js/script.js"></script>
+    <script src="js/script.js"></script>
 
 </body>
 </html>
