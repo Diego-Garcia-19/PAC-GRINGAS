@@ -1018,3 +1018,269 @@ main {
     background: #000;
     color: #ffff00;
 }
+
+/* ========================================
+   CHECKOUT - OCULTO POR DEFECTO
+   ======================================== */
+
+.ventana-checkout {
+    display: none;
+}
+
+/* ========================================
+   VENTANA CHECKOUT
+   ======================================== */
+
+.ventana-checkout {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.85);
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 10000;
+
+    padding: 20px;
+}
+
+
+/* Cuando está activa */
+
+.ventana-checkout.activa {
+    display: flex;
+}
+
+
+/* ========================================
+   CONTENIDO CHECKOUT
+   ======================================== */
+
+.checkout-contenido {
+    width: 100%;
+    max-width: 550px;
+
+    max-height: 90vh;
+    overflow-y: auto;
+
+    background: #111;
+
+    border: 3px solid #ffd900;
+
+    box-shadow:
+        0 0 10px #ffd900,
+        0 0 30px rgba(255, 217, 0, 0.4);
+
+    padding: 25px;
+
+    color: white;
+}
+
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+.checkout-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 2px solid #ffd900;
+
+    padding-bottom: 15px;
+
+    margin-bottom: 20px;
+}
+
+.checkout-header h2 {
+    margin: 0;
+
+    color: #ffd900;
+}
+
+.checkout-header button {
+    background: transparent;
+
+    border: none;
+
+    color: #ffd900;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+
+/* ========================================
+   RESUMEN
+   ======================================== */
+
+.checkout-resumen h3 {
+    color: #ffd900;
+
+    margin-bottom: 15px;
+}
+
+
+/* ========================================
+   PRODUCTOS CHECKOUT
+   ======================================== */
+
+.checkout-item {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 15px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #444;
+}
+
+.checkout-item strong {
+    color: white;
+}
+
+.checkout-item p {
+    margin: 5px 0 0;
+
+    font-size: 14px;
+
+    color: #ccc;
+}
+
+
+/* ========================================
+   TOTAL
+   ======================================== */
+
+.checkout-total {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 20px;
+
+    padding: 15px 0;
+
+    border-top: 2px solid #ffd900;
+
+    font-size: 20px;
+}
+
+.checkout-total strong {
+    color: #ffd900;
+}
+
+
+/* ========================================
+   MÉTODO DE PAGO
+   ======================================== */
+
+.metodo-pago {
+    margin-top: 20px;
+}
+
+.metodo-pago h3 {
+    color: #ffd900;
+}
+
+.metodo-pago-btn {
+    width: 100%;
+
+    padding: 12px;
+
+    margin-top: 8px;
+
+    background: #222;
+
+    border: 2px solid #ffd900;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.metodo-pago-btn:hover {
+    background: #ffd900;
+
+    color: black;
+}
+
+
+/* ========================================
+   PAGO
+   ======================================== */
+
+.pago-opcion {
+    margin-top: 15px;
+
+    padding: 15px;
+
+    border: 1px solid #555;
+}
+
+.pago-opcion input {
+    width: 100%;
+
+    padding: 10px;
+
+    margin-top: 8px;
+
+    box-sizing: border-box;
+}
+
+
+/* ========================================
+   CAMBIO
+   ======================================== */
+
+.cambio {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 15px;
+
+    font-size: 18px;
+}
+
+.cambio strong {
+    color: #ffd900;
+}
+
+
+/* ========================================
+   FINALIZAR
+   ======================================== */
+
+#finalizar-pedido {
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 14px;
+
+    background: #ffd900;
+
+    border: none;
+
+    color: black;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+#finalizar-pedido:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+}
