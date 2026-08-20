@@ -1344,7 +1344,7 @@ if (confirmarPedido) {
 
 
             // ========================================
-            // PEDIR NOMBRE DEL CLIENTE
+            // PEDIR NOMBRE
             // ========================================
 
             const nombre =
@@ -1430,6 +1430,7 @@ botonesMetodoPago.forEach(function (boton) {
                 boton.dataset.metodo;
 
 
+            // EFECTIVO
             if (metodo === "efectivo") {
 
                 pagoEfectivo.style.display =
@@ -1446,6 +1447,7 @@ botonesMetodoPago.forEach(function (boton) {
             }
 
 
+            // TRANSFERENCIA
             else if (
                 metodo === "transferencia"
             ) {
@@ -1798,20 +1800,44 @@ if (finalizarPedido) {
 
 
             console.log(
-                "✅ Pedido guardado:",
-                numeroFormateado
+                "========================================"
             );
 
+            console.log(
+                "✅ PEDIDO GUARDADO CORRECTAMENTE"
+            );
+
+            console.log(
+                "🔢 Número:",
+                numeroFormateado
+            );
 
             console.log(
                 "👤 Cliente:",
                 nombreCliente
             );
 
+            console.log(
+                "💰 Total:",
+                total.toFixed(2)
+            );
 
             console.log(
-                "💰 Cambio:",
+                "💵 Cambio:",
                 cambio.toFixed(2)
+            );
+
+            console.log(
+                "💳 Método:",
+                metodoPago
+            );
+
+            console.log(
+                "📌 Estado: Pendiente"
+            );
+
+            console.log(
+                "========================================"
             );
 
 
@@ -1919,7 +1945,7 @@ if (cerrarConfirmacion) {
 
 
 // ========================================
-// ESTADO INICIAL
+// ESTADO INICIAL DE VENTANAS
 // ========================================
 
 document.addEventListener(

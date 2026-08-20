@@ -3716,3 +3716,44 @@ body::before {
 .campo-cliente input:focus {
     box-shadow: 0 0 10px rgba(255, 217, 0, 0.4);
 }
+
+.estado {
+
+    border: none;
+
+    padding: 8px 14px;
+
+    border-radius: 20px;
+
+    background: #9b6500;
+
+    color: #fff;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.estado.pendiente {
+
+    background: #9b6500;
+
+}
+
+
+.estado.entregado {
+
+    background: #16803c;
+
+}
+
+
+.estado:hover {
+
+    transform: scale(1.05);
+
+}
