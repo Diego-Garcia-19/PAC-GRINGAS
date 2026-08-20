@@ -51,49 +51,53 @@
     <section class="categoria" id="gringas">
         <h3>GRINGAS</h3>
         <div class="productos">
-            <article class="producto" data-producto="chicken" data-precio="2.00">
-                <img src="img/gringa-pollo.jpg" alt="Gringa de Pollo">
-                <h4>Chicken.exe</h4>
-                <p>
-                    Gringa de Pollo
-                </p>
-                <p>
-                    Precio: $2.00
-                </p>
-                <button>
-                    Agregar al pedido
-                </button>
-            </article>
+           <article class="producto"
+    data-producto="chicken"
+    data-precio="2.00"
+    data-tipo="gringa">
+    <h4>Chicken.exe</h4>
+    <p>
+        Gringa de Pollo
+    </p>
+    <p>
+        Precio: $2.00
+    </p>
+    <button type="button" class="btn-gringa">
+        Agregar al pedido
+    </button>
+</article>
 
-            <article class="producto" data-producto="beef" data-precio="2.00">
-                <img src="img/gringa-carne.jpg" alt="Gringa de Carne">
-                <h4>Beef.exe</h4>
-                <p>
-                    Gringa de Carne
-                </p>
-                <p>
-                    Precio: $2.00
-                </p>
-                <button>
-                    Agregar al pedido
-                </button>
-            </article>
+            <article class="producto"
+    data-producto="beef"
+    data-precio="2.00"
+    data-tipo="gringa">
+    <h4>Beef.exe</h4>
+    <p>
+        Gringa de Carne
+    </p>
+    <p>
+        Precio: $2.00
+    </p>
+    <button type="button" class="btn-gringa">
+        Agregar al pedido
+    </button>
+</article>
 
-            <article class="producto" data-producto="mixed" data-precio="2.15">
-                <img src="img/gringa-carne-pollo.jpg" alt="Gringa de Carne y Pollo">
-                <h4>Mixed Mode</h4>
-                <p>
-                    Gringa de Carne + Pollo
-                </p>
-                <p>
-                    Precio: $2.15
-                </p>
-                <button>
-                    Agregar al pedido
-                </button>
-            </article>
-        </div>
-    </section>
+            <article class="producto"
+    data-producto="mixed"
+    data-precio="2.15"
+    data-tipo="gringa">
+    <h4>Mixed Mode</h4>
+    <p>
+        Gringa de Carne + Pollo
+    </p>
+    <p>
+        Precio: $2.15
+    </p>
+    <button type="button" class="btn-gringa">
+        Agregar al pedido
+    </button>
+</article>
 
     <!-- =========================
      FRESCOS
@@ -225,18 +229,25 @@
     <section class="categoria" id="extra">
         <h3>System Upgrade</h3>
         <div class="productos">
-            <article class="producto">
-                <h4>Extra Cheese</h4>
-                <p>
-                    Extra de queso
-                </p>
-                <p>
-                    Precio: +$0.50
-                </p>
-                <button>
-                    Agregar al pedido
-                </button>
-            </article>
+            <article class="producto"
+    data-tipo="extra"
+    data-precio="0.50">
+
+    <h4>Extra Cheese</h4>
+
+    <p>
+        Extra de queso
+    </p>
+
+    <p>
+        Precio: +$0.50
+    </p>
+
+    <button type="button">
+        Agregar al pedido
+    </button>
+
+</article>
         </div>
     </section>
 
@@ -360,6 +371,296 @@
 <footer>
     <p>© 2026 PAC-GRINGAS. Todos los derechos reservados.</p>
 </footer>
+
+<!-- ========================================
+     VENTANA CONFIGURAR GRINGA
+     ======================================== -->
+
+<div id="ventana-salsas" class="ventana-salsas">
+
+    <div class="salsas-contenido">
+
+        <div class="salsas-header">
+
+            <h2>CONFIGURAR GRINGA</h2>
+
+            <button
+                type="button"
+                id="cerrar-salsas">
+                ×
+            </button>
+        </div>
+
+        <div class="salsas-producto">
+            <h3 id="salsa-gringa-nombre">
+                Chicken.exe
+            </h3>
+
+            <p>
+                Elige las salsas para tu gringa
+            </p>
+
+            <p class="salsa-regla">
+                Puedes elegir hasta 2 salsas.
+                La primera está incluida.
+                La segunda cuesta +$0.15.
+            </p>
+        </div>
+
+
+        <!-- SALSA 1 -->
+        <div class="selector-salsa">
+            <label for="salsa-1">
+                Salsa 1
+            </label>
+
+            <select id="salsa-1">
+                <option value="">
+                    Sin salsa
+                </option>
+
+                <option value="Safe Mode">
+                    Safe Mode
+                </option>
+
+                <option value="Warning Mode">
+                    Warning Mode
+                </option>
+
+                <option value="Reset Mode">
+                    Reset Mode
+                </option>
+            </select>
+        </div>
+
+        <!-- SALSA 2 -->
+        <div
+            class="selector-salsa"
+            id="contenedor-salsa-2"
+            style="display: none;">
+
+            <label for="salsa-2">
+                Salsa 2
+            </label>
+
+            <select id="salsa-2">
+                <option value="">
+                    Selecciona una salsa
+                </option>
+
+                <option value="Safe Mode">
+                    Safe Mode
+                </option>
+
+                <option value="Warning Mode">
+                    Warning Mode
+                </option>
+
+                <option value="Reset Mode">
+                    Reset Mode
+                </option>
+            </select>
+        </div>
+
+        <button
+            type="button"
+            id="agregar-segunda-salsa"
+            class="btn-segunda-salsa">
+            + Agregar segunda salsa
+        </button>
+
+        <p
+            id="mensaje-salsa"
+            class="mensaje-salsa">
+        </p>
+
+        <!-- ========================================
+     EXTRA CHEESE
+     ======================================== -->
+
+<div class="extra-queso">
+
+    <label class="checkbox-extra">
+
+        <input
+            type="checkbox"
+            id="extra-queso-checkbox">
+
+        <span>
+            🧀 Extra Cheese
+        </span>
+
+    </label>
+
+    <p>
+        Agregar queso extra:
+        <strong>+$0.50</strong>
+    </p>
+
+</div>
+
+
+<!-- ========================================
+     RESUMEN DE EXTRAS
+     ======================================== -->
+
+<div class="resumen-salsas">
+
+    <p>
+        Extra por segunda salsa:
+
+        <strong id="precio-salsas">
+            $0.00
+        </strong>
+    </p>
+
+    <p>
+        Extra Cheese:
+
+        <strong id="precio-queso">
+            $0.00
+        </strong>
+    </p>
+
+</div>
+
+        <button
+            type="button"
+            id="confirmar-gringa"
+            class="btn-confirmar-gringa">
+            Agregar gringa al pedido
+        </button>
+    </div>
+</div>
+
+<!-- ========================================
+     VENTANA CHECKOUT
+     ======================================== -->
+
+<div id="ventana-checkout" class="ventana-checkout">
+
+    <div class="checkout-contenido">
+
+        <div class="checkout-header">
+
+            <h2>👻 CHECKOUT.EXE</h2>
+
+            <button
+                type="button"
+                id="cerrar-checkout">
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="checkout-resumen">
+
+            <h3>RESUMEN DEL PEDIDO</h3>
+
+            <div id="checkout-productos">
+
+                <!-- Aquí aparecerán los productos -->
+
+            </div>
+
+        </div>
+
+
+        <div class="checkout-total">
+
+            <span>TOTAL</span>
+
+            <strong id="checkout-total">
+                $0.00
+            </strong>
+
+        </div>
+
+
+        <div class="metodo-pago">
+
+            <h3>MÉTODO DE PAGO</h3>
+
+            <button
+                type="button"
+                class="metodo-pago-btn"
+                data-metodo="efectivo">
+
+                💵 EFECTIVO
+
+            </button>
+
+
+            <button
+                type="button"
+                class="metodo-pago-btn"
+                data-metodo="transferencia">
+
+                📱 TRANSFERENCIA
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="pago-efectivo"
+            class="pago-opcion"
+            style="display:none;">
+
+            <label for="dinero-recibido">
+
+                ¿Con cuánto paga el cliente?
+
+            </label>
+
+            <input
+                type="number"
+                id="dinero-recibido"
+                min="0"
+                step="0.01"
+                placeholder="Ej. 5.00">
+
+
+            <div class="cambio">
+
+                <span>CAMBIO:</span>
+
+                <strong id="cambio-pago">
+                    $0.00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="pago-transferencia"
+            class="pago-opcion"
+            style="display:none;">
+
+            <p>
+                📱 El cliente realizará
+                el pago por transferencia.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="finalizar-pedido"
+            disabled>
+
+            CONFIRMAR PEDIDO
+
+        </button>
+
+    </div>
+
+</div>
 
 <script src="js/script.js"></script>
 

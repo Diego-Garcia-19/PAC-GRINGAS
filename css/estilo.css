@@ -422,7 +422,7 @@ nav a:hover {
     width: 100%;
     padding: 0;
     margin: 0;
-    z-index: 9999;
+    z-index: 1000;
 }
 
 .pedido-barra {
@@ -662,4 +662,359 @@ main {
     color: #ffff00;
 
     box-shadow: 0 0 15px #ffff00;
+}
+
+/* ========================================
+   VENTANA DE SALSAS
+   ======================================== */
+
+.ventana-salsas {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.85);
+
+    z-index: 2000;
+
+    padding: 20px;
+}
+
+.ventana-salsas.activa {
+    display: flex;
+}
+
+.salsas-contenido {
+    width: 100%;
+    max-width: 500px;
+
+    background: #000;
+
+    border: 3px solid #ffff00;
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 0 10px #ffff00,
+        0 0 30px #ffff00;
+}
+
+.salsas-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 2px solid #ffff00;
+
+    padding-bottom: 15px;
+
+    margin-bottom: 20px;
+}
+
+.salsas-header h2 {
+    color: #ffff00;
+
+    font-size: 1.5rem;
+}
+
+.salsas-header button {
+    background: none;
+
+    color: #ffff00;
+
+    font-size: 30px;
+
+    font-weight: bold;
+}
+
+.salsas-producto {
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+.salsas-producto h3 {
+    color: #ffff00;
+
+    font-size: 1.5rem;
+
+    margin-bottom: 8px;
+}
+
+.salsa-regla {
+    margin-top: 10px;
+
+    font-size: 0.9rem;
+
+    opacity: 0.8;
+}
+
+.selector-salsa {
+    margin-bottom: 18px;
+}
+
+.selector-salsa label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-weight: bold;
+
+    color: #ffff00;
+}
+
+.selector-salsa select {
+    width: 100%;
+
+    padding: 12px;
+
+    background: #111;
+
+    color: #fff;
+
+    border: 2px solid #ffff00;
+
+    border-radius: 6px;
+
+    font-size: 1rem;
+}
+
+.btn-segunda-salsa {
+    width: 100%;
+
+    padding: 12px;
+
+    background: #111;
+
+    color: #ffff00;
+
+    border: 2px dashed #ffff00;
+
+    border-radius: 6px;
+
+    font-weight: bold;
+
+    margin-bottom: 15px;
+}
+
+.btn-segunda-salsa:hover {
+    background: #ffff00;
+
+    color: #000;
+}
+
+.mensaje-salsa {
+    min-height: 25px;
+
+    color: #ffff00;
+
+    text-align: center;
+
+    font-weight: bold;
+}
+
+.resumen-salsas {
+    border-top: 1px solid #ffff00;
+
+    margin-top: 15px;
+
+    padding-top: 15px;
+
+    text-align: right;
+}
+
+.resumen-salsas strong {
+    color: #ffff00;
+}
+
+.btn-confirmar-gringa {
+    width: 100%;
+
+    padding: 14px;
+
+    margin-top: 20px;
+
+    background: #ffff00;
+
+    color: #000;
+
+    border: 2px solid #ffff00;
+
+    border-radius: 6px;
+
+    font-weight: bold;
+
+    font-size: 1rem;
+
+    cursor: pointer;
+}
+
+.btn-confirmar-gringa:hover {
+    background: #000;
+
+    color: #ffff00;
+}
+
+/* ========================================
+   VENTANA DE SALSAS
+   ======================================== */
+
+.ventana-salsas {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.ventana-salsas.activa {
+    display: flex;
+}
+
+.salsas-contenido {
+    width: 100%;
+    max-width: 500px;
+
+    max-height: 85vh;
+    overflow-y: auto;
+
+    padding: 25px;
+
+    background: #000;
+
+    border: 3px solid #ffff00;
+    border-radius: 12px;
+
+    box-shadow: 0 0 30px #ffff00;
+}
+
+.salsas-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+
+    border-bottom: 2px solid #ffff00;
+}
+
+.salsas-header h2 {
+    color: #ffff00;
+    margin: 0;
+}
+
+.salsas-header button {
+    background: transparent;
+    color: #ffff00;
+
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.salsas-producto {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.salsas-producto h3 {
+    color: #ffff00;
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+}
+
+.selector-salsa {
+    margin-bottom: 18px;
+}
+
+.selector-salsa label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #ffff00;
+}
+
+.selector-salsa select {
+    width: 100%;
+    padding: 12px;
+
+    background: #111;
+    color: #fff;
+
+    border: 2px solid #ffff00;
+    border-radius: 6px;
+
+    font-size: 1rem;
+}
+
+.btn-segunda-salsa {
+    width: 100%;
+    padding: 12px;
+
+    background: #ffff00;
+    color: #000;
+
+    font-weight: bold;
+
+    border: 2px solid #ffff00;
+    border-radius: 6px;
+
+    margin-bottom: 15px;
+}
+
+.btn-segunda-salsa:hover {
+    background: #000;
+    color: #ffff00;
+}
+
+.mensaje-salsa {
+    min-height: 25px;
+    color: #ffff00;
+    text-align: center;
+}
+
+.resumen-salsas {
+    margin: 20px 0;
+    padding: 15px;
+
+    border-top: 2px solid #ffff00;
+    border-bottom: 2px solid #ffff00;
+
+    text-align: center;
+}
+
+.resumen-salsas strong {
+    color: #ffff00;
+}
+
+.btn-confirmar-gringa {
+    width: 100%;
+    padding: 14px;
+
+    background: #ffff00;
+    color: #000;
+
+    border: 2px solid #ffff00;
+    border-radius: 6px;
+
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.btn-confirmar-gringa:hover {
+    background: #000;
+    color: #ffff00;
 }
