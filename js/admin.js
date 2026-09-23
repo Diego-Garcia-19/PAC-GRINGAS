@@ -37,11 +37,34 @@ const conexion =
    3. CONFIGURACIÓN
    ========================================================= */
 
-const INTERVALO_ACTUALIZACION = 5000;
+/*
+ * Realtime será el sistema principal.
+ *
+ * Este intervalo NO actualiza constantemente el panel.
+ * Solo funciona como respaldo cuando Realtime no está
+ * conectado correctamente.
+ */
+
+const INTERVALO_RESPALDO = 15000;
 
 
 /* =========================================================
-   4. UTILIDADES
+   4. ESTADO INTERNO
+   ========================================================= */
+
+let canalPedidos = null;
+
+let realtimeConectado = false;
+
+let cargandoPedidos = false;
+
+let actualizacionPendiente = false;
+
+let intervaloRespaldo = null;
+
+
+/* =========================================================
+   5. UTILIDADES
    ========================================================= */
 
 function escaparHTML(valor) {
@@ -175,7 +198,7 @@ function obtenerNumeroPedido(pedido) {
 
 
 /* =========================================================
-   5. ESTADO DE CONEXIÓN
+   6. ESTADO DE CONEXIÓN
    ========================================================= */
 
 function actualizarEstadoConexion(
@@ -195,19 +218,20 @@ function actualizarEstadoConexion(
         conexion.style.color =
             "#38ff8b";
 
-    } else {
-
-        conexion.textContent =
-            mensaje || "🔴 Error de conexión";
-
-        conexion.style.color =
-            "#ff3154";
+        return;
     }
+
+
+    conexion.textContent =
+        mensaje || "🔴 Error de conexión";
+
+    conexion.style.color =
+        "#ff3154";
 }
 
 
 /* =========================================================
-   6. CARGAR PEDIDOS
+   7. CARGAR PEDIDOS
    ========================================================= */
 
 async function cargarPedidos() {
@@ -215,6 +239,23 @@ async function cargarPedidos() {
     if (!contenedorPedidos) {
         return;
     }
+
+
+    /*
+     * Evita que varias actualizaciones simultáneas
+     * hagan múltiples consultas innecesarias.
+     */
+
+    if (cargandoPedidos) {
+
+        actualizacionPendiente = true;
+
+        return;
+    }
+
+
+    cargandoPedidos = true;
+
 
     try {
 
@@ -231,11 +272,15 @@ async function cargarPedidos() {
                 }
             );
 
+
         if (error) {
             throw error;
         }
 
-        actualizarEstadoConexion(true);
+
+        actualizarEstadoConexion(
+            true
+        );
 
 
         if (
@@ -259,24 +304,18 @@ async function cargarPedidos() {
         }
 
 
+        /*
+         * Una sola escritura del DOM.
+         *
+         * Esto evita modificar el HTML
+         * repetidamente durante el renderizado.
+         */
+
         contenedorPedidos.innerHTML =
             data
                 .map(renderizarPedido)
                 .join("");
 
-
-        document
-            .querySelectorAll(
-                ".btn-cambiar-estado"
-            )
-            .forEach(boton => {
-
-                boton.addEventListener(
-                    "click",
-                    manejarCambioEstado
-                );
-
-            });
 
     } catch (error) {
 
@@ -285,34 +324,73 @@ async function cargarPedidos() {
             error
         );
 
+
+        /*
+         * No marcamos Realtime como desconectado
+         * simplemente porque falle una consulta.
+         * El canal puede seguir funcionando.
+         */
+
         actualizarEstadoConexion(
             false,
-            "🔴 Error de conexión"
+            realtimeConectado
+                ? "🟡 Error al actualizar"
+                : "🔴 Sin conexión"
         );
 
-        contenedorPedidos.innerHTML = `
-            <div class="error">
 
-                <strong>
-                    ❌ No se pudieron cargar los pedidos.
-                </strong>
+        /*
+         * Solo mostramos el error si todavía
+         * no existen pedidos visibles.
+         */
 
-                <br><br>
+        if (
+            !contenedorPedidos.children.length ||
+            contenedorPedidos.innerHTML.trim() === ""
+        ) {
 
-                <span>
-                    ${escaparHTML(
-                        error.message
-                    )}
-                </span>
+            contenedorPedidos.innerHTML = `
+                <div class="error">
 
-            </div>
-        `;
+                    <strong>
+                        ❌ No se pudieron cargar los pedidos.
+                    </strong>
+
+                    <br><br>
+
+                    <span>
+                        ${escaparHTML(
+                            error.message
+                        )}
+                    </span>
+
+                </div>
+            `;
+        }
+
+
+    } finally {
+
+        cargandoPedidos = false;
+
+
+        /*
+         * Si llegó otro cambio mientras estábamos
+         * cargando, hacemos una actualización adicional.
+         */
+
+        if (actualizacionPendiente) {
+
+            actualizacionPendiente = false;
+
+            cargarPedidos();
+        }
     }
 }
 
 
 /* =========================================================
-   7. RENDERIZAR PEDIDO
+   8. RENDERIZAR PEDIDO
    ========================================================= */
 
 function renderizarPedido(pedido) {
@@ -508,7 +586,7 @@ function renderizarPedido(pedido) {
 
 
 /* =========================================================
-   8. SUBTOTAL DEL PRODUCTO
+   9. SUBTOTAL DEL PRODUCTO
    ========================================================= */
 
 function obtenerSubtotalProducto(producto) {
@@ -519,12 +597,11 @@ function obtenerSubtotalProducto(producto) {
 
 
     /*
-     * PRIORIDAD:
-     * Si el subtotal ya fue guardado al realizar
-     * el pedido, se utiliza exactamente ese valor.
+     * PRIORIDAD ABSOLUTA:
      *
-     * Esto evita que el administrador vuelva a
-     * calcular precios de pedidos existentes.
+     * Si el subtotal fue guardado cuando
+     * se realizó el pedido, utilizamos
+     * exactamente ese valor.
      */
 
     if (
@@ -540,10 +617,6 @@ function obtenerSubtotalProducto(producto) {
 
     /*
      * COMPATIBILIDAD CON PEDIDOS ANTIGUOS
-     *
-     * Si el pedido no tiene subtotal guardado,
-     * utilizamos los datos disponibles para
-     * reconstruir el subtotal.
      */
 
     const cantidad =
@@ -572,15 +645,6 @@ function obtenerSubtotalProducto(producto) {
 
     /*
      * FRESCOS
-     *
-     * Se intenta utilizar primero el precio
-     * aplicado durante el pedido.
-     *
-     * Se aceptan ambos nombres para mantener
-     * compatibilidad:
-     *
-     * precioAplicado
-     * precio_aplicado
      */
 
     if (
@@ -601,8 +665,6 @@ function obtenerSubtotalProducto(producto) {
 
     /*
      * GRINGAS
-     *
-     * Precio base + salsa extra + queso extra.
      */
 
     return (
@@ -614,7 +676,7 @@ function obtenerSubtotalProducto(producto) {
 
 
 /* =========================================================
-   9. RENDERIZAR PRODUCTO
+   10. RENDERIZAR PRODUCTO
    ========================================================= */
 
 function renderizarProducto(producto) {
@@ -623,9 +685,11 @@ function renderizarProducto(producto) {
         return "";
     }
 
+
     const nombre =
         producto.nombre ||
         "Producto";
+
 
     const cantidad =
         Math.max(
@@ -635,20 +699,24 @@ function renderizarProducto(producto) {
             )
         );
 
+
     const precio =
         numeroSeguro(
             producto.precio
         );
+
 
     const extraSalsa =
         numeroSeguro(
             producto.extraSalsa
         );
 
+
     const extraQueso =
         numeroSeguro(
             producto.extraQueso
         );
+
 
     const subtotal =
         obtenerSubtotalProducto(
@@ -661,7 +729,7 @@ function renderizarProducto(producto) {
 
 
     /*
-     * Mostrar salsas seleccionadas.
+     * SALSAS
      */
 
     if (
@@ -679,7 +747,7 @@ function renderizarProducto(producto) {
 
 
     /*
-     * Mostrar salsa extra.
+     * SALSA EXTRA
      */
 
     if (
@@ -694,7 +762,7 @@ function renderizarProducto(producto) {
 
 
     /*
-     * Mostrar queso extra.
+     * QUESO EXTRA
      */
 
     if (
@@ -709,11 +777,7 @@ function renderizarProducto(producto) {
 
 
     /*
-     * Mostrar promoción de fresco.
-     *
-     * Se aceptan:
-     * precioAplicado
-     * precio_aplicado
+     * PROMOCIÓN DE FRESCO
      */
 
     if (
@@ -727,6 +791,7 @@ function renderizarProducto(producto) {
                 producto.precio_aplicado ??
                 producto.precio
             );
+
 
         if (
             precioAplicado > 0 &&
@@ -774,15 +839,27 @@ function renderizarProducto(producto) {
 
 
 /* =========================================================
-   10. CAMBIAR ESTADO
+   11. CAMBIAR ESTADO
    ========================================================= */
 
 async function manejarCambioEstado(evento) {
 
     const boton =
-        evento.currentTarget;
+        evento.target.closest(
+            ".btn-cambiar-estado"
+        );
+
 
     if (!boton) {
+        return;
+    }
+
+
+    /*
+     * Evita doble clic.
+     */
+
+    if (boton.disabled) {
         return;
     }
 
@@ -791,6 +868,7 @@ async function manejarCambioEstado(evento) {
         numeroSeguro(
             boton.dataset.id
         );
+
 
     const estadoActual =
         boton.dataset.estado ||
@@ -882,18 +960,14 @@ async function manejarCambioEstado(evento) {
 
 
         /*
-         * IMPORTANTE:
+         * No llamamos cargarPedidos() aquí.
          *
-         * AQUÍ NO reproducimos sonido.
+         * Supabase Realtime detectará el UPDATE
+         * y actualizará el panel automáticamente.
          *
-         * El sonido será responsabilidad del
-         * dispositivo del cliente mediante
-         * Supabase Realtime.
+         * Si Realtime tarda o está desconectado,
+         * el sistema de respaldo se encargará.
          */
-
-
-        await cargarPedidos();
-
 
     } catch (error) {
 
@@ -918,7 +992,7 @@ async function manejarCambioEstado(evento) {
 
 
 /* =========================================================
-   11. COMPATIBILIDAD
+   12. COMPATIBILIDAD
    ========================================================= */
 
 async function cambiarEstado(
@@ -961,8 +1035,10 @@ async function cambiarEstado(
         }
 
 
-        await cargarPedidos();
-
+        /*
+         * Realtime se encargará de actualizar
+         * visualmente el panel.
+         */
 
     } catch (error) {
 
@@ -981,17 +1057,214 @@ async function cambiarEstado(
 
 
 /* =========================================================
-   12. ACTUALIZACIÓN AUTOMÁTICA
+   13. SUPABASE REALTIME
    ========================================================= */
 
-setInterval(
-    cargarPedidos,
-    INTERVALO_ACTUALIZACION
-);
+function iniciarRealtime() {
+
+    /*
+     * Si ya existe un canal, no creamos otro.
+     */
+
+    if (canalPedidos) {
+
+        console.warn(
+            "⚠️ El canal Realtime ya está iniciado."
+        );
+
+        return;
+    }
+
+
+    console.log(
+        "📡 Iniciando Supabase Realtime..."
+    );
+
+
+    canalPedidos =
+        supabaseClient
+            .channel(
+                "admin-pedidos"
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "pedidos"
+                },
+                payload => {
+
+                    console.log(
+                        "📡 Cambio detectado en pedidos:",
+                        payload.eventType
+                    );
+
+
+                    /*
+                     * Esperamos a que Supabase termine
+                     * de confirmar el cambio antes de
+                     * volver a consultar los pedidos.
+                     */
+
+                    cargarPedidos();
+
+                }
+            )
+            .subscribe(
+                status => {
+
+                    console.log(
+                        "📡 Estado Realtime:",
+                        status
+                    );
+
+
+                    if (
+                        status ===
+                        "SUBSCRIBED"
+                    ) {
+
+                        realtimeConectado =
+                            true;
+
+
+                        actualizarEstadoConexion(
+                            true
+                        );
+
+
+                        console.log(
+                            "✅ Realtime conectado correctamente."
+                        );
+
+
+                        return;
+                    }
+
+
+                    realtimeConectado =
+                        false;
+
+
+                    if (
+                        status ===
+                        "CHANNEL_ERROR"
+                    ) {
+
+                        actualizarEstadoConexion(
+                            false,
+                            "🟡 Realtime desconectado"
+                        );
+
+
+                        console.warn(
+                            "⚠️ Realtime presentó un error. Se utilizará el respaldo."
+                        );
+
+
+                        return;
+                    }
+
+
+                    if (
+                        status ===
+                        "TIMED_OUT"
+                    ) {
+
+                        actualizarEstadoConexion(
+                            false,
+                            "🟡 Realtime agotó el tiempo"
+                        );
+
+
+                        console.warn(
+                            "⚠️ Realtime agotó el tiempo. Se utilizará el respaldo."
+                        );
+
+
+                        return;
+                    }
+
+
+                    if (
+                        status ===
+                        "CLOSED"
+                    ) {
+
+                        actualizarEstadoConexion(
+                            false,
+                            "🟡 Realtime cerrado"
+                        );
+
+
+                        console.warn(
+                            "⚠️ Canal Realtime cerrado."
+                        );
+                    }
+                }
+            );
+}
 
 
 /* =========================================================
-   13. INICIALIZACIÓN
+   14. RESPALDO DE ACTUALIZACIÓN
+   ========================================================= */
+
+function iniciarRespaldo() {
+
+    /*
+     * El respaldo consulta cada 15 segundos.
+     *
+     * Cuando Realtime está funcionando, NO hacemos
+     * consultas periódicas.
+     *
+     * Si Realtime falla, el respaldo mantiene el
+     * panel actualizado.
+     */
+
+    if (intervaloRespaldo) {
+        return;
+    }
+
+
+    intervaloRespaldo =
+        setInterval(
+            () => {
+
+                if (
+                    !realtimeConectado
+                ) {
+
+                    console.log(
+                        "🔄 Respaldo: comprobando pedidos..."
+                    );
+
+
+                    cargarPedidos();
+                }
+
+            },
+            INTERVALO_RESPALDO
+        );
+}
+
+
+/* =========================================================
+   15. DELEGACIÓN DE EVENTOS
+   ========================================================= */
+
+if (contenedorPedidos) {
+
+    contenedorPedidos.addEventListener(
+        "click",
+        manejarCambioEstado
+    );
+}
+
+
+/* =========================================================
+   16. INICIALIZACIÓN
    ========================================================= */
 
 document.addEventListener(
@@ -1002,7 +1275,26 @@ document.addEventListener(
             "👻 GRINGA.EXE Admin inicializado."
         );
 
+
+        /*
+         * Primera carga.
+         */
+
         cargarPedidos();
+
+
+        /*
+         * Realtime.
+         */
+
+        iniciarRealtime();
+
+
+        /*
+         * Respaldo.
+         */
+
+        iniciarRespaldo();
 
     }
 );
