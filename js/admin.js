@@ -9,15 +9,17 @@
    1. CONFIGURACIÓN SUPABASE
    ========================================================= */
 
-const SUPABASE_URL = "https://gbrqwiucxwqzflzxtupf.supabase.co";
+const SUPABASE_URL =
+    "https://gbrqwiucxwqzflzxtupf.supabase.co";
 
 const SUPABASE_KEY =
     "sb_publishable_jW0Tc-8Ij0klXATVMNBFAQ_z3hOqZTz";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
 /* =========================================================
@@ -43,12 +45,14 @@ const INTERVALO_ACTUALIZACION = 5000;
    ========================================================= */
 
 /**
- * Escapa caracteres HTML para evitar que datos
- * introducidos por usuarios sean interpretados como HTML.
+ * Escapa caracteres HTML.
  */
 function escaparHTML(valor) {
 
-    if (valor === null || valor === undefined) {
+    if (
+        valor === null ||
+        valor === undefined
+    ) {
         return "";
     }
 
@@ -75,7 +79,7 @@ function numeroSeguro(valor) {
 
 
 /**
- * Formatea valores monetarios.
+ * Formatea dinero.
  */
 function dinero(valor) {
 
@@ -84,21 +88,30 @@ function dinero(valor) {
 
 
 /**
- * Convierte el estado a una clase CSS segura.
+ * Devuelve la clase CSS según el estado.
  */
 function claseEstado(estado) {
 
-    return estado === "Entregado"
-        ? "entregado"
-        : "pendiente";
+    switch (estado) {
+
+        case "Entregado":
+            return "entregado";
+
+        case "Preparando":
+            return "preparando";
+
+        case "Listo":
+            return "listo";
+
+        default:
+            return "pendiente";
+    }
 }
 
 
 /**
- * Convierte productos a array.
- *
- * Supabase normalmente devuelve JSON como array,
- * pero esta función también soporta texto JSON.
+ * Convierte productos almacenados en Supabase
+ * a un array válido.
  */
 function obtenerProductos(productos) {
 
@@ -120,7 +133,7 @@ function obtenerProductos(productos) {
         } catch (error) {
 
             console.error(
-                "Error al interpretar productos:",
+                "❌ Error al interpretar productos:",
                 error
             );
 
@@ -144,7 +157,11 @@ function formatearFecha(fecha) {
     const fechaObj =
         new Date(fecha);
 
-    if (Number.isNaN(fechaObj.getTime())) {
+    if (
+        Number.isNaN(
+            fechaObj.getTime()
+        )
+    ) {
         return "Fecha no disponible";
     }
 
@@ -158,8 +175,29 @@ function formatearFecha(fecha) {
 }
 
 
+/**
+ * Obtiene el número visual del pedido.
+ */
+function obtenerNumeroPedido(pedido) {
+
+    if (
+        pedido.numero_pedido !== null &&
+        pedido.numero_pedido !== undefined
+    ) {
+
+        return String(
+            pedido.numero_pedido
+        ).padStart(3, "0");
+    }
+
+    return String(
+        pedido.id
+    ).padStart(3, "0");
+}
+
+
 /* =========================================================
-   5. CONEXIÓN
+   5. ESTADO DE CONEXIÓN
    ========================================================= */
 
 function actualizarEstadoConexion(
@@ -208,23 +246,18 @@ async function cargarPedidos() {
         } = await supabaseClient
             .from("pedidos")
             .select("*")
-            .order("id", {
-                ascending: false
-            });
+            .order(
+                "id",
+                {
+                    ascending: false
+                }
+            );
 
-
-        /* -------------------------------------------------
-           ERROR
-           ------------------------------------------------- */
 
         if (error) {
             throw error;
         }
 
-
-        /* -------------------------------------------------
-           CONEXIÓN CORRECTA
-           ------------------------------------------------- */
 
         actualizarEstadoConexion(true);
 
@@ -233,7 +266,10 @@ async function cargarPedidos() {
            SIN PEDIDOS
            ------------------------------------------------- */
 
-        if (!data || data.length === 0) {
+        if (
+            !data ||
+            data.length === 0
+        ) {
 
             contenedorPedidos.innerHTML = `
                 <div class="sin-pedidos">
@@ -252,19 +288,23 @@ async function cargarPedidos() {
 
 
         /* -------------------------------------------------
-           RENDERIZAR PEDIDOS
+           RENDERIZAR
            ------------------------------------------------- */
 
         contenedorPedidos.innerHTML =
-            data.map(renderizarPedido).join("");
+            data
+                .map(renderizarPedido)
+                .join("");
 
 
         /* -------------------------------------------------
-           ACTIVAR BOTONES
+           EVENTOS
            ------------------------------------------------- */
 
         document
-            .querySelectorAll(".btn-cambiar-estado")
+            .querySelectorAll(
+                ".btn-cambiar-estado"
+            )
             .forEach(boton => {
 
                 boton.addEventListener(
@@ -297,7 +337,9 @@ async function cargarPedidos() {
                 <br><br>
 
                 <span>
-                    ${escaparHTML(error.message)}
+                    ${escaparHTML(
+                        error.message
+                    )}
                 </span>
 
             </div>
@@ -313,7 +355,9 @@ async function cargarPedidos() {
 function renderizarPedido(pedido) {
 
     const productos =
-        obtenerProductos(pedido.productos);
+        obtenerProductos(
+            pedido.productos
+        );
 
     const estado =
         pedido.estado || "Pendiente";
@@ -322,12 +366,7 @@ function renderizarPedido(pedido) {
         claseEstado(estado);
 
     const numero =
-        pedido.numero_pedido !== null &&
-        pedido.numero_pedido !== undefined
-            ? String(pedido.numero_pedido)
-                .padStart(3, "0")
-            : String(pedido.id)
-                .padStart(3, "0");
+        obtenerNumeroPedido(pedido);
 
 
     /* -----------------------------------------------------
@@ -343,36 +382,43 @@ function renderizarPedido(pedido) {
 
             : `
                 <div class="producto">
+
                     <div class="producto-nombre">
                         Sin productos
                     </div>
+
                 </div>
             `;
 
 
     /* -----------------------------------------------------
-       INFORMACIÓN DE PAGO
+       PAGO
        ----------------------------------------------------- */
 
     let pagoHTML = `
         <div class="pago">
 
             💳 Método de pago:
+
             <strong>
                 ${escaparHTML(
-                    pedido.metodo_pago || "No especificado"
+                    pedido.metodo_pago ||
+                    "No especificado"
                 )}
             </strong>
-
     `;
 
 
-    if (pedido.metodo_pago === "efectivo") {
+    if (
+        pedido.metodo_pago ===
+        "efectivo"
+    ) {
 
         pagoHTML += `
             <br>
 
             💵 Efectivo recibido:
+
             <strong>
                 $${dinero(
                     pedido.efectivo_recibido
@@ -382,6 +428,7 @@ function renderizarPedido(pedido) {
             <br>
 
             💰 Cambio:
+
             <strong>
                 $${dinero(
                     pedido.cambio
@@ -391,7 +438,10 @@ function renderizarPedido(pedido) {
     }
 
 
-    if (pedido.metodo_pago === "transferencia") {
+    if (
+        pedido.metodo_pago ===
+        "transferencia"
+    ) {
 
         pagoHTML += `
             <br>
@@ -407,13 +457,15 @@ function renderizarPedido(pedido) {
 
 
     /* -----------------------------------------------------
-       HTML COMPLETO
+       HTML DEL PEDIDO
        ----------------------------------------------------- */
 
     return `
         <article
             class="pedido"
-            data-pedido-id="${numeroSeguro(pedido.id)}"
+            data-pedido-id="${numeroSeguro(
+                pedido.id
+            )}"
         >
 
             <div class="pedido-header">
@@ -424,13 +476,17 @@ function renderizarPedido(pedido) {
                         #${escaparHTML(numero)}
                     </div>
 
-                    <small style="
-                        color:#666;
-                        display:block;
-                        margin-top:4px;
-                    ">
+                    <small
+                        style="
+                            color:#666;
+                            display:block;
+                            margin-top:4px;
+                        "
+                    >
                         ${escaparHTML(
-                            formatearFecha(pedido.fecha)
+                            formatearFecha(
+                                pedido.fecha
+                            )
                         )}
                     </small>
 
@@ -440,8 +496,12 @@ function renderizarPedido(pedido) {
                 <button
                     type="button"
                     class="estado ${clase} btn-cambiar-estado"
-                    data-id="${numeroSeguro(pedido.id)}"
-                    data-estado="${escaparHTML(estado)}"
+                    data-id="${numeroSeguro(
+                        pedido.id
+                    )}"
+                    data-estado="${escaparHTML(
+                        estado
+                    )}"
                 >
                     ${escaparHTML(estado)}
                 </button>
@@ -458,7 +518,8 @@ function renderizarPedido(pedido) {
                 </strong>
 
                 ${escaparHTML(
-                    pedido.cliente || "Sin nombre"
+                    pedido.cliente ||
+                    "Sin nombre"
                 )}
 
             </div>
@@ -478,7 +539,9 @@ function renderizarPedido(pedido) {
                 </span>
 
                 <span>
-                    $${dinero(pedido.total)}
+                    $${dinero(
+                        pedido.total
+                    )}
                 </span>
 
             </div>
@@ -492,7 +555,89 @@ function renderizarPedido(pedido) {
 
 
 /* =========================================================
-   8. RENDERIZAR PRODUCTO
+   8. OBTENER SUBTOTAL DEL PRODUCTO
+   ========================================================= */
+
+function obtenerSubtotalProducto(producto) {
+
+    if (!producto) {
+        return 0;
+    }
+
+
+    /*
+     * NUEVO SISTEMA:
+     *
+     * script.js ahora guarda el subtotal exacto
+     * de cada producto.
+     *
+     * Esto permite conservar correctamente
+     * promociones como:
+     *
+     * 2 frescos → $0.25
+     * restantes → $0.35
+     */
+
+    if (
+        producto.subtotal !== undefined &&
+        producto.subtotal !== null
+    ) {
+
+        return numeroSeguro(
+            producto.subtotal
+        );
+    }
+
+
+    /* -----------------------------------------------------
+       COMPATIBILIDAD CON PEDIDOS ANTIGUOS
+       ----------------------------------------------------- */
+
+    const cantidad =
+        Math.max(
+            0,
+            numeroSeguro(
+                producto.cantidad
+            )
+        );
+
+    const precio =
+        numeroSeguro(
+            producto.precio
+        );
+
+    const extraSalsa =
+        numeroSeguro(
+            producto.extraSalsa
+        );
+
+    const extraQueso =
+        numeroSeguro(
+            producto.extraQueso
+        );
+
+
+    /* Fresco antiguo */
+    if (
+        producto.tipo ===
+        "fresco"
+    ) {
+
+        return precio * cantidad;
+    }
+
+
+    /* Gringa antigua */
+    return (
+        precio +
+        extraSalsa +
+        extraQueso
+    ) * cantidad;
+}
+
+
+/* =========================================================
+   9. RENDERIZAR PRODUCTO
    ========================================================= */
 
 function renderizarProducto(producto) {
@@ -501,41 +646,57 @@ function renderizarProducto(producto) {
         return "";
     }
 
+
     const nombre =
-        producto.nombre || "Producto";
+        producto.nombre ||
+        "Producto";
 
     const cantidad =
-        numeroSeguro(producto.cantidad);
+        Math.max(
+            0,
+            numeroSeguro(
+                producto.cantidad
+            )
+        );
 
     const precio =
-        numeroSeguro(producto.precio);
+        numeroSeguro(
+            producto.precio
+        );
 
     const extraSalsa =
-        numeroSeguro(producto.extraSalsa);
+        numeroSeguro(
+            producto.extraSalsa
+        );
 
     const extraQueso =
-        numeroSeguro(producto.extraQueso);
+        numeroSeguro(
+            producto.extraQueso
+        );
 
 
-    /* -----------------------------------------------------
-       SUBTOTAL
-       ----------------------------------------------------- */
-
-    let subtotal =
-        (precio + extraSalsa + extraQueso) *
-        cantidad;
+    const subtotal =
+        obtenerSubtotalProducto(
+            producto
+        );
 
 
     /* -----------------------------------------------------
        DETALLES
        ----------------------------------------------------- */
 
-    let detalles = `x${cantidad}`;
+    let detalles =
+        `x${cantidad}`;
 
 
-    // Salsas
+    /* -----------------------------------------------------
+       SALSAS
+       ----------------------------------------------------- */
+
     if (
-        Array.isArray(producto.salsas) &&
+        Array.isArray(
+            producto.salsas
+        ) &&
         producto.salsas.length > 0
     ) {
 
@@ -546,59 +707,97 @@ function renderizarProducto(producto) {
     }
 
 
-    // Segunda salsa
-    if (extraSalsa > 0) {
+    /* -----------------------------------------------------
+       SEGUNDA SALSA
+       ----------------------------------------------------- */
+
+    if (
+        extraSalsa > 0
+    ) {
 
         detalles +=
-            ` · +$${dinero(extraSalsa)} salsa extra`;
-    }
-
-
-    // Extra queso
-    if (extraQueso > 0) {
-
-        detalles +=
-            ` · 🧀 +$${dinero(extraQueso)}`;
+            ` · +$${dinero(
+                extraSalsa
+            )} salsa extra`;
     }
 
 
     /* -----------------------------------------------------
-       FRESCOS
+       EXTRA QUESO
        ----------------------------------------------------- */
 
-    if (producto.tipo === "fresco") {
+    if (
+        extraQueso > 0
+    ) {
 
-        /*
-         * El precio mostrado aquí corresponde al precio
-         * almacenado inicialmente.
-         *
-         * El total final del pedido viene directamente
-         * de pedido.total.
-         */
-
-        subtotal =
-            precio * cantidad;
+        detalles +=
+            ` · 🧀 +$${dinero(
+                extraQueso
+            )}`;
     }
 
+
+    /* -----------------------------------------------------
+       PROMOCIÓN DE FRESCOS
+       ----------------------------------------------------- */
+
+    if (
+        producto.tipo ===
+        "fresco"
+    ) {
+
+        const precioAplicado =
+            numeroSeguro(
+                producto.precio_aplicado
+            );
+
+
+        /*
+         * Si el pedido nuevo contiene
+         * precio_aplicado, mostramos
+         * información adicional.
+         */
+
+        if (
+            precioAplicado > 0 &&
+            precioAplicado < precio
+        ) {
+
+            detalles +=
+                ` · 🥤 Promo`;
+        }
+    }
+
+
+    /* -----------------------------------------------------
+       HTML
+       ----------------------------------------------------- */
 
     return `
         <div class="producto">
 
             <div class="producto-nombre">
 
-                ${escaparHTML(nombre)}
+                ${escaparHTML(
+                    nombre
+                )}
 
             </div>
 
             <div class="producto-detalle">
 
-                ${escaparHTML(detalles)}
+                ${escaparHTML(
+                    detalles
+                )}
 
                 <br>
 
                 Subtotal:
+
                 <strong>
-                    $${dinero(subtotal)}
+                    $${dinero(
+                        subtotal
+                    )}
                 </strong>
 
             </div>
@@ -609,10 +808,12 @@ function renderizarProducto(producto) {
 
 
 /* =========================================================
-   9. CAMBIAR ESTADO
+   10. CAMBIAR ESTADO
    ========================================================= */
 
-async function manejarCambioEstado(evento) {
+async function manejarCambioEstado(
+    evento
+) {
 
     const boton =
         evento.currentTarget;
@@ -633,17 +834,28 @@ async function manejarCambioEstado(evento) {
 
 
     /*
-     * Actualmente utilizamos dos estados:
+     * SISTEMA ACTUAL:
      *
      * Pendiente <-> Entregado
      *
-     * Más adelante podemos ampliar el sistema a:
-     * Pendiente -> Preparando -> Listo -> Entregado
+     * Posteriormente podemos ampliar
+     * a:
+     *
+     * Pendiente
+     *      ↓
+     * Preparando
+     *      ↓
+     * Listo
+     *      ↓
+     * Entregado
      */
 
     const nuevoEstado =
-        estadoActual === "Entregado"
+        estadoActual ===
+        "Entregado"
+
             ? "Pendiente"
+
             : "Entregado";
 
 
@@ -715,24 +927,27 @@ async function manejarCambioEstado(evento) {
 
 
 /* =========================================================
-   10. FUNCIÓN GLOBAL DE COMPATIBILIDAD
+   11. COMPATIBILIDAD
    ========================================================= */
 
 /*
- * Dejamos esta función disponible por si algún elemento
- * antiguo de admin.html todavía utiliza:
+ * Se conserva por si una versión anterior
+ * de admin.html utiliza:
  *
  * cambiarEstado(id, estado)
- *
- * Así evitamos que el panel se rompa si queda algún
- * onclick antiguo.
  */
 
-async function cambiarEstado(id, estadoActual) {
+async function cambiarEstado(
+    id,
+    estadoActual
+) {
 
     const nuevoEstado =
-        estadoActual === "Entregado"
+        estadoActual ===
+        "Entregado"
+
             ? "Pendiente"
+
             : "Entregado";
 
 
@@ -784,16 +999,8 @@ async function cambiarEstado(id, estadoActual) {
 
 
 /* =========================================================
-   11. ACTUALIZACIÓN AUTOMÁTICA
+   12. ACTUALIZACIÓN AUTOMÁTICA
    ========================================================= */
-
-/*
- * No usamos Realtime todavía.
- *
- * Por ahora el panel consulta Supabase cada 5 segundos.
- * En la siguiente optimización podemos sustituir esto
- * por Supabase Realtime.
- */
 
 setInterval(
     cargarPedidos,
@@ -802,7 +1009,7 @@ setInterval(
 
 
 /* =========================================================
-   12. INICIALIZACIÓN
+   13. INICIALIZACIÓN
    ========================================================= */
 
 document.addEventListener(
