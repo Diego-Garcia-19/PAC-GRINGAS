@@ -195,6 +195,75 @@ function obtenerNumeroPedido(pedido) {
     ).padStart(3, "0");
 }
 
+/* =========================================================
+   SONIDO DE NOTIFICACIÓN
+   ========================================================= */
+
+function reproducirSonidoNotificacion() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if (!AudioContext) {
+            return;
+        }
+
+        const audioContext =
+            new AudioContext();
+
+        const oscilador =
+            audioContext.createOscillator();
+
+        const ganancia =
+            audioContext.createGain();
+
+        oscilador.type = "sine";
+
+        oscilador.frequency.setValueAtTime(
+            880,
+            audioContext.currentTime
+        );
+
+        oscilador.frequency.setValueAtTime(
+            1174,
+            audioContext.currentTime + 0.12
+        );
+
+        ganancia.gain.setValueAtTime(
+            0.0001,
+            audioContext.currentTime
+        );
+
+        ganancia.gain.exponentialRampToValueAtTime(
+            0.18,
+            audioContext.currentTime + 0.02
+        );
+
+        ganancia.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audioContext.currentTime + 0.35
+        );
+
+        oscilador.connect(ganancia);
+        ganancia.connect(audioContext.destination);
+
+        oscilador.start();
+
+        oscilador.stop(
+            audioContext.currentTime + 0.35
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "No se pudo reproducir el sonido:",
+            error
+        );
+    }
+}
 
 /* =========================================================
    5. ESTADO DE CONEXIÓN
