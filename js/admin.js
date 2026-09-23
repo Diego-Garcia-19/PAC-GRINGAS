@@ -1007,8 +1007,3 @@ document.addEventListener(
 
     }
 );
-```
-
-Este reemplaza **completo** al anterior. No necesitas mezclar partes.
-
-Después de guardarlo, **recarga el admin con `Ctrl + F5`** y revisamos la consola. Si carga los pedidos correctamente, el siguiente paso será atacar el `[Violation] 'click' handler took 1303ms` y la actualización cada 5 segundos.
