@@ -1052,18 +1052,8 @@ async function cambiarEstado(
         await cargarPedidos();
 
 
-    } catch (error) {
-
-        console.error(
-            "❌ Error al cambiar estado:",
-            error
-        );
-
-        alert(
-            "❌ No se pudo actualizar el pedido.\n\n" +
-            error.message
-        );
-    }
+    if (nuevoEstado === "Entregado") {
+    reproducirSonidoNotificacion();
 }
 
 
