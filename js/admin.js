@@ -175,78 +175,7 @@ function obtenerNumeroPedido(pedido) {
 
 
 /* =========================================================
-   5. SONIDO DE NOTIFICACIÓN
-   ========================================================= */
-
-function reproducirSonidoNotificacion() {
-
-    try {
-
-        const AudioContext =
-            window.AudioContext ||
-            window.webkitAudioContext;
-
-        if (!AudioContext) {
-            return;
-        }
-
-        const audioContext =
-            new AudioContext();
-
-        const oscilador =
-            audioContext.createOscillator();
-
-        const ganancia =
-            audioContext.createGain();
-
-        oscilador.type = "sine";
-
-        oscilador.frequency.setValueAtTime(
-            880,
-            audioContext.currentTime
-        );
-
-        oscilador.frequency.setValueAtTime(
-            1174,
-            audioContext.currentTime + 0.12
-        );
-
-        ganancia.gain.setValueAtTime(
-            0.0001,
-            audioContext.currentTime
-        );
-
-        ganancia.gain.exponentialRampToValueAtTime(
-            0.18,
-            audioContext.currentTime + 0.02
-        );
-
-        ganancia.gain.exponentialRampToValueAtTime(
-            0.0001,
-            audioContext.currentTime + 0.35
-        );
-
-        oscilador.connect(ganancia);
-        ganancia.connect(audioContext.destination);
-
-        oscilador.start();
-
-        oscilador.stop(
-            audioContext.currentTime + 0.35
-        );
-
-    } catch (error) {
-
-        console.warn(
-            "⚠️ No se pudo reproducir el sonido:",
-            error
-        );
-    }
-}
-
-
-/* =========================================================
-   6. ESTADO DE CONEXIÓN
+   5. ESTADO DE CONEXIÓN
    ========================================================= */
 
 function actualizarEstadoConexion(
@@ -278,7 +207,7 @@ function actualizarEstadoConexion(
 
 
 /* =========================================================
-   7. CARGAR PEDIDOS
+   6. CARGAR PEDIDOS
    ========================================================= */
 
 async function cargarPedidos() {
@@ -383,7 +312,7 @@ async function cargarPedidos() {
 
 
 /* =========================================================
-   8. RENDERIZAR PEDIDO
+   7. RENDERIZAR PEDIDO
    ========================================================= */
 
 function renderizarPedido(pedido) {
@@ -579,7 +508,7 @@ function renderizarPedido(pedido) {
 
 
 /* =========================================================
-   9. SUBTOTAL DEL PRODUCTO
+   8. SUBTOTAL DEL PRODUCTO
    ========================================================= */
 
 function obtenerSubtotalProducto(producto) {
@@ -588,10 +517,6 @@ function obtenerSubtotalProducto(producto) {
         return 0;
     }
 
-
-    /*
-     * Los pedidos nuevos guardan el subtotal exacto.
-     */
 
     if (
         producto.subtotal !== undefined &&
@@ -603,10 +528,6 @@ function obtenerSubtotalProducto(producto) {
         );
     }
 
-
-    /*
-     * Compatibilidad con pedidos anteriores.
-     */
 
     const cantidad =
         Math.max(
@@ -650,7 +571,7 @@ function obtenerSubtotalProducto(producto) {
 
 
 /* =========================================================
-   10. RENDERIZAR PRODUCTO
+   9. RENDERIZAR PRODUCTO
    ========================================================= */
 
 function renderizarProducto(producto) {
@@ -788,13 +709,18 @@ function renderizarProducto(producto) {
 
 
 /* =========================================================
-   11. CAMBIAR ESTADO
+   10. CAMBIAR ESTADO
    ========================================================= */
 
 async function manejarCambioEstado(evento) {
 
     const boton =
         evento.currentTarget;
+
+    if (!boton) {
+        return;
+    }
+
 
     const id =
         numeroSeguro(
@@ -807,6 +733,11 @@ async function manejarCambioEstado(evento) {
 
 
     if (!id) {
+
+        console.error(
+            "❌ ID de pedido inválido."
+        );
+
         return;
     }
 
@@ -829,10 +760,11 @@ async function manejarCambioEstado(evento) {
     }
 
 
-    boton.disabled = true;
-
     const textoOriginal =
-        boton.textContent;
+        boton.textContent.trim();
+
+
+    boton.disabled = true;
 
     boton.textContent =
         "Actualizando...";
@@ -840,18 +772,42 @@ async function manejarCambioEstado(evento) {
 
     try {
 
+        console.log(
+            `🔄 Actualizando pedido #${id}...`
+        );
+
+
         const {
+            data,
             error
         } = await supabaseClient
             .from("pedidos")
             .update({
                 estado: nuevoEstado
             })
-            .eq("id", id);
+            .eq("id", id)
+            .select();
 
 
         if (error) {
+
+            console.error(
+                "❌ Supabase rechazó la actualización:",
+                error
+            );
+
             throw error;
+        }
+
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            throw new Error(
+                "Supabase no actualizó ningún pedido. Revisa las políticas RLS de la tabla pedidos."
+            );
         }
 
 
@@ -861,17 +817,14 @@ async function manejarCambioEstado(evento) {
 
 
         /*
-         * El sonido SOLO se reproduce cuando
-         * realmente se cambió a Entregado.
+         * IMPORTANTE:
+         *
+         * AQUÍ NO reproducimos sonido.
+         *
+         * El sonido será responsabilidad del
+         * dispositivo del cliente mediante
+         * Supabase Realtime.
          */
-
-        if (
-            nuevoEstado ===
-            "Entregado"
-        ) {
-
-            reproducirSonidoNotificacion();
-        }
 
 
         await cargarPedidos();
@@ -883,6 +836,7 @@ async function manejarCambioEstado(evento) {
             "❌ Error al cambiar estado:",
             error
         );
+
 
         alert(
             "❌ No se pudo actualizar el estado.\n\n" +
@@ -899,7 +853,7 @@ async function manejarCambioEstado(evento) {
 
 
 /* =========================================================
-   12. COMPATIBILIDAD
+   11. COMPATIBILIDAD
    ========================================================= */
 
 async function cambiarEstado(
@@ -942,15 +896,6 @@ async function cambiarEstado(
         }
 
 
-        if (
-            nuevoEstado ===
-            "Entregado"
-        ) {
-
-            reproducirSonidoNotificacion();
-        }
-
-
         await cargarPedidos();
 
 
@@ -961,6 +906,7 @@ async function cambiarEstado(
             error
         );
 
+
         alert(
             "❌ No se pudo actualizar el pedido.\n\n" +
             error.message
@@ -970,7 +916,7 @@ async function cambiarEstado(
 
 
 /* =========================================================
-   13. ACTUALIZACIÓN AUTOMÁTICA
+   12. ACTUALIZACIÓN AUTOMÁTICA
    ========================================================= */
 
 setInterval(
@@ -980,7 +926,7 @@ setInterval(
 
 
 /* =========================================================
-   14. INICIALIZACIÓN
+   13. INICIALIZACIÓN
    ========================================================= */
 
 document.addEventListener(
