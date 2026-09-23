@@ -1,7 +1,7 @@
 /* =========================================================
-   GRINGA.EXE - PANEL ADMINISTRATIVO
+   GRINGA.EXE - ADMIN
    Archivo: js/admin.js
-   Función: Gestión de pedidos
+   Función: Administración de pedidos
    ========================================================= */
 
 
@@ -27,29 +27,25 @@ const supabaseClient =
    ========================================================= */
 
 const contenedorPedidos =
-    document.getElementById("contenedor-pedidos");
+    document.getElementById(
+        "contenedor-pedidos"
+    );
 
 const conexion =
-    document.getElementById("conexion");
+    document.getElementById(
+        "conexion"
+    );
 
 
 /* =========================================================
    3. CONFIGURACIÓN
    ========================================================= */
 
-/*
- * Realtime será el sistema principal.
- *
- * Este intervalo NO actualiza constantemente el panel.
- * Solo funciona como respaldo cuando Realtime no está
- * conectado correctamente.
- */
-
 const INTERVALO_RESPALDO = 15000;
 
 
 /* =========================================================
-   4. ESTADO INTERNO
+   4. ESTADO DEL ADMIN
    ========================================================= */
 
 let canalPedidos = null;
@@ -66,6 +62,23 @@ let intervaloRespaldo = null;
 /* =========================================================
    5. UTILIDADES
    ========================================================= */
+
+function numeroSeguro(valor) {
+
+    const numero = Number(valor);
+
+    return Number.isFinite(numero)
+        ? numero
+        : 0;
+}
+
+
+function dinero(valor) {
+
+    return numeroSeguro(valor)
+        .toFixed(2);
+}
+
 
 function escaparHTML(valor) {
 
@@ -85,176 +98,518 @@ function escaparHTML(valor) {
 }
 
 
-function numeroSeguro(valor) {
+/* =========================================================
+   6. SUBTOTAL DE PRODUCTO
+   ========================================================= */
 
-    const numero = Number(valor);
+/*
+ * IMPORTANTE:
+ *
+ * Si el pedido ya tiene un subtotal guardado,
+ * utilizamos ese valor.
+ *
+ * Esto evita que el administrador vuelva a
+ * calcular precios promocionales incorrectamente.
+ */
 
-    return Number.isFinite(numero)
-        ? numero
-        : 0;
-}
-
-
-function dinero(valor) {
-
-    return numeroSeguro(valor).toFixed(2);
-}
-
-
-function claseEstado(estado) {
-
-    switch (estado) {
-
-        case "Entregado":
-            return "entregado";
-
-        case "Preparando":
-            return "preparando";
-
-        case "Listo":
-            return "listo";
-
-        default:
-            return "pendiente";
-    }
-}
-
-
-function obtenerProductos(productos) {
-
-    if (Array.isArray(productos)) {
-        return productos;
-    }
-
-    if (typeof productos === "string") {
-
-        try {
-
-            const resultado =
-                JSON.parse(productos);
-
-            return Array.isArray(resultado)
-                ? resultado
-                : [];
-
-        } catch (error) {
-
-            console.error(
-                "❌ Error al interpretar productos:",
-                error
-            );
-
-            return [];
-        }
-    }
-
-    return [];
-}
-
-
-function formatearFecha(fecha) {
-
-    if (!fecha) {
-        return "Fecha no disponible";
-    }
-
-    const fechaObj =
-        new Date(fecha);
+function obtenerSubtotalProducto(producto) {
 
     if (
-        Number.isNaN(
-            fechaObj.getTime()
+        producto &&
+        producto.subtotal !== undefined &&
+        producto.subtotal !== null &&
+        Number.isFinite(
+            Number(producto.subtotal)
         )
     ) {
-        return "Fecha no disponible";
+
+        return Number(
+            producto.subtotal
+        );
     }
 
-    return fechaObj.toLocaleString(
-        "es-SV",
-        {
-            dateStyle: "short",
-            timeStyle: "short"
-        }
-    );
-}
 
+    const cantidad =
+        numeroSeguro(
+            producto?.cantidad
+        );
 
-function obtenerNumeroPedido(pedido) {
 
     if (
-        pedido.numero_pedido !== null &&
-        pedido.numero_pedido !== undefined
+        producto?.tipo ===
+        "gringa"
     ) {
 
-        return String(
-            pedido.numero_pedido
-        ).padStart(3, "0");
+        const precio =
+            numeroSeguro(
+                producto.precio
+            );
+
+        const extraSalsa =
+            numeroSeguro(
+                producto.extraSalsa
+            );
+
+        const extraQueso =
+            numeroSeguro(
+                producto.extraQueso
+            );
+
+        const precioUnitario =
+            precio +
+            extraSalsa +
+            extraQueso;
+
+        return (
+            precioUnitario *
+            cantidad
+        );
     }
 
-    return String(
-        pedido.id
-    ).padStart(3, "0");
+
+    if (
+        producto?.tipo ===
+        "fresco"
+    ) {
+
+        const precioAplicado =
+            numeroSeguro(
+                producto.precioAplicado ??
+                producto.precio_aplicado ??
+                producto.precio
+            );
+
+        return (
+            precioAplicado *
+            cantidad
+        );
+    }
+
+
+    return 0;
 }
 
 
 /* =========================================================
-   6. ESTADO DE CONEXIÓN
+   7. TEXTO / CLASE DEL ESTADO
+   ========================================================= */
+
+function obtenerClaseEstado(estado) {
+
+    return String(
+        estado || "Pendiente"
+    )
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+        .replace(
+            /\s+/g,
+            "-"
+        );
+}
+
+
+function obtenerSiguienteEstado(estado) {
+
+    switch (estado) {
+
+        case "Pendiente":
+            return "Preparando";
+
+        case "Preparando":
+            return "Listo";
+
+        case "Listo":
+            return "Entregado";
+
+        case "Entregado":
+            return "Pendiente";
+
+        default:
+            return "Preparando";
+    }
+}
+
+
+/* =========================================================
+   8. ACTUALIZAR INDICADOR DE CONEXIÓN
    ========================================================= */
 
 function actualizarEstadoConexion(
-    conectado,
-    mensaje = ""
+    conectado
 ) {
 
     if (!conexion) {
         return;
     }
 
+
     if (conectado) {
 
         conexion.textContent =
             "🟢 Conectado";
 
-        conexion.style.color =
-            "#38ff8b";
+    } else {
 
-        return;
+        conexion.textContent =
+            "🟠 Modo respaldo";
     }
-
-
-    conexion.textContent =
-        mensaje || "🔴 Error de conexión";
-
-    conexion.style.color =
-        "#ff3154";
 }
 
 
 /* =========================================================
-   7. CARGAR PEDIDOS
+   9. RENDERIZAR PRODUCTOS
+   ========================================================= */
+
+function renderizarProducto(
+    producto
+) {
+
+    const cantidad =
+        numeroSeguro(
+            producto?.cantidad
+        );
+
+    const subtotal =
+        obtenerSubtotalProducto(
+            producto
+        );
+
+
+    let detalles = "";
+
+
+    if (
+        producto?.tipo ===
+        "gringa"
+    ) {
+
+        if (
+            Array.isArray(
+                producto.salsas
+            ) &&
+            producto.salsas.length > 0
+        ) {
+
+            detalles += `
+                <small>
+                    🌶️ Salsa:
+                    ${escaparHTML(
+                        producto.salsas.join(
+                            " + "
+                        )
+                    )}
+                </small>
+            `;
+        }
+
+
+        if (
+            numeroSeguro(
+                producto.extraSalsa
+            ) > 0
+        ) {
+
+            detalles += `
+                <small>
+                    🌶️ Segunda salsa
+                    +$${dinero(
+                        producto.extraSalsa
+                    )}
+                </small>
+            `;
+        }
+
+
+        if (
+            numeroSeguro(
+                producto.extraQueso
+            ) > 0
+        ) {
+
+            detalles += `
+                <small>
+                    🧀 Extra queso
+                    +$${dinero(
+                        producto.extraQueso
+                    )}
+                </small>
+            `;
+        }
+    }
+
+
+    else if (
+        producto?.tipo ===
+        "fresco"
+    ) {
+
+        const precioAplicado =
+            numeroSeguro(
+                producto.precioAplicado ??
+                producto.precio_aplicado ??
+                producto.precio
+            );
+
+        detalles = `
+            <small>
+                🥤 $${dinero(
+                    precioAplicado
+                )} c/u
+            </small>
+        `;
+    }
+
+
+    return `
+        <div class="producto-pedido">
+
+            <div class="producto-pedido-info">
+
+                <strong>
+                    ${escaparHTML(
+                        producto?.nombre ||
+                        "Producto"
+                    )}
+                </strong>
+
+                ${detalles}
+
+                <span>
+                    x${cantidad}
+                </span>
+
+            </div>
+
+            <strong>
+                $${dinero(
+                    subtotal
+                )}
+            </strong>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   10. RENDERIZAR PEDIDO
+   ========================================================= */
+
+function renderizarPedido(
+    pedido
+) {
+
+    const estado =
+        pedido.estado ||
+        "Pendiente";
+
+
+    const claseEstado =
+        obtenerClaseEstado(
+            estado
+        );
+
+
+    const siguienteEstado =
+        obtenerSiguienteEstado(
+            estado
+        );
+
+
+    let productos = [];
+
+
+    if (
+        Array.isArray(
+            pedido.productos
+        )
+    ) {
+
+        productos =
+            pedido.productos;
+
+    } else {
+
+        try {
+
+            productos =
+                JSON.parse(
+                    pedido.productos || "[]"
+                );
+
+        } catch (error) {
+
+            console.warn(
+                "⚠️ No se pudieron leer los productos del pedido:",
+                pedido.id
+            );
+
+            productos = [];
+        }
+    }
+
+
+    const productosHTML =
+        productos
+            .map(
+                renderizarProducto
+            )
+            .join("");
+
+
+    const numero =
+        pedido.numero_pedido ??
+        pedido.id;
+
+
+    return `
+        <div
+            class="pedido-card ${claseEstado}"
+            data-id="${pedido.id}"
+        >
+
+            <div class="pedido-header">
+
+                <div>
+
+                    <h3>
+                        Pedido #${escaparHTML(
+                            numero
+                        )}
+                    </h3>
+
+                    <p>
+                        👤 ${escaparHTML(
+                            pedido.cliente ||
+                            "Cliente"
+                        )}
+                    </p>
+
+                </div>
+
+                <span class="estado ${claseEstado}">
+                    ${escaparHTML(
+                        estado
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="pedido-productos">
+
+                ${productosHTML}
+
+            </div>
+
+
+            <div class="pedido-info">
+
+                <p>
+                    💳 Método:
+                    <strong>
+                        ${escaparHTML(
+                            pedido.metodo_pago ||
+                            "No especificado"
+                        )}
+                    </strong>
+                </p>
+
+                ${
+                    pedido.efectivo_recibido !==
+                    null &&
+                    pedido.efectivo_recibido !==
+                    undefined
+                    ? `
+                        <p>
+                            💵 Efectivo:
+                            <strong>
+                                $${dinero(
+                                    pedido.efectivo_recibido
+                                )}
+                            </strong>
+                        </p>
+                    `
+                    : ""
+                }
+
+                ${
+                    pedido.cambio !==
+                    null &&
+                    pedido.cambio !==
+                    undefined
+                    ? `
+                        <p>
+                            💰 Cambio:
+                            <strong>
+                                $${dinero(
+                                    pedido.cambio
+                                )}
+                            </strong>
+                        </p>
+                    `
+                    : ""
+                }
+
+            </div>
+
+
+            <div class="pedido-footer">
+
+                <strong class="pedido-total">
+                    TOTAL:
+                    $${dinero(
+                        pedido.total
+                    )}
+                </strong>
+
+
+                <button
+                    type="button"
+                    class="btn-cambiar-estado"
+                    data-id="${pedido.id}"
+                    data-estado="${escaparHTML(
+                        siguienteEstado
+                    )}"
+                >
+                    Cambiar a
+                    ${escaparHTML(
+                        siguienteEstado
+                    )}
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   11. CARGAR PEDIDOS
    ========================================================= */
 
 async function cargarPedidos() {
 
-    if (!contenedorPedidos) {
-        return;
-    }
-
-
     /*
-     * Evita que varias actualizaciones simultáneas
-     * hagan múltiples consultas innecesarias.
+     * Evitamos varias consultas simultáneas.
      */
 
     if (cargandoPedidos) {
 
-        actualizacionPendiente = true;
+        actualizacionPendiente =
+            true;
 
         return;
     }
 
 
-    cargandoPedidos = true;
+    cargandoPedidos =
+        true;
 
 
     try {
@@ -262,15 +617,16 @@ async function cargarPedidos() {
         const {
             data,
             error
-        } = await supabaseClient
-            .from("pedidos")
-            .select("*")
-            .order(
-                "id",
-                {
-                    ascending: false
-                }
-            );
+        } =
+            await supabaseClient
+                .from("pedidos")
+                .select("*")
+                .order(
+                    "id",
+                    {
+                        ascending: false
+                    }
+                );
 
 
         if (error) {
@@ -278,9 +634,9 @@ async function cargarPedidos() {
         }
 
 
-        actualizarEstadoConexion(
-            true
-        );
+        if (!contenedorPedidos) {
+            return;
+        }
 
 
         if (
@@ -290,31 +646,35 @@ async function cargarPedidos() {
 
             contenedorPedidos.innerHTML = `
                 <div class="sin-pedidos">
-
-                    <h2>👻 SIN PEDIDOS</h2>
-
                     <p>
-                        Todavía no hay pedidos registrados.
+                        👻 No hay pedidos todavía.
                     </p>
-
                 </div>
             `;
 
-            return;
+        } else {
+
+            contenedorPedidos.innerHTML =
+                data
+                    .map(
+                        renderizarPedido
+                    )
+                    .join("");
         }
 
 
         /*
-         * Una sola escritura del DOM.
-         *
-         * Esto evita modificar el HTML
-         * repetidamente durante el renderizado.
+         * La consulta a Supabase funcionó.
          */
 
-        contenedorPedidos.innerHTML =
-            data
-                .map(renderizarPedido)
-                .join("");
+        if (!realtimeConectado) {
+            actualizarEstadoConexion(true);
+        }
+
+
+        console.log(
+            `📦 ${data?.length || 0} pedido(s) cargado(s)`
+        );
 
 
     } catch (error) {
@@ -325,63 +685,47 @@ async function cargarPedidos() {
         );
 
 
-        /*
-         * No marcamos Realtime como desconectado
-         * simplemente porque falle una consulta.
-         * El canal puede seguir funcionando.
-         */
-
         actualizarEstadoConexion(
-            false,
-            realtimeConectado
-                ? "🟡 Error al actualizar"
-                : "🔴 Sin conexión"
+            false
         );
 
 
-        /*
-         * Solo mostramos el error si todavía
-         * no existen pedidos visibles.
-         */
-
-        if (
-            !contenedorPedidos.children.length ||
-            contenedorPedidos.innerHTML.trim() === ""
-        ) {
+        if (contenedorPedidos) {
 
             contenedorPedidos.innerHTML = `
-                <div class="error">
+                <div class="sin-pedidos">
+                    <p>
+                        ⚠️ No se pudieron cargar los pedidos.
+                    </p>
 
-                    <strong>
-                        ❌ No se pudieron cargar los pedidos.
-                    </strong>
-
-                    <br><br>
-
-                    <span>
-                        ${escaparHTML(
-                            error.message
-                        )}
-                    </span>
-
+                    <button
+                        type="button"
+                        onclick="cargarPedidos()"
+                    >
+                        🔄 Reintentar
+                    </button>
                 </div>
             `;
         }
 
-
     } finally {
 
-        cargandoPedidos = false;
+        cargandoPedidos =
+            false;
 
 
         /*
-         * Si llegó otro cambio mientras estábamos
-         * cargando, hacemos una actualización adicional.
+         * Si llegó otro cambio mientras
+         * estábamos cargando, hacemos
+         * una segunda carga.
          */
 
-        if (actualizacionPendiente) {
+        if (
+            actualizacionPendiente
+        ) {
 
-            actualizacionPendiente = false;
+            actualizacionPendiente =
+                false;
 
             cargarPedidos();
         }
@@ -390,459 +734,12 @@ async function cargarPedidos() {
 
 
 /* =========================================================
-   8. RENDERIZAR PEDIDO
+   12. CAMBIAR ESTADO
    ========================================================= */
 
-function renderizarPedido(pedido) {
-
-    const productos =
-        obtenerProductos(
-            pedido.productos
-        );
-
-    const estado =
-        pedido.estado || "Pendiente";
-
-    const clase =
-        claseEstado(estado);
-
-    const numero =
-        obtenerNumeroPedido(pedido);
-
-
-    const productosHTML =
-        productos.length > 0
-
-            ? productos
-                .map(renderizarProducto)
-                .join("")
-
-            : `
-                <div class="producto">
-
-                    <div class="producto-nombre">
-                        Sin productos
-                    </div>
-
-                </div>
-            `;
-
-
-    let pagoHTML = `
-        <div class="pago">
-
-            💳 Método de pago:
-
-            <strong>
-                ${escaparHTML(
-                    pedido.metodo_pago ||
-                    "No especificado"
-                )}
-            </strong>
-    `;
-
-
-    if (
-        pedido.metodo_pago ===
-        "efectivo"
-    ) {
-
-        pagoHTML += `
-            <br>
-
-            💵 Efectivo recibido:
-
-            <strong>
-                $${dinero(
-                    pedido.efectivo_recibido
-                )}
-            </strong>
-
-            <br>
-
-            💰 Cambio:
-
-            <strong>
-                $${dinero(
-                    pedido.cambio
-                )}
-            </strong>
-        `;
-    }
-
-
-    if (
-        pedido.metodo_pago ===
-        "transferencia"
-    ) {
-
-        pagoHTML += `
-            <br>
-
-            🏦 Pago mediante transferencia.
-        `;
-    }
-
-
-    pagoHTML += `
-        </div>
-    `;
-
-
-    return `
-        <article
-            class="pedido"
-            data-pedido-id="${numeroSeguro(
-                pedido.id
-            )}"
-        >
-
-            <div class="pedido-header">
-
-                <div>
-
-                    <div class="numero">
-                        #${escaparHTML(numero)}
-                    </div>
-
-                    <small
-                        style="
-                            color:#666;
-                            display:block;
-                            margin-top:4px;
-                        "
-                    >
-                        ${escaparHTML(
-                            formatearFecha(
-                                pedido.fecha
-                            )
-                        )}
-                    </small>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="estado ${clase} btn-cambiar-estado"
-                    data-id="${numeroSeguro(
-                        pedido.id
-                    )}"
-                    data-estado="${escaparHTML(
-                        estado
-                    )}"
-                >
-                    ${escaparHTML(
-                        estado
-                    )}
-                </button>
-
-            </div>
-
-
-            <div class="cliente">
-
-                👤
-
-                <strong>
-                    Cliente:
-                </strong>
-
-                ${escaparHTML(
-                    pedido.cliente ||
-                    "Sin nombre"
-                )}
-
-            </div>
-
-
-            <div class="productos-pedido">
-
-                ${productosHTML}
-
-            </div>
-
-
-            <div class="total">
-
-                <span>
-                    TOTAL
-                </span>
-
-                <span>
-                    $${dinero(
-                        pedido.total
-                    )}
-                </span>
-
-            </div>
-
-
-            ${pagoHTML}
-
-        </article>
-    `;
-}
-
-
-/* =========================================================
-   9. SUBTOTAL DEL PRODUCTO
-   ========================================================= */
-
-function obtenerSubtotalProducto(producto) {
-
-    if (!producto) {
-        return 0;
-    }
-
-
-    /*
-     * PRIORIDAD ABSOLUTA:
-     *
-     * Si el subtotal fue guardado cuando
-     * se realizó el pedido, utilizamos
-     * exactamente ese valor.
-     */
-
-    if (
-        producto.subtotal !== undefined &&
-        producto.subtotal !== null
-    ) {
-
-        return numeroSeguro(
-            producto.subtotal
-        );
-    }
-
-
-    /*
-     * COMPATIBILIDAD CON PEDIDOS ANTIGUOS
-     */
-
-    const cantidad =
-        Math.max(
-            0,
-            numeroSeguro(
-                producto.cantidad
-            )
-        );
-
-    const precio =
-        numeroSeguro(
-            producto.precio
-        );
-
-    const extraSalsa =
-        numeroSeguro(
-            producto.extraSalsa
-        );
-
-    const extraQueso =
-        numeroSeguro(
-            producto.extraQueso
-        );
-
-
-    /*
-     * FRESCOS
-     */
-
-    if (
-        producto.tipo ===
-        "fresco"
-    ) {
-
-        const precioAplicado =
-            numeroSeguro(
-                producto.precioAplicado ??
-                producto.precio_aplicado ??
-                producto.precio
-            );
-
-        return precioAplicado * cantidad;
-    }
-
-
-    /*
-     * GRINGAS
-     */
-
-    return (
-        precio +
-        extraSalsa +
-        extraQueso
-    ) * cantidad;
-}
-
-
-/* =========================================================
-   10. RENDERIZAR PRODUCTO
-   ========================================================= */
-
-function renderizarProducto(producto) {
-
-    if (!producto) {
-        return "";
-    }
-
-
-    const nombre =
-        producto.nombre ||
-        "Producto";
-
-
-    const cantidad =
-        Math.max(
-            0,
-            numeroSeguro(
-                producto.cantidad
-            )
-        );
-
-
-    const precio =
-        numeroSeguro(
-            producto.precio
-        );
-
-
-    const extraSalsa =
-        numeroSeguro(
-            producto.extraSalsa
-        );
-
-
-    const extraQueso =
-        numeroSeguro(
-            producto.extraQueso
-        );
-
-
-    const subtotal =
-        obtenerSubtotalProducto(
-            producto
-        );
-
-
-    let detalles =
-        `x${cantidad}`;
-
-
-    /*
-     * SALSAS
-     */
-
-    if (
-        Array.isArray(
-            producto.salsas
-        ) &&
-        producto.salsas.length > 0
-    ) {
-
-        detalles +=
-            ` · 🌶️ ${producto.salsas
-                .map(escaparHTML)
-                .join(" + ")}`;
-    }
-
-
-    /*
-     * SALSA EXTRA
-     */
-
-    if (
-        extraSalsa > 0
-    ) {
-
-        detalles +=
-            ` · +$${dinero(
-                extraSalsa
-            )} salsa extra`;
-    }
-
-
-    /*
-     * QUESO EXTRA
-     */
-
-    if (
-        extraQueso > 0
-    ) {
-
-        detalles +=
-            ` · 🧀 +$${dinero(
-                extraQueso
-            )}`;
-    }
-
-
-    /*
-     * PROMOCIÓN DE FRESCO
-     */
-
-    if (
-        producto.tipo ===
-        "fresco"
-    ) {
-
-        const precioAplicado =
-            numeroSeguro(
-                producto.precioAplicado ??
-                producto.precio_aplicado ??
-                producto.precio
-            );
-
-
-        if (
-            precioAplicado > 0 &&
-            precioAplicado < precio
-        ) {
-
-            detalles +=
-                ` · 🥤 Promo`;
-        }
-    }
-
-
-    return `
-        <div class="producto">
-
-            <div class="producto-nombre">
-
-                ${escaparHTML(
-                    nombre
-                )}
-
-            </div>
-
-            <div class="producto-detalle">
-
-                ${escaparHTML(
-                    detalles
-                )}
-
-                <br>
-
-                Subtotal:
-
-                <strong>
-                    $${dinero(
-                        subtotal
-                    )}
-                </strong>
-
-            </div>
-
-        </div>
-    `;
-}
-
-
-/* =========================================================
-   11. CAMBIAR ESTADO
-   ========================================================= */
-
-async function manejarCambioEstado(evento) {
+async function manejarCambioEstado(
+    evento
+) {
 
     const boton =
         evento.target.closest(
@@ -855,59 +752,45 @@ async function manejarCambioEstado(evento) {
     }
 
 
-    /*
-     * Evita doble clic.
-     */
-
-    if (boton.disabled) {
-        return;
-    }
-
-
     const id =
-        numeroSeguro(
-            boton.dataset.id
-        );
-
-
-    const estadoActual =
-        boton.dataset.estado ||
-        "Pendiente";
-
-
-    if (!id) {
-
-        console.error(
-            "❌ ID de pedido inválido."
-        );
-
-        return;
-    }
+        boton.dataset.id;
 
 
     const nuevoEstado =
-        estadoActual === "Entregado"
-            ? "Pendiente"
-            : "Entregado";
+        boton.dataset.estado;
 
 
-    const confirmar =
-        confirm(
-            `¿Cambiar el pedido #${String(id)
-                .padStart(3, "0")} a "${nuevoEstado}"?`
+    if (
+        !id ||
+        !nuevoEstado
+    ) {
+
+        console.error(
+            "❌ Faltan datos para cambiar el estado.",
+            {
+                id,
+                nuevoEstado
+            }
         );
 
-
-    if (!confirmar) {
         return;
     }
 
 
+    /*
+     * Guardamos el texto original.
+     */
+
     const textoOriginal =
-        boton.textContent.trim();
+        boton.textContent;
 
 
-    boton.disabled = true;
+    /*
+     * Bloqueamos únicamente este botón.
+     */
+
+    boton.disabled =
+        true;
 
     boton.textContent =
         "Actualizando...";
@@ -921,53 +804,59 @@ async function manejarCambioEstado(evento) {
 
 
         const {
-            data,
             error
-        } = await supabaseClient
-            .from("pedidos")
-            .update({
-                estado: nuevoEstado
-            })
-            .eq("id", id)
-            .select();
+        } =
+            await supabaseClient
+                .from("pedidos")
+                .update({
+                    estado:
+                        nuevoEstado
+                })
+                .eq(
+                    "id",
+                    id
+                );
 
 
         if (error) {
-
-            console.error(
-                "❌ Supabase rechazó la actualización:",
-                error
-            );
-
             throw error;
         }
 
 
-        if (
-            !data ||
-            data.length === 0
-        ) {
-
-            throw new Error(
-                "Supabase no actualizó ningún pedido. Revisa las políticas RLS de la tabla pedidos."
-            );
-        }
-
-
         console.log(
-            `✅ Pedido #${id} actualizado a ${nuevoEstado}`
+            `✅ Pedido #${id} actualizado a "${nuevoEstado}"`
         );
 
 
         /*
-         * No llamamos cargarPedidos() aquí.
+         * IMPORTANTE:
          *
-         * Supabase Realtime detectará el UPDATE
-         * y actualizará el panel automáticamente.
+         * NO usamos:
          *
-         * Si Realtime tarda o está desconectado,
-         * el sistema de respaldo se encargará.
+         * await cargarPedidos();
+         *
+         * porque eso hacía que el botón
+         * permaneciera en "Actualizando..."
+         * mientras se descargaban todos
+         * los pedidos nuevamente.
+         *
+         * Realtime detectará el UPDATE.
          */
+
+        cargarPedidos();
+
+
+        /*
+         * Liberamos el botón inmediatamente
+         * después de confirmar el UPDATE.
+         */
+
+        boton.disabled =
+            false;
+
+        boton.textContent =
+            textoOriginal;
+
 
     } catch (error) {
 
@@ -978,12 +867,12 @@ async function manejarCambioEstado(evento) {
 
 
         alert(
-            "❌ No se pudo actualizar el estado.\n\n" +
-            error.message
+            "❌ No se pudo actualizar el estado del pedido."
         );
 
 
-        boton.disabled = false;
+        boton.disabled =
+            false;
 
         boton.textContent =
             textoOriginal;
@@ -992,42 +881,62 @@ async function manejarCambioEstado(evento) {
 
 
 /* =========================================================
-   12. COMPATIBILIDAD
+   13. COMPATIBILIDAD
    ========================================================= */
+
+/*
+ * Esta función permite que cualquier parte
+ * antigua del código que utilice cambiarEstado()
+ * siga funcionando.
+ */
 
 async function cambiarEstado(
     id,
-    estadoActual
+    nuevoEstado,
+    boton = null
 ) {
 
-    const nuevoEstado =
-        estadoActual === "Entregado"
-            ? "Pendiente"
-            : "Entregado";
-
-
-    const confirmar =
-        confirm(
-            `¿Cambiar el pedido #${String(id)
-                .padStart(3, "0")} a "${nuevoEstado}"?`
-        );
-
-
-    if (!confirmar) {
+    if (!id || !nuevoEstado) {
         return;
+    }
+
+
+    const textoOriginal =
+        boton
+            ? boton.textContent
+            : "";
+
+
+    if (boton) {
+
+        boton.disabled =
+            true;
+
+        boton.textContent =
+            "Actualizando...";
     }
 
 
     try {
 
+        console.log(
+            `🔄 Actualizando pedido #${id}...`
+        );
+
+
         const {
             error
-        } = await supabaseClient
-            .from("pedidos")
-            .update({
-                estado: nuevoEstado
-            })
-            .eq("id", id);
+        } =
+            await supabaseClient
+                .from("pedidos")
+                .update({
+                    estado:
+                        nuevoEstado
+                })
+                .eq(
+                    "id",
+                    id
+                );
 
 
         if (error) {
@@ -1035,10 +944,23 @@ async function cambiarEstado(
         }
 
 
-        /*
-         * Realtime se encargará de actualizar
-         * visualmente el panel.
-         */
+        console.log(
+            `✅ Pedido #${id} actualizado a "${nuevoEstado}"`
+        );
+
+
+        cargarPedidos();
+
+
+        if (boton) {
+
+            boton.disabled =
+                false;
+
+            boton.textContent =
+                textoOriginal;
+        }
+
 
     } catch (error) {
 
@@ -1048,31 +970,42 @@ async function cambiarEstado(
         );
 
 
+        if (boton) {
+
+            boton.disabled =
+                false;
+
+            boton.textContent =
+                textoOriginal;
+        }
+
+
         alert(
-            "❌ No se pudo actualizar el pedido.\n\n" +
-            error.message
+            "❌ No se pudo actualizar el estado del pedido."
         );
     }
 }
 
 
 /* =========================================================
-   13. SUPABASE REALTIME
+   14. SUPABASE REALTIME
    ========================================================= */
 
 function iniciarRealtime() {
 
     /*
-     * Si ya existe un canal, no creamos otro.
+     * Si ya existe un canal,
+     * lo eliminamos antes de crear otro.
      */
 
     if (canalPedidos) {
 
-        console.warn(
-            "⚠️ El canal Realtime ya está iniciado."
+        supabaseClient.removeChannel(
+            canalPedidos
         );
 
-        return;
+        canalPedidos =
+            null;
     }
 
 
@@ -1102,13 +1035,12 @@ function iniciarRealtime() {
 
 
                     /*
-                     * Esperamos a que Supabase termine
-                     * de confirmar el cambio antes de
-                     * volver a consultar los pedidos.
+                     * Volvemos a cargar la lista
+                     * solamente cuando Supabase
+                     * confirma que hubo un cambio.
                      */
 
                     cargarPedidos();
-
                 }
             )
             .subscribe(
@@ -1128,78 +1060,36 @@ function iniciarRealtime() {
                         realtimeConectado =
                             true;
 
-
                         actualizarEstadoConexion(
                             true
                         );
 
 
                         console.log(
-                            "✅ Realtime conectado correctamente."
+                            "✅ Supabase Realtime conectado."
                         );
-
-
-                        return;
                     }
 
 
-                    realtimeConectado =
-                        false;
-
-
-                    if (
+                    else if (
                         status ===
-                        "CHANNEL_ERROR"
+                            "CHANNEL_ERROR" ||
+                        status ===
+                            "TIMED_OUT" ||
+                        status ===
+                            "CLOSED"
                     ) {
 
+                        realtimeConectado =
+                            false;
+
                         actualizarEstadoConexion(
-                            false,
-                            "🟡 Realtime desconectado"
+                            false
                         );
 
 
                         console.warn(
-                            "⚠️ Realtime presentó un error. Se utilizará el respaldo."
-                        );
-
-
-                        return;
-                    }
-
-
-                    if (
-                        status ===
-                        "TIMED_OUT"
-                    ) {
-
-                        actualizarEstadoConexion(
-                            false,
-                            "🟡 Realtime agotó el tiempo"
-                        );
-
-
-                        console.warn(
-                            "⚠️ Realtime agotó el tiempo. Se utilizará el respaldo."
-                        );
-
-
-                        return;
-                    }
-
-
-                    if (
-                        status ===
-                        "CLOSED"
-                    ) {
-
-                        actualizarEstadoConexion(
-                            false,
-                            "🟡 Realtime cerrado"
-                        );
-
-
-                        console.warn(
-                            "⚠️ Canal Realtime cerrado."
+                            "⚠️ Realtime desconectado. Se utilizará el respaldo."
                         );
                     }
                 }
@@ -1208,23 +1098,20 @@ function iniciarRealtime() {
 
 
 /* =========================================================
-   14. RESPALDO DE ACTUALIZACIÓN
+   15. RESPALDO AUTOMÁTICO
    ========================================================= */
 
 function iniciarRespaldo() {
 
     /*
-     * El respaldo consulta cada 15 segundos.
-     *
-     * Cuando Realtime está funcionando, NO hacemos
-     * consultas periódicas.
-     *
-     * Si Realtime falla, el respaldo mantiene el
-     * panel actualizado.
+     * Evitamos crear más de un intervalo.
      */
 
     if (intervaloRespaldo) {
-        return;
+
+        clearInterval(
+            intervaloRespaldo
+        );
     }
 
 
@@ -1232,12 +1119,17 @@ function iniciarRespaldo() {
         setInterval(
             () => {
 
+                /*
+                 * Mientras Realtime funcione,
+                 * NO hacemos consultas periódicas.
+                 */
+
                 if (
                     !realtimeConectado
                 ) {
 
                     console.log(
-                        "🔄 Respaldo: comprobando pedidos..."
+                        "🔄 Realtime no disponible. Ejecutando respaldo..."
                     );
 
 
@@ -1251,8 +1143,16 @@ function iniciarRespaldo() {
 
 
 /* =========================================================
-   15. DELEGACIÓN DE EVENTOS
+   16. EVENT DELEGATION
    ========================================================= */
+
+/*
+ * En lugar de agregar un listener a cada
+ * botón cada vez que se renderiza la lista,
+ * utilizamos un único listener.
+ *
+ * Esto reduce trabajo del navegador.
+ */
 
 if (contenedorPedidos) {
 
@@ -1264,7 +1164,7 @@ if (contenedorPedidos) {
 
 
 /* =========================================================
-   16. INICIALIZACIÓN
+   17. INICIO DEL ADMIN
    ========================================================= */
 
 document.addEventListener(
@@ -1272,29 +1172,29 @@ document.addEventListener(
     () => {
 
         console.log(
-            "👻 GRINGA.EXE Admin inicializado."
+            "🚀 GRINGA.EXE Admin iniciado."
         );
 
 
         /*
-         * Primera carga.
+         * Carga inicial.
          */
 
         cargarPedidos();
 
 
         /*
-         * Realtime.
+         * Conexión Realtime.
          */
 
         iniciarRealtime();
 
 
         /*
-         * Respaldo.
+         * Respaldo cada 15 segundos
+         * solamente si Realtime falla.
          */
 
         iniciarRespaldo();
-
     }
 );
