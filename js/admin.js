@@ -1,4 +1,3 @@
-javascript
 /* =========================================================
    GRINGA.EXE - PANEL ADMINISTRATIVO
    Archivo: js/admin.js
