@@ -1,3 +1,4 @@
+javascript
 /* =========================================================
    GRINGA.EXE - PANEL ADMINISTRATIVO
    Archivo: js/admin.js
@@ -518,6 +519,15 @@ function obtenerSubtotalProducto(producto) {
     }
 
 
+    /*
+     * PRIORIDAD:
+     * Si el subtotal ya fue guardado al realizar
+     * el pedido, se utiliza exactamente ese valor.
+     *
+     * Esto evita que el administrador vuelva a
+     * calcular precios de pedidos existentes.
+     */
+
     if (
         producto.subtotal !== undefined &&
         producto.subtotal !== null
@@ -528,6 +538,14 @@ function obtenerSubtotalProducto(producto) {
         );
     }
 
+
+    /*
+     * COMPATIBILIDAD CON PEDIDOS ANTIGUOS
+     *
+     * Si el pedido no tiene subtotal guardado,
+     * utilizamos los datos disponibles para
+     * reconstruir el subtotal.
+     */
 
     const cantidad =
         Math.max(
@@ -553,14 +571,40 @@ function obtenerSubtotalProducto(producto) {
         );
 
 
+    /*
+     * FRESCOS
+     *
+     * Se intenta utilizar primero el precio
+     * aplicado durante el pedido.
+     *
+     * Se aceptan ambos nombres para mantener
+     * compatibilidad:
+     *
+     * precioAplicado
+     * precio_aplicado
+     */
+
     if (
         producto.tipo ===
         "fresco"
     ) {
 
-        return precio * cantidad;
+        const precioAplicado =
+            numeroSeguro(
+                producto.precioAplicado ??
+                producto.precio_aplicado ??
+                producto.precio
+            );
+
+        return precioAplicado * cantidad;
     }
 
+
+    /*
+     * GRINGAS
+     *
+     * Precio base + salsa extra + queso extra.
+     */
 
     return (
         precio +
@@ -617,6 +661,10 @@ function renderizarProducto(producto) {
         `x${cantidad}`;
 
 
+    /*
+     * Mostrar salsas seleccionadas.
+     */
+
     if (
         Array.isArray(
             producto.salsas
@@ -631,6 +679,10 @@ function renderizarProducto(producto) {
     }
 
 
+    /*
+     * Mostrar salsa extra.
+     */
+
     if (
         extraSalsa > 0
     ) {
@@ -641,6 +693,10 @@ function renderizarProducto(producto) {
             )} salsa extra`;
     }
 
+
+    /*
+     * Mostrar queso extra.
+     */
 
     if (
         extraQueso > 0
@@ -653,6 +709,14 @@ function renderizarProducto(producto) {
     }
 
 
+    /*
+     * Mostrar promoción de fresco.
+     *
+     * Se aceptan:
+     * precioAplicado
+     * precio_aplicado
+     */
+
     if (
         producto.tipo ===
         "fresco"
@@ -660,7 +724,9 @@ function renderizarProducto(producto) {
 
         const precioAplicado =
             numeroSeguro(
-                producto.precio_aplicado
+                producto.precioAplicado ??
+                producto.precio_aplicado ??
+                producto.precio
             );
 
         if (
@@ -941,3 +1007,8 @@ document.addEventListener(
 
     }
 );
+```
+
+Este reemplaza **completo** al anterior. No necesitas mezclar partes.
+
+Después de guardarlo, **recarga el admin con `Ctrl + F5`** y revisamos la consola. Si carga los pedidos correctamente, el siguiente paso será atacar el `[Violation] 'click' handler took 1303ms` y la actualización cada 5 segundos.

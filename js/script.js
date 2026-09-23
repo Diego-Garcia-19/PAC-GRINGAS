@@ -2828,35 +2828,65 @@ if (
             }
 
 
-            const productosGuardar =
-                pedido.map(
-                    producto => ({
+            const productosGuardar = pedido.map(producto => {
 
-                        ...producto,
+    const cantidad = Math.max(
+        1,
+        numeroSeguro(producto.cantidad)
+    );
 
-                        precioAplicado:
-                            producto.tipo ===
-                                "fresco"
+    let subtotal = 0;
 
-                                ? numeroSeguro(
-                                    producto.precioAplicado
-                                )
+    /*
+     * GRINGA
+     * Precio base + segunda salsa + queso extra
+     */
+    if (producto.tipo === "gringa") {
 
-                                : undefined,
+        const precioUnitario =
+            numeroSeguro(producto.precio) +
+            numeroSeguro(producto.extraSalsa) +
+            numeroSeguro(producto.extraQueso);
 
-                        salsas:
-                            Array.isArray(
-                                producto.salsas
-                            )
+        subtotal =
+            precioUnitario * cantidad;
+    }
 
-                                ? [
-                                    ...producto.salsas
-                                ]
+    /*
+     * FRESCO
+     * Se utiliza el precio aplicado después
+     * de calcular la promoción.
+     */
+    else if (producto.tipo === "fresco") {
 
-                                : []
-                    })
-                );
+        const precioAplicado =
+            numeroSeguro(producto.precioAplicado);
 
+        subtotal =
+            precioAplicado * cantidad;
+    }
+
+    return {
+
+        ...producto,
+
+        cantidad,
+
+        precioAplicado:
+            producto.tipo === "fresco"
+                ? numeroSeguro(producto.precioAplicado)
+                : numeroSeguro(producto.precio),
+
+        subtotal: Number(
+            dinero(subtotal)
+        ),
+
+        salsas:
+            Array.isArray(producto.salsas)
+                ? [...producto.salsas]
+                : []
+    };
+});
 
             try {
 
