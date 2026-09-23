@@ -44,9 +44,6 @@ const INTERVALO_ACTUALIZACION = 5000;
    4. UTILIDADES
    ========================================================= */
 
-/**
- * Escapa caracteres HTML.
- */
 function escaparHTML(valor) {
 
     if (
@@ -65,9 +62,6 @@ function escaparHTML(valor) {
 }
 
 
-/**
- * Convierte un valor en número seguro.
- */
 function numeroSeguro(valor) {
 
     const numero = Number(valor);
@@ -78,18 +72,12 @@ function numeroSeguro(valor) {
 }
 
 
-/**
- * Formatea dinero.
- */
 function dinero(valor) {
 
     return numeroSeguro(valor).toFixed(2);
 }
 
 
-/**
- * Devuelve la clase CSS según el estado.
- */
 function claseEstado(estado) {
 
     switch (estado) {
@@ -109,10 +97,6 @@ function claseEstado(estado) {
 }
 
 
-/**
- * Convierte productos almacenados en Supabase
- * a un array válido.
- */
 function obtenerProductos(productos) {
 
     if (Array.isArray(productos)) {
@@ -145,9 +129,6 @@ function obtenerProductos(productos) {
 }
 
 
-/**
- * Formatea la fecha del pedido.
- */
 function formatearFecha(fecha) {
 
     if (!fecha) {
@@ -175,9 +156,6 @@ function formatearFecha(fecha) {
 }
 
 
-/**
- * Obtiene el número visual del pedido.
- */
 function obtenerNumeroPedido(pedido) {
 
     if (
@@ -195,8 +173,9 @@ function obtenerNumeroPedido(pedido) {
     ).padStart(3, "0");
 }
 
+
 /* =========================================================
-   SONIDO DE NOTIFICACIÓN
+   5. SONIDO DE NOTIFICACIÓN
    ========================================================= */
 
 function reproducirSonidoNotificacion() {
@@ -259,14 +238,15 @@ function reproducirSonidoNotificacion() {
     } catch (error) {
 
         console.warn(
-            "No se pudo reproducir el sonido:",
+            "⚠️ No se pudo reproducir el sonido:",
             error
         );
     }
 }
 
+
 /* =========================================================
-   5. ESTADO DE CONEXIÓN
+   6. ESTADO DE CONEXIÓN
    ========================================================= */
 
 function actualizarEstadoConexion(
@@ -298,7 +278,7 @@ function actualizarEstadoConexion(
 
 
 /* =========================================================
-   6. CARGAR PEDIDOS
+   7. CARGAR PEDIDOS
    ========================================================= */
 
 async function cargarPedidos() {
@@ -322,18 +302,12 @@ async function cargarPedidos() {
                 }
             );
 
-
         if (error) {
             throw error;
         }
 
-
         actualizarEstadoConexion(true);
 
-
-        /* -------------------------------------------------
-           SIN PEDIDOS
-           ------------------------------------------------- */
 
         if (
             !data ||
@@ -356,19 +330,11 @@ async function cargarPedidos() {
         }
 
 
-        /* -------------------------------------------------
-           RENDERIZAR
-           ------------------------------------------------- */
-
         contenedorPedidos.innerHTML =
             data
                 .map(renderizarPedido)
                 .join("");
 
-
-        /* -------------------------------------------------
-           EVENTOS
-           ------------------------------------------------- */
 
         document
             .querySelectorAll(
@@ -382,7 +348,6 @@ async function cargarPedidos() {
                 );
 
             });
-
 
     } catch (error) {
 
@@ -418,7 +383,7 @@ async function cargarPedidos() {
 
 
 /* =========================================================
-   7. RENDERIZAR PEDIDO
+   8. RENDERIZAR PEDIDO
    ========================================================= */
 
 function renderizarPedido(pedido) {
@@ -438,10 +403,6 @@ function renderizarPedido(pedido) {
         obtenerNumeroPedido(pedido);
 
 
-    /* -----------------------------------------------------
-       PRODUCTOS
-       ----------------------------------------------------- */
-
     const productosHTML =
         productos.length > 0
 
@@ -459,10 +420,6 @@ function renderizarPedido(pedido) {
                 </div>
             `;
 
-
-    /* -----------------------------------------------------
-       PAGO
-       ----------------------------------------------------- */
 
     let pagoHTML = `
         <div class="pago">
@@ -525,10 +482,6 @@ function renderizarPedido(pedido) {
     `;
 
 
-    /* -----------------------------------------------------
-       HTML DEL PEDIDO
-       ----------------------------------------------------- */
-
     return `
         <article
             class="pedido"
@@ -572,7 +525,9 @@ function renderizarPedido(pedido) {
                         estado
                     )}"
                 >
-                    ${escaparHTML(estado)}
+                    ${escaparHTML(
+                        estado
+                    )}
                 </button>
 
             </div>
@@ -624,7 +579,7 @@ function renderizarPedido(pedido) {
 
 
 /* =========================================================
-   8. OBTENER SUBTOTAL DEL PRODUCTO
+   9. SUBTOTAL DEL PRODUCTO
    ========================================================= */
 
 function obtenerSubtotalProducto(producto) {
@@ -635,16 +590,7 @@ function obtenerSubtotalProducto(producto) {
 
 
     /*
-     * NUEVO SISTEMA:
-     *
-     * script.js ahora guarda el subtotal exacto
-     * de cada producto.
-     *
-     * Esto permite conservar correctamente
-     * promociones como:
-     *
-     * 2 frescos → $0.25
-     * restantes → $0.35
+     * Los pedidos nuevos guardan el subtotal exacto.
      */
 
     if (
@@ -658,9 +604,9 @@ function obtenerSubtotalProducto(producto) {
     }
 
 
-    /* -----------------------------------------------------
-       COMPATIBILIDAD CON PEDIDOS ANTIGUOS
-       ----------------------------------------------------- */
+    /*
+     * Compatibilidad con pedidos anteriores.
+     */
 
     const cantidad =
         Math.max(
@@ -686,7 +632,6 @@ function obtenerSubtotalProducto(producto) {
         );
 
 
-    /* Fresco antiguo */
     if (
         producto.tipo ===
         "fresco"
@@ -696,7 +641,6 @@ function obtenerSubtotalProducto(producto) {
     }
 
 
-    /* Gringa antigua */
     return (
         precio +
         extraSalsa +
@@ -706,7 +650,7 @@ function obtenerSubtotalProducto(producto) {
 
 
 /* =========================================================
-   9. RENDERIZAR PRODUCTO
+   10. RENDERIZAR PRODUCTO
    ========================================================= */
 
 function renderizarProducto(producto) {
@@ -714,7 +658,6 @@ function renderizarProducto(producto) {
     if (!producto) {
         return "";
     }
-
 
     const nombre =
         producto.nombre ||
@@ -743,24 +686,15 @@ function renderizarProducto(producto) {
             producto.extraQueso
         );
 
-
     const subtotal =
         obtenerSubtotalProducto(
             producto
         );
 
 
-    /* -----------------------------------------------------
-       DETALLES
-       ----------------------------------------------------- */
-
     let detalles =
         `x${cantidad}`;
 
-
-    /* -----------------------------------------------------
-       SALSAS
-       ----------------------------------------------------- */
 
     if (
         Array.isArray(
@@ -776,10 +710,6 @@ function renderizarProducto(producto) {
     }
 
 
-    /* -----------------------------------------------------
-       SEGUNDA SALSA
-       ----------------------------------------------------- */
-
     if (
         extraSalsa > 0
     ) {
@@ -790,10 +720,6 @@ function renderizarProducto(producto) {
             )} salsa extra`;
     }
 
-
-    /* -----------------------------------------------------
-       EXTRA QUESO
-       ----------------------------------------------------- */
 
     if (
         extraQueso > 0
@@ -806,10 +732,6 @@ function renderizarProducto(producto) {
     }
 
 
-    /* -----------------------------------------------------
-       PROMOCIÓN DE FRESCOS
-       ----------------------------------------------------- */
-
     if (
         producto.tipo ===
         "fresco"
@@ -819,13 +741,6 @@ function renderizarProducto(producto) {
             numeroSeguro(
                 producto.precio_aplicado
             );
-
-
-        /*
-         * Si el pedido nuevo contiene
-         * precio_aplicado, mostramos
-         * información adicional.
-         */
 
         if (
             precioAplicado > 0 &&
@@ -837,10 +752,6 @@ function renderizarProducto(producto) {
         }
     }
 
-
-    /* -----------------------------------------------------
-       HTML
-       ----------------------------------------------------- */
 
     return `
         <div class="producto">
@@ -877,12 +788,10 @@ function renderizarProducto(producto) {
 
 
 /* =========================================================
-   10. CAMBIAR ESTADO
+   11. CAMBIAR ESTADO
    ========================================================= */
 
-async function manejarCambioEstado(
-    evento
-) {
+async function manejarCambioEstado(evento) {
 
     const boton =
         evento.currentTarget;
@@ -902,29 +811,9 @@ async function manejarCambioEstado(
     }
 
 
-    /*
-     * SISTEMA ACTUAL:
-     *
-     * Pendiente <-> Entregado
-     *
-     * Posteriormente podemos ampliar
-     * a:
-     *
-     * Pendiente
-     *      ↓
-     * Preparando
-     *      ↓
-     * Listo
-     *      ↓
-     * Entregado
-     */
-
     const nuevoEstado =
-        estadoActual ===
-        "Entregado"
-
+        estadoActual === "Entregado"
             ? "Pendiente"
-
             : "Entregado";
 
 
@@ -971,6 +860,20 @@ async function manejarCambioEstado(
         );
 
 
+        /*
+         * El sonido SOLO se reproduce cuando
+         * realmente se cambió a Entregado.
+         */
+
+        if (
+            nuevoEstado ===
+            "Entregado"
+        ) {
+
+            reproducirSonidoNotificacion();
+        }
+
+
         await cargarPedidos();
 
 
@@ -996,15 +899,8 @@ async function manejarCambioEstado(
 
 
 /* =========================================================
-   11. COMPATIBILIDAD
+   12. COMPATIBILIDAD
    ========================================================= */
-
-/*
- * Se conserva por si una versión anterior
- * de admin.html utiliza:
- *
- * cambiarEstado(id, estado)
- */
 
 async function cambiarEstado(
     id,
@@ -1012,11 +908,8 @@ async function cambiarEstado(
 ) {
 
     const nuevoEstado =
-        estadoActual ===
-        "Entregado"
-
+        estadoActual === "Entregado"
             ? "Pendiente"
-
             : "Entregado";
 
 
@@ -1049,17 +942,35 @@ async function cambiarEstado(
         }
 
 
+        if (
+            nuevoEstado ===
+            "Entregado"
+        ) {
+
+            reproducirSonidoNotificacion();
+        }
+
+
         await cargarPedidos();
 
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error al cambiar estado:",
+            error
+        );
+
+        alert(
+            "❌ No se pudo actualizar el pedido.\n\n" +
+            error.message
+        );
     }
-    
-    if (nuevoEstado === "Entregado") {
-    reproducirSonidoNotificacion();
 }
 
 
 /* =========================================================
-   12. ACTUALIZACIÓN AUTOMÁTICA
+   13. ACTUALIZACIÓN AUTOMÁTICA
    ========================================================= */
 
 setInterval(
@@ -1069,7 +980,7 @@ setInterval(
 
 
 /* =========================================================
-   13. INICIALIZACIÓN
+   14. INICIALIZACIÓN
    ========================================================= */
 
 document.addEventListener(
