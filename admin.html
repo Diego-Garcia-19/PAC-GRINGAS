@@ -1,454 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>GRINGA.EXE | Panel de Pedidos</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="icon" href="img/logo1.png">
+    <title>GRINGA.EXE // CONTROL</title>
 
-    <style>
-        /* =====================================================
-           CONFIGURACIÓN GENERAL
-           ===================================================== */
+    <link
+        rel="stylesheet"
+        href="css/estilo.css"
+    >
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    <link
+        rel="icon"
+        href="img/logo1.png"
+    >
 
-        body {
-            background:
-                radial-gradient(circle at 20% 20%, #181818 0%, transparent 30%),
-                radial-gradient(circle at 80% 80%, #151515 0%, transparent 30%),
-                #050505;
-
-            color: #ffffff;
-            font-family: Arial, Helvetica, sans-serif;
-
-            min-height: 100vh;
-        }
-
-
-        /* =====================================================
-           HEADER
-           ===================================================== */
-
-        header {
-            background: #050505;
-
-            border-bottom: 3px solid #ffd900;
-
-            padding: 20px;
-
-            text-align: center;
-
-            box-shadow:
-                0 0 15px rgba(255, 217, 0, 0.25);
-        }
-
-        header h1 {
-            color: #ffd900;
-
-            font-size: 28px;
-
-            letter-spacing: 3px;
-
-            margin-bottom: 8px;
-
-            text-shadow:
-                0 0 8px rgba(255, 217, 0, 0.5);
-        }
-
-        header p {
-            color: #9b9b9b;
-
-            font-size: 13px;
-
-            letter-spacing: 2px;
-        }
-
-
-        /* =====================================================
-           ESTADO DE CONEXIÓN
-           ===================================================== */
-
-        #conexion {
-            margin-top: 12px;
-
-            font-size: 13px;
-
-            color: #9b9b9b;
-        }
-
-
-        /* =====================================================
-           CONTENEDOR PRINCIPAL
-           ===================================================== */
-
-        main {
-            width: 100%;
-
-            max-width: 700px;
-
-            margin: 0 auto;
-
-            padding: 25px 15px 40px;
-        }
-
-
-        /* =====================================================
-           PEDIDO
-           ===================================================== */
-
-        .pedido {
-            background: #111111;
-
-            border: 2px solid #222222;
-
-            border-radius: 12px;
-
-            padding: 18px;
-
-            margin-bottom: 18px;
-
-            box-shadow:
-                0 0 10px rgba(0, 0, 0, 0.5);
-
-            transition:
-                border-color 0.2s ease,
-                box-shadow 0.2s ease;
-        }
-
-        .pedido:hover {
-            border-color: #ffd900;
-
-            box-shadow:
-                0 0 15px rgba(255, 217, 0, 0.12);
-        }
-
-
-        /* =====================================================
-           ENCABEZADO DEL PEDIDO
-           ===================================================== */
-
-        .pedido-header {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 10px;
-
-            padding-bottom: 14px;
-
-            margin-bottom: 14px;
-
-            border-bottom: 1px solid #222222;
-        }
-
-        .numero {
-            color: #ffd900;
-
-            font-size: 20px;
-
-            font-weight: bold;
-
-            letter-spacing: 1px;
-        }
-
-
-        /* =====================================================
-           ESTADO
-           ===================================================== */
-
-        .estado {
-            border: none;
-
-            border-radius: 20px;
-
-            padding: 7px 12px;
-
-            font-size: 11px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-            text-transform: uppercase;
-
-            transition:
-                transform 0.15s ease,
-                opacity 0.15s ease;
-        }
-
-        .estado:hover {
-            transform: scale(1.04);
-
-            opacity: 0.9;
-        }
-
-        .estado.pendiente {
-            background: #ffd900;
-
-            color: #050505;
-        }
-
-        .estado.entregado {
-            background: #38ff8b;
-
-            color: #050505;
-        }
-
-
-        /* =====================================================
-           CLIENTE
-           ===================================================== */
-
-        .cliente {
-            color: #ffffff;
-
-            font-size: 15px;
-
-            margin-bottom: 15px;
-        }
-
-        .cliente strong {
-            color: #ffd900;
-        }
-
-
-        /* =====================================================
-           PRODUCTOS
-           ===================================================== */
-
-        .producto {
-            background: #0b0b0b;
-
-            border-left: 3px solid #ffd900;
-
-            padding: 12px;
-
-            margin-bottom: 8px;
-
-            border-radius: 5px;
-        }
-
-        .producto-nombre {
-            color: #ffffff;
-
-            font-weight: bold;
-
-            font-size: 14px;
-
-            margin-bottom: 5px;
-        }
-
-        .producto-detalle {
-            color: #9b9b9b;
-
-            font-size: 12px;
-
-            line-height: 1.6;
-        }
-
-
-        /* =====================================================
-           TOTAL
-           ===================================================== */
-
-        .total {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-top: 15px;
-
-            padding-top: 12px;
-
-            border-top: 1px solid #222222;
-        }
-
-        .total span:first-child {
-            color: #9b9b9b;
-
-            font-size: 13px;
-        }
-
-        .total span:last-child {
-            color: #ffd900;
-
-            font-size: 22px;
-
-            font-weight: bold;
-        }
-
-
-        /* =====================================================
-           PAGO
-           ===================================================== */
-
-        .pago {
-            margin-top: 12px;
-
-            padding: 10px;
-
-            background: #0b0b0b;
-
-            border-radius: 6px;
-
-            color: #9b9b9b;
-
-            font-size: 12px;
-
-            line-height: 1.7;
-        }
-
-        .pago strong {
-            color: #ffffff;
-        }
-
-
-        /* =====================================================
-           SIN PEDIDOS
-           ===================================================== */
-
-        .sin-pedidos {
-            text-align: center;
-
-            padding: 60px 20px;
-
-            color: #9b9b9b;
-
-            border: 2px dashed #222222;
-
-            border-radius: 12px;
-        }
-
-        .sin-pedidos h2 {
-            color: #ffd900;
-
-            margin-bottom: 10px;
-        }
-
-
-        /* =====================================================
-           ERROR
-           ===================================================== */
-
-        .error {
-            background: #1a0a0a;
-
-            border: 1px solid #ff3154;
-
-            color: #ff3154;
-
-            border-radius: 8px;
-
-            padding: 20px;
-
-            text-align: center;
-
-            line-height: 1.6;
-        }
-
-
-        /* =====================================================
-           RESPONSIVE
-           ===================================================== */
-
-        @media (max-width: 500px) {
-
-            header h1 {
-                font-size: 22px;
-
-                letter-spacing: 2px;
-            }
-
-            main {
-                padding:
-                    18px 10px 30px;
-            }
-
-            .pedido {
-                padding: 14px;
-            }
-
-            .pedido-header {
-                align-items: flex-start;
-
-                flex-direction: column;
-            }
-
-            .estado {
-                align-self: flex-start;
-            }
-
-            .total span:last-child {
-                font-size: 19px;
-            }
-        }
-    </style>
 </head>
 
+<body class="admin-body">
 
-<body>
+<div class="scanlines"></div>
 
-    <!-- =====================================================
-         HEADER
-         ===================================================== -->
+<header>
 
-    <header>
+    <div class="admin-brand">
 
-        <h1>👻 GRINGA.EXE</h1>
+        <img
+            src="img/logo1.png"
+            alt="GRINGA.EXE"
+        >
 
-        <p>PANEL DE PEDIDOS</p>
+        <div>
 
-        <div id="conexion">
-            🟢 Conectando...
-        </div>
+            <strong>
+                GRINGA.EXE
+            </strong>
 
-    </header>
-
-
-    <!-- =====================================================
-         CONTENIDO
-         ===================================================== -->
-
-    <main>
-
-        <div id="contenedor-pedidos">
-
-            <div class="sin-pedidos">
-                <h2>CARGANDO...</h2>
-
-                <p>
-                    Conectando con el sistema de pedidos.
-                </p>
-            </div>
+            <span>
+                ORDER CONTROL // v1.0
+            </span>
 
         </div>
 
-    </main>
+    </div>
 
+    <div class="admin-live">
 
-    <!-- =====================================================
-         SUPABASE
-         ===================================================== -->
+        <span class="live-dot"></span>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        LIVE ORDER QUEUE
 
+    </div>
 
-    <!-- =====================================================
-         JAVASCRIPT DEL PANEL ADMIN
-         ===================================================== -->
+    <div id="conexion">
+        🟢 Conectando...
+    </div>
 
-    <script src="js/admin.js"></script>
+</header>
+
+<main>
+
+    <section class="admin-intro">
+
+        <h2>
+            PANEL DE PEDIDOS
+        </h2>
+
+        <p>
+            Centro de control para gestionar,
+            preparar y entregar pedidos.
+        </p>
+
+        <div class="admin-legend">
+
+            <span class="legend-pendiente">
+                PENDIENTE
+            </span>
+
+            <span class="legend-preparando">
+                PREPARANDO
+            </span>
+
+            <span class="legend-listo">
+                LISTO
+            </span>
+
+            <span class="legend-entregado">
+                ENTREGADO
+            </span>
+
+        </div>
+
+    </section>
+
+    <section id="contenedor-pedidos">
+
+        <div class="sin-pedidos">
+            CARGANDO PEDIDOS...
+        </div>
+
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/admin.js"></script>
 
 </body>
 </html>
