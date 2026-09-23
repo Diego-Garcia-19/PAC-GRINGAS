@@ -1051,7 +1051,8 @@ async function cambiarEstado(
 
         await cargarPedidos();
 
-
+    }
+    
     if (nuevoEstado === "Entregado") {
     reproducirSonidoNotificacion();
 }
